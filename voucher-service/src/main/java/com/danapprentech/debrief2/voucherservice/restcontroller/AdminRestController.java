@@ -176,7 +176,7 @@ public class AdminRestController {
                 voucherResponse.setQuota(voucherRequest.getQuota());
                 voucherResponse.setExpiredDate(voucherRequest.getExpiredDate());
                 voucherResponse.setStatus(voucherRequest.getStatus());
-                voucherResponse.setMerchantId(vouchers.getMerchant().getIdMerchant());
+                voucherResponse.setIdMerchant(idMerchant);
                 voucherResponse.setIdVoucher(voucher.getIdVoucher());
                 voucherResponse.setMerchantName(voucher.getMerchant().getMerchantName());
 
@@ -341,7 +341,7 @@ public class AdminRestController {
         voucherResponse.setQuota(vouchers.getQuota());
         voucherResponse.setMaxDiscount(vouchers.getMaxDiscount());
         voucherResponse.setDiscount(vouchers.getDiscount());
-        voucherResponse.setMerchantId(vouchers.getMerchant().getIdMerchant());
+        voucherResponse.setIdMerchant(vouchers.getMerchant().getIdMerchant());
         voucherResponse.setVoucherName(vouchers.getVoucherName());
         voucherResponse.setVoucherPrice(vouchers.getVoucherPrice());
 
@@ -431,7 +431,6 @@ public class AdminRestController {
             vouchers.setUpdateAt(new Date());
             rabbitMqProducer.updateVoucher(vouchers);
             voucherRepository.save(vouchers);
-
 
             return ResponseEntity.ok(new MessageResponse("Successfully change status","044",
                     "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
