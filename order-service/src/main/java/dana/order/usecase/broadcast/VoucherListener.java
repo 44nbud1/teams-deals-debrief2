@@ -1,6 +1,7 @@
 package dana.order.usecase.broadcast;
 
 import dana.order.entity.Voucher;
+import dana.order.usecase.broadcast.model.NewVoucher;
 import dana.order.usecase.port.DatabaseMapper;
 import dana.order.usecase.port.VoucherRepository;
 import org.json.simple.JSONObject;
@@ -22,25 +23,20 @@ public class VoucherListener {
     VoucherRepository voucherRepository;
 
     @RabbitListener(queues = "${spring.rabbitmq.queue.listener}",containerFactory = "createListener")
-    public void recieveMessage(JSONObject json) {
+    public void recieveMessage(NewVoucher vouchers) {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date expiredDate = new Date();
-
-        try{
-            expiredDate = sdf.parse(""+json.get("expiredDate"));
-        }catch (ParseException e){e.printStackTrace();}
+        System.out.println(vouchers.toJsonString());
 
         Voucher voucher = new Voucher();
-        voucher.setIdVoucher(Integer.valueOf(""+json.get("id")));
-        voucher.setIdMerchant(Integer.valueOf(""+json.get("idMerchant")));
-        voucher.setVoucherName(""+json.get("voucherName"));
-        voucher.setVoucherPrice(Double.valueOf(""+json.get("voucherPrice")));
-        voucher.setMaxDiscountPrice(Double.valueOf(""+json.get("maxDiscount")));
-        voucher.setDiscount(Double.valueOf(""+json.get("discount")));
-        voucher.setVoucherQuantity(Integer.valueOf(""+json.get("quota")));
-        voucher.setIsActive(Boolean.valueOf(""+json.get("status")));
-        voucher.setExpiredDate(expiredDate);
+        voucher.setIdVoucher(Integer.valueOf(""+vouchers.getIdVoucher()));
+        voucher.setIdMerchant(Integer.valueOf(""+vouchers.getIdMerchant()));
+        voucher.setVoucherName(""+vouchers.getVoucherName());
+        voucher.setVoucherPrice(vouchers.getVoucherPrice());
+        voucher.setMaxDiscountPrice(vouchers.getMaxDiscount());
+        voucher.setDiscount(vouchers.getDiscount());
+        voucher.setVoucherQuantity(vouchers.getQuota());
+        voucher.setIsActive(vouchers.getStatus());
+        voucher.setExpiredDate(vouchers.getExpiredDate());
 
         if (voucherRepository.isVoucherExists(voucher.getIdVoucher()) == Boolean.FALSE){
             databaseMapper.createNewVoucher(voucher);
@@ -48,7 +44,7 @@ public class VoucherListener {
             databaseMapper.updateAVoucher(voucher);
         }
 
-        System.out.println(json);
+        System.out.println("New incoming voucher id: "+vouchers.getIdVoucher());
     }
 
 }

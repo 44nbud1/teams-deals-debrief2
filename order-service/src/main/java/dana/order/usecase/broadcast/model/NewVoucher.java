@@ -1,12 +1,15 @@
 package dana.order.usecase.broadcast.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class Voucher implements Serializable {
+public class NewVoucher implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long idVoucher;
+    private Long idMerchant;
     private String idUser;
     private String voucherName;
     private Double voucherPrice;
@@ -20,6 +23,19 @@ public class Voucher implements Serializable {
     private Date createAt;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateAt;
+
+    public String toJsonString(){
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+
+    public Long getIdMerchant() {
+        return idMerchant;
+    }
+
+    public void setIdMerchant(Long idMerchant) {
+        this.idMerchant = idMerchant;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
