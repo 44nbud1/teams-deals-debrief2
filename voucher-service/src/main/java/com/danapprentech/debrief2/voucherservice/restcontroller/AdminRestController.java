@@ -165,9 +165,8 @@ public class AdminRestController {
                 vouchers.setCreateAt(new Date());
                 vouchers.setUpdateAt(new Date());
                 vouchers.setMerchant(merchant);
-                rabbitMqProducer.sendToRabbitVoucher(vouchers);
                 voucherRepository.save(vouchers);
-
+                Voucher voucher = voucherRepository.findByVoucherName(voucherRequest.getVoucherName());
                 // response
                 VoucherResponse voucherResponse = new VoucherResponse();
                 voucherResponse.setVoucherName(voucherRequest.getVoucherName());
@@ -177,7 +176,9 @@ public class AdminRestController {
                 voucherResponse.setQuota(voucherRequest.getQuota());
                 voucherResponse.setExpiredDate(voucherRequest.getExpiredDate());
                 voucherResponse.setStatus(voucherRequest.getStatus());
-                voucherResponse.setMerchantId(vouchers.getMerchant().getIdMerchant());
+                voucherResponse.setIdMerchant(idMerchant);
+                voucherResponse.setIdVoucher(voucher.getIdVoucher());
+                voucherResponse.setMerchantName(voucher.getMerchant().getMerchantName());
 
                 List<VoucherResponse> voucherResponses = new ArrayList<>();
                 voucherResponses.add(voucherResponse);
@@ -188,8 +189,12 @@ public class AdminRestController {
                 vouchersRes.put("message","Create voucher successfully");
                 vouchersRes.put("status","042");
 
+
+                rabbitMqProducer.sendToRabbitVoucher(voucherResponse);
+
                 return ResponseEntity.ok(vouchersRes);
             }).orElseThrow(() -> new NotFoundException("id Merchant not found","054"));
+
     }
 
     @GetMapping("/admin/show-all-voucher")
@@ -336,7 +341,7 @@ public class AdminRestController {
         voucherResponse.setQuota(vouchers.getQuota());
         voucherResponse.setMaxDiscount(vouchers.getMaxDiscount());
         voucherResponse.setDiscount(vouchers.getDiscount());
-        voucherResponse.setMerchantId(vouchers.getMerchant().getIdMerchant());
+        voucherResponse.setIdMerchant(vouchers.getMerchant().getIdMerchant());
         voucherResponse.setVoucherName(vouchers.getVoucherName());
         voucherResponse.setVoucherPrice(vouchers.getVoucherPrice());
 
@@ -390,6 +395,7 @@ public class AdminRestController {
             vouchers.setStatus(Boolean.TRUE);
             vouchers.setQuota(vouchers.getQuota());
             vouchers.setUpdateAt(new Date());
+            rabbitMqProducer.updateVoucher(vouchers);
             voucherRepository.save(vouchers);
 
             return ResponseEntity.ok(new MessageResponse("Successfully Change Status","044",
@@ -423,6 +429,7 @@ public class AdminRestController {
             vouchers.setStatus(Boolean.TRUE);
             vouchers.setQuota(vouchers.getQuota()+ updateVoucherRequest.getQuota());
             vouchers.setUpdateAt(new Date());
+            rabbitMqProducer.updateVoucher(vouchers);
             voucherRepository.save(vouchers);
 
             return ResponseEntity.ok(new MessageResponse("Successfully change status","044",
@@ -435,6 +442,7 @@ public class AdminRestController {
 
             vouchers.setStatus(Boolean.FALSE);
             vouchers.setUpdateAt(new Date());
+            rabbitMqProducer.updateVoucher(vouchers);
             voucherRepository.save(vouchers);
 
             return ResponseEntity.ok(new MessageResponse("Successfully change status", "044",
@@ -446,6 +454,5 @@ public class AdminRestController {
         }
 
     }
-
 
 }

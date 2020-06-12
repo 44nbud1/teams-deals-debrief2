@@ -115,7 +115,7 @@ public class Payment {
         }
 
         transactionRepository.setFinishATransaction(Integer.valueOf(""+json.get("idTransaction")));
-        //transactionBroadcaster.send(Integer.valueOf(""+json.get("idTransaction")));
+        transactionBroadcaster.send(Integer.valueOf(""+json.get("idTransaction")));
 
         return ResponseWrapper.wrap("Your payment is successful!", 200, null);
     }

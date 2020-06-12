@@ -34,7 +34,7 @@ public class AdminService {
         }
         System.out.println("Create Merchant. Send data to voucher domain :" + Parser.toJsonString(createMerchantRequest));
         ResponseEntity<?> fromVoucher = voucher.createMerchant(idUser, idMerchant, createMerchantRequest);
-        System.out.println("Get All Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
+        System.out.println("Create Merchant. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
 
         JSONObject jsonVoucher = Parser.parseJSON(fromVoucher.getBody().toString());
         String message = ""+ jsonVoucher.get("message");
@@ -94,7 +94,7 @@ public class AdminService {
     public ResponseEntity<?> searchVoucher(String merchantName, String page, String path){
 
         ResponseEntity<?> fromVoucher = voucher.searchVoucherAdmin(merchantName, page);
-        System.out.println("Filter Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
+        System.out.println("Search Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
 
         JSONObject jsonVoucher = Parser.parseJSON(fromVoucher.getBody().toString());
         String message = ""+ jsonVoucher.get("message");
@@ -114,7 +114,7 @@ public class AdminService {
     public ResponseEntity<?> sortVoucher(String name, String page, String path){
 
         ResponseEntity<?> fromVoucher = voucher.sortVoucherAdmin(name, page);
-        System.out.println("Filter Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
+        System.out.println("Sort Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
 
         JSONObject jsonVoucher = Parser.parseJSON(fromVoucher.getBody().toString());
         String message = ""+ jsonVoucher.get("message");

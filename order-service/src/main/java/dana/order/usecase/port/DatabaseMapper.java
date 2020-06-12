@@ -57,6 +57,25 @@ public interface DatabaseMapper {
             "LEFT JOIN virtual_payments ON virtual_payments.id_third_party = third_parties.id_third_party\n" +
             "WHERE id_transaction = #{idTransaction}";
     final String getMerchantById = "SELECT * FROM merchants WHERE id_merchant = #{idMerchant}";
+    final String createNewVoucher = "INSERT INTO vouchers (id_voucher, id_merchant, voucher_name, voucher_price, max_discount_price, " +
+            "discount, voucher_quantity, is_active, expired_date) VALUES (#{idVoucher}, #{idMerchant}, #{voucherName}, #{voucherPrice}, " +
+            "#{maxDiscountPrice}, #{discount}, #{voucherQuantity}, #{isActive}, #{expiredDate})";
+    final String updateAVoucher = "UPDATE vouchers SET id_merchant = #{idMerchant}, voucher_name = #{voucherName}, " +
+            "voucher_price = #{voucherPrice}, max_discount_price = #{maxDiscountPrice}, discount = #{discount}, " +
+            "voucher_quantity = #{voucherQuantity}, is_active = #{isActive}, expired_date = #{expiredDate} WHERE id_voucher = #{idVoucher}";
+    final String checkVoucherExists = "SELECT COUNT(*) AS amount FROM vouchers WHERE id_voucher = #{idVoucher}";
+
+    @Insert(createNewVoucher)
+    void createNewVoucher(Voucher voucher);
+
+    @Update(updateAVoucher)
+    void updateAVoucher(Voucher voucher);
+
+    @Select(checkVoucherExists)
+    @Results(value = {
+            @Result(column = "amount")
+    })
+    Integer checkVoucherExists(@Param("idVoucher") Integer idVoucher);
 
     @Select(getMerchantById)
     @Results(value = {

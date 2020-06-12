@@ -85,7 +85,7 @@ public class TOPUP {
 
         Transaction transaction = databaseMapper.getLatestUserSuccessfulTransaction(""+json.get("idUser"));
 
-        //transactionBroadcaster.send(transaction.getIdTransaction());
+        transactionBroadcaster.send(transaction.getIdTransaction());
 
         return ResponseWrapper.wrap("Your TOPUP is successful.", 201, null);
     }

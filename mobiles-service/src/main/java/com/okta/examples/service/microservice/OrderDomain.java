@@ -16,7 +16,7 @@ public class OrderDomain {
     @Autowired
     private Template template;
 
-    private final String api = "http://localhost:8889";
+    private final String api = "http://localhost:8084";
 
     public ResponseEntity<?> createOrder(String idUser, JSONObject data){
         return template.post(api+"/api/user/"+idUser+"/transaction/voucher", data);

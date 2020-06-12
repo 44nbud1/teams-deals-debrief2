@@ -82,7 +82,6 @@ public class PlaceOrder{
         }
 
         voucherRepository.insertNewOrder(""+json.get("idUser"), Integer.valueOf(""+json.get("idVoucher")));
-        voucherRepository.broadcastNewOrder(""+json.get("idUser"), Integer.valueOf(""+json.get("idVoucher")));
 
         Transaction transaction = databaseMapper.getLatestUserInProgressTransaction(""+json.get("idUser"));
         JSONObject result = new JSONObject();

@@ -1,15 +1,50 @@
 package dana.order.usecase.broadcast;
 
+import dana.order.entity.Voucher;
+import dana.order.usecase.broadcast.model.NewVoucher;
+import dana.order.usecase.port.DatabaseMapper;
+import dana.order.usecase.port.VoucherRepository;
+import org.json.simple.JSONObject;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 public class VoucherListener {
 
+    @Autowired
+    DatabaseMapper databaseMapper;
+
+    @Autowired
+    VoucherRepository voucherRepository;
+
     @RabbitListener(queues = "${spring.rabbitmq.queue.listener}",containerFactory = "createListener")
-    public void recieveMessage(String aan)
-    {
-        System.out.println(aan);
+    public void recieveMessage(NewVoucher vouchers) {
+
+        System.out.println(vouchers.toJsonString());
+
+        Voucher voucher = new Voucher();
+        voucher.setIdVoucher(Integer.valueOf(""+vouchers.getIdVoucher()));
+        voucher.setIdMerchant(Integer.valueOf(""+vouchers.getIdMerchant()));
+        voucher.setVoucherName(""+vouchers.getVoucherName());
+        voucher.setVoucherPrice(vouchers.getVoucherPrice());
+        voucher.setMaxDiscountPrice(vouchers.getMaxDiscount());
+        voucher.setDiscount(vouchers.getDiscount());
+        voucher.setVoucherQuantity(vouchers.getQuota());
+        voucher.setIsActive(vouchers.getStatus());
+        voucher.setExpiredDate(vouchers.getExpiredDate());
+
+        if (voucherRepository.isVoucherExists(voucher.getIdVoucher()) == Boolean.FALSE){
+            databaseMapper.createNewVoucher(voucher);
+        }else {
+            databaseMapper.updateAVoucher(voucher);
+        }
+
+        System.out.println("New incoming voucher id: "+vouchers.getIdVoucher());
     }
 
 }
