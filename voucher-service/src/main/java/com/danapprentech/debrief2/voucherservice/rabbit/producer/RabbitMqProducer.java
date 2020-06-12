@@ -24,4 +24,9 @@ public class RabbitMqProducer
         directExchange.convertAndSend(exchange,routingKey,aan);
     }
 
+    public void updateVoucher(Voucher aan)
+    {
+        directExchange.convertAndSend(exchange,routingKey,aan);
+    }
+
 }
