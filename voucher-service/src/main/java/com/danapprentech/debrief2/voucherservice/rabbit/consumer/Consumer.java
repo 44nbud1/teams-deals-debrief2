@@ -62,7 +62,6 @@ public class Consumer
         voucherResponse.setStatus(voucher.getStatus());
         voucherResponse.setIdMerchant(voucher.getMerchant().getIdMerchant());
         voucherResponse.setIdVoucher(voucher.getIdVoucher());
-        voucherResponse.setMerchantName(voucher.getMerchant().getMerchantName());
         mqProducer.sendToRabbitVoucher(voucherResponse);
     }
 }
