@@ -13,14 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ConsumerConfig {
 
-    /*
-    spring.rabbitmq.username=guest
-    spring.rabbitmq.password=guest
-    spring.rabbitmq.port=5672
-    spring.rabbitmq.host=localhost
-    spring.rabbitmq.virtualHost=/
-     */
-
     @Value("${spring.rabbitmq.username}")
     private String username;
 
