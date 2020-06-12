@@ -5,7 +5,6 @@ import com.MemberDomain.model.request.RegisterRequest;
 import com.MemberDomain.model.response.UserDataResponse;
 import com.MemberDomain.usecase.broadcast.MemberBroadcaster;
 import com.MemberDomain.usecase.exception.RegisterException;
-import com.MemberDomain.usecase.port.UserMapper;
 import com.MemberDomain.usecase.port.UserRepository;
 import com.MemberDomain.usecase.validation.UserValidation;
 import org.json.simple.JSONObject;
