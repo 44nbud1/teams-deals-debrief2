@@ -30,13 +30,9 @@ public class UserController {
     @Autowired
     SessionValidation sessionValidation;
 
-    @PostMapping(value = "/{idUser}")
-    public ResponseEntity<?> welcome(@PathVariable("idUser") String idUser,
-                                     HttpServletRequest request){
-        if (!sessionValidation.request(idUser, request)){
-            return ResponseFailed.unAuthorized(request.getServletPath());
-        }
-        return new ResponseEntity<>("Welcome. Your session id : "+idUser, HttpStatus.OK);
+    @PostMapping(value = "/")
+    public ResponseEntity<?> welcome(HttpServletRequest request){
+        return new ResponseEntity<>("Welcome. Your session id : "+request.getSession().getId(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id_user}")
