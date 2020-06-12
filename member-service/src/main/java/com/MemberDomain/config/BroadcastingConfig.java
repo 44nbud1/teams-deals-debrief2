@@ -84,8 +84,8 @@ public class BroadcastingConfig {
     }
 
     @Bean
-    public Binding binding(FanoutExchange fanoutMember,
+    public Binding binding(FanoutExchange fanout,
                            Queue autoDeleteQueue) {
-        return BindingBuilder.bind(autoDeleteQueue).to(fanoutMember);
+        return BindingBuilder.bind(autoDeleteQueue).to(fanout);
     }
 }

@@ -13,16 +13,12 @@ import org.springframework.stereotype.Service;
 public class TransactionListener {
 
     @Autowired
-    UserDataResponse userDataResponse;
-
-    @Autowired
     UserMapper userMapper;
 
     @Autowired
     BalanceMapper balanceMapper;
 
     @Autowired
-    @Qualifier("fanoutMember")
     MemberBroadcaster memberBroadcaster;
 
     @Qualifier("fanoutOrder")
