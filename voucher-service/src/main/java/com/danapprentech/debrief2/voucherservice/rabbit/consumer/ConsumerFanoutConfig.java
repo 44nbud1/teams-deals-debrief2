@@ -25,7 +25,7 @@ public class ConsumerFanoutConfig
 
 
     @Bean
-    public Consumer consumer() {
+    public Consumer consumers() {
         return new Consumer();
     }
 }
