@@ -2,9 +2,7 @@ package com.MemberDomain.model.response;
 
 import org.joda.time.DateTime;
 
-import java.util.Date;
-
-public class OTPResponse {
+public class OtpResponse {
 
     private String idOtp;
     private String otp;
@@ -12,10 +10,10 @@ public class OTPResponse {
     private int is_active;
     private String idUser;
 
-    public OTPResponse() {
+    public OtpResponse() {
     }
 
-    public OTPResponse(String idOtp, String otp, DateTime date, int is_active, String idUser) {
+    public OtpResponse(String idOtp, String otp, DateTime date, int is_active, String idUser) {
         super();
         this.idOtp = idOtp;
         this.otp = otp;
@@ -36,7 +34,7 @@ public class OTPResponse {
         return sb.toString();
     }
 
-    public OTPResponse(String otp, DateTime date, int is_active, String idUser){
+    public OtpResponse(String otp, DateTime date, int is_active, String idUser){
         this("", otp, date, is_active, idUser);
     }
 

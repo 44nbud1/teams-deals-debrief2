@@ -1,6 +1,6 @@
 package com.MemberDomain.model.response;
 
-public class RegisterLoginResponse {
+public class UserDataResponse {
 
     private String idUser;
     private String name;
@@ -10,10 +10,10 @@ public class RegisterLoginResponse {
     private String idRole;
     private String roleName;
 
-    public RegisterLoginResponse() {
+    public UserDataResponse() {
     }
 
-    public RegisterLoginResponse(String idUser, String name, String email, String phoneNumber, double balance, String idRole, String roleName) {
+    public UserDataResponse(String idUser, String name, String email, String phoneNumber, double balance, String idRole, String roleName) {
         super();
         this.idUser = idUser;
         this.name = name;
@@ -38,7 +38,7 @@ public class RegisterLoginResponse {
         return sb.toString();
     }
 
-    public RegisterLoginResponse(String name, String email, String phoneNumber, double balance, String idRole, String roleName){
+    public UserDataResponse(String name, String email, String phoneNumber, double balance, String idRole, String roleName){
         this("", name, email, phoneNumber, balance, idRole, roleName);
     }
 
