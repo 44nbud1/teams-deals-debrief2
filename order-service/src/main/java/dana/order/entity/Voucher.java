@@ -14,7 +14,7 @@ public class Voucher {
     private Double maxDiscountPrice;
     private Double discount;
     private Integer voucherQuantity;
-    private String expiredDate;
+    private Date expiredDate;
     private Boolean isActive;
     private Date createdAt;
     private Date updatedAt;
@@ -75,11 +75,11 @@ public class Voucher {
         this.voucherQuantity = voucherQuantity;
     }
 
-    public String getExpiredDate() {
+    public Date getExpiredDate() {
         return expiredDate;
     }
 
-    public void setExpiredDate(String expiredDate) {
+    public void setExpiredDate(Date expiredDate) {
         this.expiredDate = expiredDate;
     }
 

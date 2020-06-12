@@ -32,7 +32,10 @@ public class VoucherRepositoryImpl implements VoucherRepository {
         databaseMapper.insertNewOrder(idUser, voucher.getVoucherPrice(), idVoucher);
     }
 
-    public void broadcastNewOrder(String idUser, Integer idVoucher){
-
+    public Boolean isVoucherExists(Integer idVoucher){
+        if (databaseMapper.checkVoucherExists(idVoucher) == 0){
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
     }
 }
