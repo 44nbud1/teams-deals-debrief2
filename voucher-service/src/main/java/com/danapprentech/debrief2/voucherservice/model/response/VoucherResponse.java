@@ -19,5 +19,8 @@ public class VoucherResponse
     private Date expiredDate;
     private Boolean status;
     private Long merchantId;
+    private Long idVoucher;
+    private Long idMerchant;
+    private String merchantName;
 
 }
