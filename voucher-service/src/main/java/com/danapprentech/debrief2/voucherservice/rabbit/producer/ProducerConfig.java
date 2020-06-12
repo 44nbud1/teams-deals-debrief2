@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 public class ProducerConfig
 {
 
-
     @Configuration
     public class RabbitConfigConnection
     {
