@@ -2,7 +2,7 @@ package com.MemberDomain.usecase.port;
 
 import com.MemberDomain.model.request.RegisterRequest;
 import com.MemberDomain.model.response.ProfileResponse;
-import com.MemberDomain.model.response.RegisterLoginResponse;
+import com.MemberDomain.model.response.UserDataResponse;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -12,8 +12,8 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    final String registerUser = "INSERT INTO tbl_users (idUser, name, email, phoneNumber, password, idRole)\n" +
-            "VALUES (#{idUser}, #{name}, #{email}, #{phoneNumber}, #{password}, '2');";
+    final String registerUser = "INSERT INTO tbl_users (name, email, phoneNumber, password, idRole)\n" +
+            "VALUES (#{name}, #{email}, #{phoneNumber}, #{password}, '2');";
 
     final String emailCheck = "SELECT * FROM tbl_users WHERE email = #{email}";
     final String phoneCheck = "SELECT * FROM tbl_users WHERE phoneNumber = #{phoneNumber}";
@@ -37,16 +37,17 @@ public interface UserMapper {
     final String editProfilePro = "";
 
     @Insert(registerUser)
+    @Options(useGeneratedKeys = true, keyProperty = "idUser")
     void registerUser(RegisterRequest register);
 
     @Select(emailCheck)
-    RegisterLoginResponse emailCheck(String email);
+    UserDataResponse emailCheck(String email);
 
     @Select(phoneCheck)
-    RegisterLoginResponse phoneCheck(String phoneNumber);
+    UserDataResponse phoneCheck(String phoneNumber);
 
     @Select(login)
-    RegisterLoginResponse login(String phoneNumber, String password);
+    ProfileResponse login(String phoneNumber, String password);
 
     @Select(getUserData)
     @Results(value = {
@@ -58,7 +59,7 @@ public interface UserMapper {
             @Result(property = "idRole", column = "idRole"),
             @Result(property = "roleName", column = "roleName")
     })
-    RegisterLoginResponse getUserData(String idUser);
+    UserDataResponse getUserData(String idUser);
 
     @Select(getUserProfile)
     @Results(value = {
@@ -83,5 +84,5 @@ public interface UserMapper {
             @Result(property = "phoneNumber", column = "phoneNumber"),
             @Result(property = "idRole", column = "idRole")
     })
-    List<RegisterLoginResponse> getAll();
+    List<UserDataResponse> getAll();
 }
