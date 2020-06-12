@@ -64,6 +64,14 @@ public interface DatabaseMapper {
             "voucher_price = #{voucherPrice}, max_discount_price = #{maxDiscountPrice}, discount = #{discount}, " +
             "voucher_quantity = #{voucherQuantity}, is_active = #{isActive}, expired_date = #{expiredDate} WHERE id_voucher = #{idVoucher}";
     final String checkVoucherExists = "SELECT COUNT(*) AS amount FROM vouchers WHERE id_voucher = #{idVoucher}";
+    final String createNewUser = "INSERT INTO users (id_user, balance, phone_number) VALUES (#{idUser}, #{balance}, #{phoneNumber})";
+    final String updateAUser = "UPDATE SET WHERE id_user = #{idUser}";
+
+    @Insert(createNewUser)
+    void createNewUser(User user);
+
+    @Update(updateAUser)
+    void updateAUser(User user);
 
     @Insert(createNewVoucher)
     void createNewVoucher(Voucher voucher);
