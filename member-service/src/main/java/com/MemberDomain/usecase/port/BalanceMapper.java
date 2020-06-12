@@ -10,7 +10,12 @@ public interface BalanceMapper {
     final String registerBalance = "INSERT INTO tbl_balances (idUser, balance)\n" +
             "VALUES (#{idUser}, '0');";
 
+    final String updateBalance = "UPDATE tbl_balances SET balance = #{balance} WHERE idUser = #{idUser}";
+
     @Insert(registerBalance)
-    void registerBalance(String idUser);
+    void registerBalance(@Param("idUser") String idUser);
+
+    @Update(updateBalance)
+    void updateBalance(@Param("balance") double finalAmount, @Param("idUser") String idUser);
 
 }

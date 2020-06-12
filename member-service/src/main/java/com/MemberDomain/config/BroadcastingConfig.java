@@ -1,12 +1,13 @@
 package com.MemberDomain.config;
 
-import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.AbstractConnectionFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,8 +67,25 @@ public class BroadcastingConfig {
     }
 
     @Bean
+    @Qualifier("fanoutOrder")
     public FanoutExchange fanout(){
+        return new FanoutExchange("deals.order.yes1sfe94hksjf");
+    }
+
+    @Bean
+    @Qualifier("fanoutMember")
+    public FanoutExchange fanoutMember(){
         return new FanoutExchange("deals.member.hanggu");
     }
 
+    @Bean
+    public Queue autoDeleteQueue() {
+        return new AnonymousQueue();
+    }
+
+    @Bean
+    public Binding binding(FanoutExchange fanout,
+                           Queue autoDeleteQueue) {
+        return BindingBuilder.bind(autoDeleteQueue).to(fanout);
+    }
 }
