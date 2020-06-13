@@ -46,7 +46,7 @@ public class AdminRestController {
                                           @PathVariable String idUser,
                              @RequestBody VoucherRequest voucherRequest)
     {
-        if (!idUser.equalsIgnoreCase("user01"))
+        if (!idUser.equalsIgnoreCase("12"))
         {
             return new ResponseEntity<>(new MessageResponse("User not found","022","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.NOT_FOUND);
