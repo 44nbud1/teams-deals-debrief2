@@ -94,7 +94,6 @@ public class UserController {
         if (!sessionValidation.requestVoucher(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
-        System.out.println(request.getServletPath());
         return transactionService.transactionHistory(idUser, category, filterStart, filterEnd, page, request.getServletPath());
     }
 

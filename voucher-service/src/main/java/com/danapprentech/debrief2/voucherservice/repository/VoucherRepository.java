@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface VoucherRepository extends JpaRepository<Voucher, Long>
 {
 
-    Page<Voucher> findByIdVoucher(Long id, Pageable pageable);
+    Page<Voucher> findByMerchant(Long id, Pageable pageable);
     Voucher findByIdVoucher(Long id);
     Page<Voucher> findByStatus(Boolean status, Pageable pageable);
     Page<Voucher> findByVoucherNameContainingIgnoreCase(String voucherName, Pageable pageable);

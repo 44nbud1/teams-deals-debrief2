@@ -9,6 +9,7 @@ public class CreateMerchantRequest {
     private Integer quota;
     private String expiredDate;
     private Boolean status;
+    private String idUser;
 
     public String getVoucherName() {
         return voucherName;
@@ -64,5 +65,13 @@ public class CreateMerchantRequest {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
 }

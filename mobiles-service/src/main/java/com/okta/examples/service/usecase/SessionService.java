@@ -31,5 +31,7 @@ public class SessionService {
 
     public void destroySessionWithoutId(String idSession){ repository.destroySessionWithoutId(idSession);}
 
+    public String getIdUserSession(String idSession){ return repository.getIdUserSession(idSession);}
+
 
 }
