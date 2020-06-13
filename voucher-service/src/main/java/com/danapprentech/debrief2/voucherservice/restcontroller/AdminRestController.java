@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 
@@ -44,8 +45,11 @@ public class AdminRestController {
     @PostMapping("/admin/{idUser}/merchant/{idMerchant}/vouchers")
     public ResponseEntity<?> createOutlet(@PathVariable Long idMerchant,
                                           @PathVariable String idUser,
-                             @RequestBody VoucherRequest voucherRequest)
+                                          @RequestBody VoucherRequest voucherRequest,
+                                          HttpServletRequest httpServletRequest)
     {
+        System.out.println(httpServletRequest.getHeader("Authorization").substring(7));
+
         if (!idUser.equalsIgnoreCase("12"))
         {
             return new ResponseEntity<>(new MessageResponse("User not found","022","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
@@ -200,8 +204,11 @@ public class AdminRestController {
     @GetMapping("/admin/show-all-voucher")
     public ResponseEntity<?> getAllVoucher(
             @RequestParam Optional<Integer> page,
-            @RequestParam(defaultValue = "voucherName") String sortBy)
+            @RequestParam(defaultValue = "voucherName") String sortBy,
+            HttpServletRequest httpServletRequest)
     {
+        System.out.println(httpServletRequest.getHeader("Authorization").substring(7));
+
         String check = String.valueOf(page);
         System.out.println(page);
 
