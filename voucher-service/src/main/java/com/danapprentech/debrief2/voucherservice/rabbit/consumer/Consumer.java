@@ -52,6 +52,7 @@ public class Consumer
         // kirim keyogi
 
         Voucher voucher = voucherRepository.findByVoucherName(vouchers.getVoucherName());
+        // response
         VoucherResponse voucherResponse = new VoucherResponse();
         voucherResponse.setVoucherName(voucher.getVoucherName());
         voucherResponse.setDiscount(voucher.getDiscount());
@@ -63,5 +64,6 @@ public class Consumer
         voucherResponse.setIdMerchant(voucher.getMerchant().getIdMerchant());
         voucherResponse.setIdVoucher(voucher.getIdVoucher());
         mqProducer.sendToRabbitVoucher(voucherResponse);
+
     }
 }
