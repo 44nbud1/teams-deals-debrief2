@@ -26,29 +26,29 @@ public class AuthController {
     }
 
     @PostMapping(value = "/api/auth/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest, HttpServletRequest request){
+    public ResponseEntity<?> register(@RequestBody(required = false) RegisterRequest registerRequest, HttpServletRequest request){
         return authentication.register(registerRequest, request.getServletPath());
     }
 
     @PostMapping(value = "/api/auth/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+    public ResponseEntity<?> login(@RequestBody(required = false) LoginRequest loginRequest, HttpServletRequest request) {
         return authentication.login(loginRequest, request.getServletPath());
     }
 
     @PostMapping(value ="/api/auth/request-otp")
-    public ResponseEntity<?> requestOtp(@RequestBody JSONObject data, HttpServletRequest request){
+    public ResponseEntity<?> requestOtp(@RequestBody(required = false) JSONObject data, HttpServletRequest request){
         return authentication.requestOtp(data, request.getServletPath());
     }
 
     @PostMapping(value ="/api/auth/{idUser}/match-otp")
     public ResponseEntity<?> matchOtp(@PathVariable("idUser") String idUser,
-                                      @RequestBody JSONObject data, HttpServletRequest request){
+                                      @RequestBody(required = false) JSONObject data, HttpServletRequest request){
         return authentication.matchOtp(idUser, data, request.getServletPath());
     }
 
     @PostMapping(value = "/api/auth/{idUser}/forgot-password")
     public ResponseEntity<?> forgotPassword(@PathVariable("idUser") String idUser,
-                                            @RequestBody ForgotPasswordRequest forgotPasswordRequest,
+                                            @RequestBody(required = false) ForgotPasswordRequest forgotPasswordRequest,
                                             HttpServletRequest request){
         return authentication.forgotPassword(idUser, forgotPasswordRequest, request.getServletPath());
     }

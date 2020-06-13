@@ -52,6 +52,9 @@ public class AdminValidation {
     }
 
     public ResponseEntity<?> test(JSONObject data, String path){
+        if (data == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_VOUCHER_NAME, path);
+        }
         if (data.get("voucherName") == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_VOUCHER_NAME, path);
         }
@@ -83,6 +86,98 @@ public class AdminValidation {
 
         if (!(""+data.get("status")).equals("false")) {
             if(!(""+data.get("status")).equals("true")){
+                return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+            }
+        }
+        return ResponseSuccess.wrapOk();
+    }
+
+    public ResponseEntity<?> getAllVoucher(String page, String path){
+        if (page == null){
+            return ResponseFailed.wrapResponse(DealsStatus.PAGE_NOT_FOUND, path);
+        }
+        if (!Pattern.matches(regex_integer, page)){
+            return ResponseFailed.wrapResponse(DealsStatus.PAGE_NOT_FOUND, path);
+        }
+        return ResponseSuccess.wrapOk();
+    }
+
+    public ResponseEntity<?> filterVoucher(String merchantCategory, String page, String path){
+        if (merchantCategory == null){
+            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+        }
+        if (page == null){
+            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+        }
+        if (!Pattern.matches(regex_integer, page)){
+            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+        }
+//        if (Integer.parseInt(page) < 0){
+//            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+//        }
+        return ResponseSuccess.wrapOk();
+    }
+
+    public ResponseEntity<?> searchVoucher(String merchantName, String page, String path){
+        if (merchantName == null){
+            return ResponseFailed.wrapResponse(DealsStatus.PAGE_NOT_FOUND, path);
+        }
+        if (page == null){
+            return ResponseFailed.wrapResponse(DealsStatus.PAGE_NOT_FOUND, path);
+        }
+        if (!Pattern.matches(regex_integer, page)){
+            return ResponseFailed.wrapResponse(DealsStatus.PAGE_NOT_FOUND, path);
+        }
+//        if (Integer.parseInt(page) < 0){
+//            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+//        }
+        return ResponseSuccess.wrapOk();
+    }
+
+    public ResponseEntity<?> sortVoucher(String name, String page, String path){
+        if (name == null){
+            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+        }
+        if (page == null){
+            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+        }
+        if (!Pattern.matches(regex_integer, page)){
+            return ResponseFailed.wrapResponse(DealsStatus.PAGE_NOT_FOUND, path);
+        }
+//        if (Integer.parseInt(page) < 0){
+//            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+//        }
+        return ResponseSuccess.wrapOk();
+    }
+
+    public ResponseEntity<?> voucherDetail(String idVoucher, String path){
+        if (idVoucher == null){
+            return ResponseFailed.wrapResponse(DealsStatus.VOUCHER_NOT_FOUND, path);
+        }
+        if (!Pattern.matches(regex_integer, idVoucher) ){
+            return ResponseFailed.wrapResponse(DealsStatus.VOUCHER_NOT_FOUND, path);
+        }
+        return ResponseSuccess.wrapOk();
+    }
+
+    public ResponseEntity<?> updateVoucher(String idVoucher, JSONObject data, String path){
+
+        if (idVoucher == null){
+            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+        }
+        if (data == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_STATUS, path);
+        }
+        if (data.get("status") == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_STATUS, path);
+        }
+        if (!(""+data.get("status")).equals("false")) {
+            if(!(""+data.get("status")).equals("true")){
+                return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+            }
+        }
+        if (data.get("updateQty") != null) {
+            if (!Pattern.matches(regex_integer, ""+data.get("updateQty"))) {
                 return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
             }
         }
