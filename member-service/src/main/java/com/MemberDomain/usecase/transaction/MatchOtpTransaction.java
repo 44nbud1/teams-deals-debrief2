@@ -14,10 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 @Service
 public class MatchOtpTransaction {
 
@@ -37,18 +33,15 @@ public class MatchOtpTransaction {
             throw new RegisterException("User is not found.", HttpStatus.NOT_FOUND);
         }
 
-        String otp = matchOtp.getOtp();
-        OtpResponse otpResponse = userRepository.matchOtp(""+idUser, ""+otp);
+        String userOtp = matchOtp.getOtp();
+        OtpResponse matchingOtp = userRepository.matchOtp(""+idUser, ""+userOtp);
 
-        DateTime expiredDate = otpResponse.getExpiredDate();
-        DateTime currentDate = new DateTime();
-
-        if (otp == otpResponse.getOtp()){
-            throw new MatchOtpException("Otp Not Match.", HttpStatus.NOT_FOUND);
+        if(matchingOtp == null || !userOtp.equals(matchingOtp.getOtp())) {
+            return ResponseWrapper.wrap("OTP Not Match.", 200, matchingOtp);
         }
 
-        if(currentDate.compareTo(expiredDate) > 0){
-            return ResponseWrapper.wrap("Your OTP expired.", 200, idUser);
+        if (userOtp.equals(matchingOtp.getOtp())){
+            return ResponseWrapper.wrap("OTP Match.", 200, matchingOtp);
         }
 
         JSONObject result = new JSONObject();

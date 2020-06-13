@@ -92,45 +92,45 @@ public class UserController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-    // match otp
-    @PostMapping("/auth/{idUser}/match-otpasdasd")
-    public ResponseEntity<?> matchOTPasd(@PathVariable String idUser, @RequestBody MatchOtpRequest otp){
-        ProfileResponse userCheck = userMapper.getUserProfile(idUser);
-        if (userCheck == null) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("message", "User is not found");
-            jsonObject.put("status", "404");
-            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        }
-
-        OtpResponse checkOTP = otpMapper.checkOTP(idUser);
-        if(checkOTP == null){
-            JSONObject jsonObject = new JSONObject();
-            JSONObject empty = new JSONObject();
-            jsonObject.put("data", empty);
-            jsonObject.put("message", "You need to request new OTP.");
-            jsonObject.put("status", "200");
-            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-        }
-        else{
-            OtpResponse matchOTP = otpMapper.matchOTP(idUser, otp.getOtp());
-            if(matchOTP.getOtp() != otp.getOtp()){
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("Status", "");
-                jsonObject.put("Message", "OTP is invalid.");
-                jsonObject.put("Http status", "400");
-                return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-            }
-            else{
-                JSONObject jsonObject = new JSONObject();
-                JSONObject empty = new JSONObject();
-                jsonObject.put("data", empty);
-                jsonObject.put("message", "OTP Match.");
-                jsonObject.put("status", "200");
-                return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-            }
-        }
-    }
+//    //match otp
+//    @PostMapping("/auth/{idUser}/match-otpasdasd")
+//    public ResponseEntity<?> matchOTPasd(@PathVariable String idUser, @RequestBody MatchOtpRequest otp){
+//        ProfileResponse userCheck = userMapper.getUserProfile(idUser);
+//        if (userCheck == null) {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put("message", "User is not found");
+//            jsonObject.put("status", "404");
+//            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
+//        }
+//
+//        OtpResponse checkOTP = otpMapper.checkOTP(idUser);
+//        if(checkOTP == null){
+//            JSONObject jsonObject = new JSONObject();
+//            JSONObject empty = new JSONObject();
+//            jsonObject.put("data", empty);
+//            jsonObject.put("message", "You need to request new OTP.");
+//            jsonObject.put("status", "200");
+//            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+//        }
+//        else{
+//            OtpResponse matchOTP = otpMapper.matchOTP(idUser, otp.getOtp());
+//            if(matchOTP.getOtp() != otp.getOtp()){
+//                JSONObject jsonObject = new JSONObject();
+//                jsonObject.put("Status", "");
+//                jsonObject.put("Message", "OTP is invalid.");
+//                jsonObject.put("Http status", "400");
+//                return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+//            }
+//            else{
+//                JSONObject jsonObject = new JSONObject();
+//                JSONObject empty = new JSONObject();
+//                jsonObject.put("data", empty);
+//                jsonObject.put("message", "OTP Match.");
+//                jsonObject.put("status", "200");
+//                return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+//            }
+//        }
+//    }
 
     // request otp
     @PostMapping("/auth/request-otpasd")
