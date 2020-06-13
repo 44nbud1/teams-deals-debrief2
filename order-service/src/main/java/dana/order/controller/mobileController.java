@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -32,6 +33,7 @@ public class mobileController {
     @Autowired
     DetailedTransactionHistory detailedTransactionHistory;
 
+    @Transactional
     @PostMapping(value = "/api/user/{idUser}/transaction/voucher", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> placeOrder(@PathVariable("idUser") String idUser, @RequestBody JSONObject json){
         json.put("idUser", idUser);
@@ -39,6 +41,7 @@ public class mobileController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
+    @Transactional
     @PutMapping(value = "/api/user/{idUser}/transaction/voucher", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> payOrder(@PathVariable("idUser") String idUser,
                                       @RequestBody JSONObject json){
@@ -47,6 +50,7 @@ public class mobileController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @Transactional
     @PostMapping(value = "/api/user/{idUser}/transaction/topup", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> TOPUP(@PathVariable("idUser") Integer idUser, @RequestBody JSONObject json){
         json.put("idUser", idUser);

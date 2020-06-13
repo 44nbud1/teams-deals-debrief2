@@ -2,14 +2,15 @@ package com.danapprentech.debrief2.voucherservice.rabbit.consumer;//package com.
 
 import com.danapprentech.debrief2.voucherservice.model.Voucher;
 import com.danapprentech.debrief2.voucherservice.model.response.VoucherResponse;
-import com.danapprentech.debrief2.voucherservice.rabbit.model.MemberConsumer;
 import com.danapprentech.debrief2.voucherservice.rabbit.model.TransactionConsumer;
+import com.danapprentech.debrief2.voucherservice.rabbit.model.UpdateQtyConsumer;
 import com.danapprentech.debrief2.voucherservice.rabbit.producer.RabbitMqProducer;
 import com.danapprentech.debrief2.voucherservice.repository.VoucherRepository;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -36,7 +37,8 @@ public class Consumer
 //        voucherRepository.save(vouchers);
 //    }
 
-    @RabbitListener(queues = "deals.order.queueaiewufc")
+    @Qualifier("shareOrderForVoucher")
+    @RabbitListener(queues = "deals.queue.order.voucher")
     public void receive1(TransactionConsumer updateQtyConsumer) throws InterruptedException
     {
         System.out.println("-------------");
@@ -66,13 +68,4 @@ public class Consumer
         mqProducer.sendToRabbitVoucher(voucherResponse);
 
     }
-
-    //deals.member.hanggu
-    @Qualifier("fanoutMember")
-    @RabbitListener(queues = "deals.member.queuehanggu")
-    public void receive(MemberConsumer user)
-    {
-        System.out.println(user);
-    }
-
 }

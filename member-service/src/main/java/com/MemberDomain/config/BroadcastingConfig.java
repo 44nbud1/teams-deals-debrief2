@@ -67,33 +67,33 @@ public class BroadcastingConfig {
     }
 
     @Bean
-    @Qualifier("fanoutOrder")
-    public FanoutExchange fanout(){
-        return new FanoutExchange("deals.order.yes1sfe94hksjf");
+    @Qualifier("shareMemberForOrder")
+    public FanoutExchange fanoutMemberForOrder(){
+        return new FanoutExchange("deals.fanout.member.order");
     }
 
     @Bean
-    @Qualifier("fanoutMember")
-    public FanoutExchange fanoutMember(){
-        return new FanoutExchange("deals.member.hanggu");
+    @Qualifier("shareOrderForMember")
+    public FanoutExchange fanoutOrderForMember(){
+        return new FanoutExchange("deals.fanout.order.member");
     }
 
     @Bean
-    @Qualifier("fanoutMember")
-    public Queue memberQueue() {
-        return new Queue("deals.member.queuehanggu");
+    @Qualifier("shareMemberForOrder")
+    public Queue queueMemberForOrder() {
+        return new Queue("deals.queue.member.order");
     }
 
     @Bean
-    @Qualifier("fanoutOrder")
-    public Queue transactionQueue() {
-        return new Queue("deals.order.queueaiewufc");
+    @Qualifier("shareOrderForMember")
+    public Queue queueOrderForMember() {
+        return new Queue("deals.queue.order.member");
     }
 
     @Bean
-    @Qualifier("fanoutOrder")
-    public Binding binding(FanoutExchange fanout,
-                           Queue transactionQueue) {
-        return BindingBuilder.bind(transactionQueue).to(fanout);
+    @Qualifier("shareOrderForMember")
+    public Binding binding(FanoutExchange fanoutOrderForMember,
+                           Queue queueOrderForMember) {
+        return BindingBuilder.bind(queueOrderForMember).to(fanoutOrderForMember);
     }
 }

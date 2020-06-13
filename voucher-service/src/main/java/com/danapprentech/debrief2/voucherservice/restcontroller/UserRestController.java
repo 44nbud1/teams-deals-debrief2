@@ -75,7 +75,7 @@ public class UserRestController
 
         if (merchantsCat == null)
         {
-            return new ResponseEntity<>(new MessageResponse("voucher not found","062",
+            return new ResponseEntity<>(new MessageResponse("Voucher not found.","062",
                     "/api/user/filter-voucher",new Date()),
                     HttpStatus.NOT_FOUND);
         }
@@ -84,7 +84,7 @@ public class UserRestController
 
         if (category.equalsIgnoreCase("fnb"))
         {
-            Merchant merchants = merchantRepository.findByMerchantNameContainingIgnoreCase("kfc");
+            Merchant merchants = merchantRepository.findByMerchantNameStartsWithIgnoreCase ("kfc");
 
             List<Voucher> vouc = merchants.getVouchers();
             Pageable pageable = PageRequest.of(page.orElse(0), 10, Sort.Direction.ASC, sortBy);
@@ -118,7 +118,7 @@ public class UserRestController
 
         if (category.equalsIgnoreCase("onlineTransaction"))
         {
-            Merchant merchants = merchantRepository.findByMerchantNameContainingIgnoreCase("telkom");
+            Merchant merchants = merchantRepository.findByMerchantNameStartsWithIgnoreCase("telkom");
 
             List<Voucher> vouc = merchants.getVouchers();
             Pageable pageable = PageRequest.of(page.orElse(0), 10, Sort.Direction.ASC, sortBy);
@@ -150,7 +150,7 @@ public class UserRestController
             return ResponseEntity.ok(merchantResp);
         }
 
-        return new ResponseEntity<>(new MessageResponse("voucher not found","062",
+        return new ResponseEntity<>(new MessageResponse("Voucher not found","062",
                 "/api/user/filter-voucher",new Date()),
                 HttpStatus.NOT_FOUND);
     }
@@ -162,7 +162,7 @@ public class UserRestController
             @RequestParam Optional<String> merchantName,
             @RequestParam(defaultValue = "merchantName") String sortBy)
     {
-        Merchant merchants = merchantRepository.findByMerchantNameContainingIgnoreCase(merchantName.orElse(""));
+        Merchant merchants = merchantRepository.findByMerchantNameStartsWithIgnoreCase(merchantName.orElse(""));
 
         if (merchants == null)
         {

@@ -46,7 +46,7 @@ public class UserController {
 
     @PutMapping(value = "/{idUser}")
     public ResponseEntity<?> editProfile(@PathVariable("idUser") String idUser,
-                                         @RequestBody EditProfileRequest editProfileRequest,
+                                         @RequestBody(required = false) EditProfileRequest editProfileRequest,
                                          HttpServletRequest request){
         if (!sessionValidation.request(idUser, request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
@@ -56,7 +56,7 @@ public class UserController {
 
     @PostMapping(value= "/{id_user}/transaction/voucher")
     public ResponseEntity<?> createOrderVoucher(@PathVariable("id_user") String idUser,
-                                                @RequestBody JSONObject data,
+                                                @RequestBody(required = false) JSONObject data,
                                                 HttpServletRequest request){
         if (!sessionValidation.request(idUser, request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
@@ -66,7 +66,7 @@ public class UserController {
 
     @PutMapping(value = "/{idUser}/transaction/voucher")
     public ResponseEntity<?> payOrderVoucher(@PathVariable("idUser") String idUser,
-                                             @RequestBody JSONObject data,
+                                             @RequestBody(required = false) JSONObject data,
                                              HttpServletRequest request){
         if (!sessionValidation.request(idUser, request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
@@ -76,7 +76,7 @@ public class UserController {
 
     @PostMapping(value = "/{idUser}/transaction/topup")
     public ResponseEntity<?> payTopup(@PathVariable("idUser") String idUser,
-                                      @RequestBody JSONObject data,
+                                      @RequestBody(required = false) JSONObject data,
                                       HttpServletRequest request){
         if (!sessionValidation.request(idUser, request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
@@ -94,7 +94,6 @@ public class UserController {
         if (!sessionValidation.requestVoucher(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
-        System.out.println(request.getServletPath());
         return transactionService.transactionHistory(idUser, category, filterStart, filterEnd, page, request.getServletPath());
     }
 
@@ -147,7 +146,7 @@ public class UserController {
         return voucherService.sortVoucher(name, page, request.getServletPath());
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/{idUser}/logout")
     public ResponseEntity<?> logout(@PathVariable("idUser") String idUser,
                                     HttpServletRequest request){
         if (!sessionValidation.request(idUser, request)){

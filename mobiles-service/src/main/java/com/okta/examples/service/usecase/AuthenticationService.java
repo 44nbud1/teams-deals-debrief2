@@ -40,6 +40,10 @@ public class AuthenticationService {
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
+
+//        if (registerRequest.getPhoneNumber().startsWith("0")){
+//            registerRequest.setPhoneNumber("+62"+registerRequest.getPhoneNumber().substring(1));
+//        }
 //        registerRequest.setPassword(encryptPassword(registerRequest.getPassword()));
         //Register validation in member domain
         System.out.println("Register. Send data to member domain : "+ Parser.toJsonString(registerRequest));
@@ -87,6 +91,10 @@ public class AuthenticationService {
             return check;
         }
 
+//        if (loginRequest.getPhoneNumber().startsWith("0")){
+//            loginRequest.setPhoneNumber("+62"+loginRequest.getPhoneNumber().substring(1));
+//        }
+
         //Login validation in member domain
         System.out.println("Login. Send data to member domain : "+ Parser.toJsonString(loginRequest));
         ResponseEntity<?> fromMember = member.login(loginRequest);
@@ -102,9 +110,9 @@ public class AuthenticationService {
         }
 
         //Create user
-        JSONObject user = (JSONObject) jsonMember.get("user");
-        String idUser = ""+user.get("id");
-        String idSession= UUID.randomUUID().toString();
+        JSONObject user = (JSONObject) jsonMember.get("data");
+        String idUser = ""+user.get("idUser");
+        String idSession= UUID.randomUUID().toString()+idUser;
 
         //Check user session
         System.out.println("Check if id : "+ idUser+" already have session");
@@ -164,6 +172,7 @@ public class AuthenticationService {
         }
 
         JSONObject user = (JSONObject) jsonMember.get("data");
+        String idUser = ""+user.get("idUser");
 
         //Wrap response
         return ResponseSuccess.wrapResponse(user, DealsStatus.REQUEST_OTP, path);

@@ -24,7 +24,7 @@ public class MemberDomain {
     @Autowired
     private Template template;
 
-    private final String api = "http://localhost:8083";
+    private final String api = "http://localhost:8080";
 
     public ResponseEntity<?> register(RegisterRequest registerRequest, String path){
        return template.post(api+path, registerRequest);

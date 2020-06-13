@@ -24,16 +24,17 @@ public class AdminService {
     @Autowired
     AdminValidation validate;
 
-    public ResponseEntity<?> createMerchant(String idUser, String idMerchant, CreateMerchantRequest createMerchantRequest, String path){
 
-        System.out.println("Create Merchant. " +new Date());
-        ResponseEntity<?> check = validate.createMerchant(createMerchantRequest, path);
+    public ResponseEntity<?> createMerchant(String idUser, String idMerchant, JSONObject data, String path){
+
+        System.out.println("Create Merchant Validation. " +new Date());
+        ResponseEntity<?> check = validate.test(data, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
-        System.out.println("Create Merchant. Send data to voucher domain :" + Parser.toJsonString(createMerchantRequest));
-        ResponseEntity<?> fromVoucher = voucher.createMerchant(idUser, idMerchant, createMerchantRequest);
+        System.out.println("Create Merchant. Send data to voucher domain :" + Parser.toJsonString(data));
+        ResponseEntity<?> fromVoucher = voucher.createMerchant(idUser, idMerchant, data);
         System.out.println("Create Merchant. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
 
         JSONObject jsonVoucher = Parser.parseJSON(fromVoucher.getBody().toString());
@@ -52,6 +53,12 @@ public class AdminService {
     }
 
     public ResponseEntity<?> getAllVoucher(String page, String path){
+
+        System.out.println("Get All Voucher Validation. " +new Date());
+        ResponseEntity<?> check = validate.getAllVoucher(page, path);
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
 
         ResponseEntity<?> fromVoucher = voucher.getAllVoucherAdmin(page);
         System.out.println("Get All Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
@@ -73,6 +80,12 @@ public class AdminService {
 
     public ResponseEntity<?> filterVoucher(String merchantCategory, String page, String path){
 
+        System.out.println("Filter Voucher Validation. " +new Date());
+        ResponseEntity<?> check = validate.filterVoucher(merchantCategory, page, path);
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
+
         ResponseEntity<?> fromVoucher = voucher.filterVoucherAdmin(merchantCategory, page);
         System.out.println("Filter Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
 
@@ -92,6 +105,12 @@ public class AdminService {
     }
 
     public ResponseEntity<?> searchVoucher(String merchantName, String page, String path){
+
+        System.out.println("Search Voucher Validation. " +new Date());
+        ResponseEntity<?> check = validate.searchVoucher(merchantName, page, path);
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
 
         ResponseEntity<?> fromVoucher = voucher.searchVoucherAdmin(merchantName, page);
         System.out.println("Search Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
@@ -113,6 +132,12 @@ public class AdminService {
 
     public ResponseEntity<?> sortVoucher(String name, String page, String path){
 
+        System.out.println("Sort Voucher Validation. " +new Date());
+        ResponseEntity<?> check = validate.sortVoucher(name, page, path);
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
+
         ResponseEntity<?> fromVoucher = voucher.sortVoucherAdmin(name, page);
         System.out.println("Sort Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
 
@@ -133,6 +158,12 @@ public class AdminService {
 
     public ResponseEntity<?> voucherDetail(String idVoucher, String path){
 
+        System.out.println("Sort Voucher Validation. " +new Date());
+        ResponseEntity<?> check = validate.voucherDetail(idVoucher, path);
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
+
         ResponseEntity<?> fromVoucher = voucher.voucherDetail(idVoucher);
         System.out.println("Voucher Detail. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
 
@@ -146,7 +177,33 @@ public class AdminService {
 
         JSONArray voucher = (JSONArray) jsonVoucher.get("data");
 
-        return ResponseSuccess.wrapResponse(voucher, DealsStatus.VOUCHER_COLLECTED, path);
+        return ResponseSuccess.wrapResponse(voucher, DealsStatus.VOUCHER_DETAIL_COLLECTED, path);
+//        return ResponseSuccess.wrap200(voucher, "Success",
+//                "/api/admin/findByMerchantName-voucher");
+    }
+
+    public ResponseEntity<?> updateVoucher(String idVoucher, JSONObject data, String path){
+
+        System.out.println("Update Voucher Validation. " +new Date());
+        ResponseEntity<?> check = validate.updateVoucher(idVoucher,data,  path);
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
+        System.out.println("Update Voucher. Send data to voucher domain :" + Parser.toJsonString(data));
+        ResponseEntity<?> fromVoucher = voucher.updateVoucher(idVoucher, data, path);
+        System.out.println("Update Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
+
+        JSONObject jsonVoucher = Parser.parseJSON(fromVoucher.getBody().toString());
+        String message = ""+ jsonVoucher.get("message");
+        String status = ""+ jsonVoucher.get("status");
+
+        if (!fromVoucher.getStatusCode().is2xxSuccessful()){
+            return ResponseFailed.wrapResponseFailed(message, status, fromVoucher.getStatusCode(), path);
+        }
+
+        JSONArray voucher = (JSONArray) jsonVoucher.get("data");
+
+        return ResponseSuccess.wrapResponse(voucher, DealsStatus.STATUS_CHANGE, path);
 //        return ResponseSuccess.wrap200(voucher, "Success",
 //                "/api/admin/findByMerchantName-voucher");
     }

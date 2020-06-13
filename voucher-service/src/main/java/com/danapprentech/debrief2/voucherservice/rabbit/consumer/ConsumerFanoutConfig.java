@@ -10,36 +10,25 @@ package com.danapprentech.debrief2.voucherservice.rabbit.consumer;
 public class ConsumerFanoutConfig
 {
     @Bean
-    public FanoutExchange fanout() {
-        return new FanoutExchange("deals.order.yes1sfe94hksjf");
+    @Qualifier("shareOrderForVoucher")
+    public FanoutExchange fanoutOrderForVoucher() {
+        return new FanoutExchange("deals.fanout.order.voucher");
     }
 
     @Bean
-    @Qualifier("fanoutMember")
-    public Queue memberQueue(){
-        return new Queue("deals.member.queuehanggu");
+    @Qualifier("shareOrderForVoucher")
+    public Queue queueOrderForVoucher() {
+        return new Queue("deals.queue.order.voucher");
     }
 
     @Bean
-    public Queue transactionQueue() {
-        return new Queue("deals.order.queueaiewufc");
-    }
-
-    @Bean
-    public Binding binding(FanoutExchange fanout, Queue transactionQueue) {
-        return BindingBuilder.bind(transactionQueue).to(fanout);
-    }
-
-    @Bean
-    @Qualifier("fanoutMember")
-    public Binding bindingMember(FanoutExchange fanoutMember,
-                           Queue memberQueue) {
-        return BindingBuilder.bind(memberQueue).to(fanoutMember);
+    @Qualifier("shareOrderForVoucher")
+    public Binding binding(FanoutExchange fanoutOrderForVoucher, Queue queueOrderForVoucher) {
+        return BindingBuilder.bind(queueOrderForVoucher).to(fanoutOrderForVoucher);
     }
 
     @Bean
     public Consumer consumers() {
         return new Consumer();
     }
-
 }
