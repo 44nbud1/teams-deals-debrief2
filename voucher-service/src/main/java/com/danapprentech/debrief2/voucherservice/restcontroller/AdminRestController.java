@@ -51,49 +51,49 @@ public class AdminRestController {
     {
         if (!idUser.equalsIgnoreCase("12"))
         {
-            return new ResponseEntity<>(new MessageResponse("User not found","022","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("User not found.","022","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.NOT_FOUND);
         }
 
         if (merchantRepository.findByIdMerchant(idMerchant) == null)
         {
-            return new ResponseEntity<>(new MessageResponse("Id Merchant Not Found","054","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Id Merchant Not Found.","054","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.NOT_FOUND);
         }
 
         if (voucherRequest.getVoucherName() == null)
         {
-            return new ResponseEntity<>(new MessageResponse("Please fill form voucher name","055","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Please fill form voucher name.","055","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (voucherRequest.getDiscount() == null)
         {
-            return new ResponseEntity<>(new MessageResponse("Please fill form discount","056","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Please fill form discount.","056","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (voucherRequest.getExpiredDate() == null)
         {
-            return new ResponseEntity<>(new MessageResponse("Please fill form expired date","057","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Please fill form expired date.","057","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (voucherRequest.getMaxDiscount() == null)
         {
-            return new ResponseEntity<>(new MessageResponse("Please fill form max discount","058","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Please fill form max discount.","058","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (voucherRequest.getQuota() == null)
         {
-            return new ResponseEntity<>(new MessageResponse("Please fill form quota","059","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Please fill form quota.","059","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (voucherRequest.getStatus() == null)
         {
-            return new ResponseEntity<>(new MessageResponse("Please fill form status","060","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Please fill form status.","060","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -106,44 +106,44 @@ public class AdminRestController {
 
         if (validation.NumberOnlyValidator(voucherRequest.getQuota()))
         {
-            return new ResponseEntity<>(new MessageResponse("Your data is invalid","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Your data is invalid.","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (voucherRequest.getQuota() > 1000)
         {
-            return new ResponseEntity<>(new MessageResponse("Maximum voucher quota of 1000","068","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Maximum voucher quota of 1000.","068","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (voucherRequest.getVoucherPrice() > 1000000)
         {
-            return new ResponseEntity<>(new MessageResponse("Your data is invalid","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Your data is invalid.","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (voucherRequest.getVoucherName().length() < 3 || voucherRequest.getVoucherName().length() > 20)
         {
             return new ResponseEntity<>(new MessageResponse("Voucher name must be at least 3, and less than 20 " +
-                    "characters","065","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+                    "characters.","065","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (voucherRequest.getDiscount() <= 0 ||voucherRequest.getDiscount() >= 100)
         {
-            return new ResponseEntity<>(new MessageResponse("Your data is invalid","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Your data is invalid.","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (voucherRequest.getVoucherPrice() < 0 ||voucherRequest.getVoucherPrice() > 1000000)
         {
-            return new ResponseEntity<>(new MessageResponse("Your data is invalid","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Your data is invalid.","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (voucherRequest.getMaxDiscount() < 0 ||voucherRequest.getMaxDiscount() > 1000000)
         {
-            return new ResponseEntity<>(new MessageResponse("Your data is invalid","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Your data is invalid.","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -207,11 +207,13 @@ public class AdminRestController {
                 vouchers.setVoucherName(voucherRequest.getVoucherName());
                 vouchers.setDiscount(voucherRequest.getDiscount());
                 vouchers.setStatus(voucherRequest.getStatus());
+                vouchers.setMerchantName(merchant.getMerchantName());
                 vouchers.setCreateAt(new Date());
                 vouchers.setUpdateAt(new Date());
                 vouchers.setMerchant(merchant);
                 voucherRepository.save(vouchers);
                 Voucher voucher = voucherRepository.findByVoucherName(voucherRequest.getVoucherName());
+
                 // response
                 VoucherResponse voucherResponse = new VoucherResponse();
                 voucherResponse.setVoucherName(voucherRequest.getVoucherName());
@@ -248,7 +250,6 @@ public class AdminRestController {
             @RequestParam(defaultValue = "voucherName") String sortBy,
             HttpServletRequest httpServletRequest)
     {
-        System.out.println(httpServletRequest.getHeader("Authorization").substring(7));
 
         String check = String.valueOf(page);
         System.out.println(page);
@@ -280,6 +281,21 @@ public class AdminRestController {
 
         List<Page<Voucher>> voucherResponses = new ArrayList<>();
         voucherResponses.add(vouchers);
+
+        List<Voucher> voucherssss = voucherRepository.findAll();
+
+        // response
+//        VoucherShowResponse voucherResponse = new VoucherShowResponse();
+//        voucherResponse.setVoucherName(voucherRequest.getVoucherName());
+//        voucherResponse.setDiscount(voucherRequest.getDiscount());
+//        voucherResponse.setVoucherPrice(voucherRequest.getVoucherPrice());
+//        voucherResponse.setMaxDiscount(voucherRequest.getMaxDiscount());
+//        voucherResponse.setQuota(voucherRequest.getQuota());
+//        voucherResponse.setExpiredDate(voucherRequest.getExpiredDate());
+//        voucherResponse.setStatus(voucherRequest.getStatus());
+//        voucherResponse.setIdMerchant(idMerchant);
+//        voucherResponse.setIdVoucher(voucher.getIdVoucher());
+//        voucherResponse.setMerchantName(voucher.getMerchant().getMerchantName());
 
         Map vouchersRes = new HashMap<>();
         vouchersRes.put("data",voucherResponses);

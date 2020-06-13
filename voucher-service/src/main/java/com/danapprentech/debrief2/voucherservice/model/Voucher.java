@@ -37,6 +37,10 @@ public class Voucher implements Serializable {
 	@NotNull
 	private String voucherName;
 
+	@Column(name = "merchant_name") // --------b
+	@NotNull
+	private String merchantName;
+
 	@Column(name = "voucher_price") // --------2
 	@NotNull
 	private Double voucherPrice;
