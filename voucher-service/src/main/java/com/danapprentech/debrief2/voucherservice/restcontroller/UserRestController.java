@@ -150,7 +150,7 @@ public class UserRestController
             return ResponseEntity.ok(merchantResp);
         }
 
-        return new ResponseEntity<>(new MessageResponse("voucher not found","062",
+        return new ResponseEntity<>(new MessageResponse("Voucher not found","062",
                 "/api/user/filter-voucher",new Date()),
                 HttpStatus.NOT_FOUND);
     }
