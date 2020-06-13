@@ -36,7 +36,7 @@ public class Consumer
 //        voucherRepository.save(vouchers);
 //    }
 
-    @RabbitListener(queues = "#{autoDeleteQueue.name}")
+    @RabbitListener(queues = "deals.order.queueaiewufc")
     public void receive1(Transaction updateQtyConsumer) throws InterruptedException
     {
         System.out.println("-------------");

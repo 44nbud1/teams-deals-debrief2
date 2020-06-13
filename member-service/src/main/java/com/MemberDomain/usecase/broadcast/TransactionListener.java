@@ -22,7 +22,7 @@ public class TransactionListener {
     MemberBroadcaster memberBroadcaster;
 
     @Qualifier("fanoutOrder")
-    @RabbitListener(queues = "#{autoDeleteQueue.name}")
+    @RabbitListener(queues = "deals.order.queueaiewufc")
     public void receive(Transaction transaction) {
         UserDataResponse userDataResponse = userMapper.getUserData(transaction.getIdUser());
 

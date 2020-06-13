@@ -14,15 +14,14 @@ public class ConsumerFanoutConfig
     }
 
     @Bean
-    public Queue autoDeleteQueue() {
-        return new AnonymousQueue();
+    public Queue transactionQueue() {
+        return new Queue("deals.order.queueaiewufc");
     }
 
     @Bean
-    public Binding binding(FanoutExchange fanout, Queue autoDeleteQueue) {
-        return BindingBuilder.bind(autoDeleteQueue).to(fanout);
+    public Binding binding(FanoutExchange fanout, Queue transactionQueue) {
+        return BindingBuilder.bind(transactionQueue).to(fanout);
     }
-
 
     @Bean
     public Consumer consumers() {

@@ -79,14 +79,14 @@ public class BroadcastingConfig {
     }
 
     @Bean
-    public Queue autoDeleteQueue() {
-        return new AnonymousQueue();
+    public Queue transactionQueue() {
+        return new Queue("deals.order.queueaiewufc");
     }
 
     @Bean
     public Binding binding(FanoutExchange fanoutMember,
-                            Queue autoDeleteQueue) {
-        return BindingBuilder.bind(autoDeleteQueue).to(fanoutMember);
+                            Queue transactionQueue) {
+        return BindingBuilder.bind(transactionQueue).to(fanoutMember);
     }
 
 }

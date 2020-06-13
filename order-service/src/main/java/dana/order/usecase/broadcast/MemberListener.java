@@ -18,7 +18,7 @@ public class MemberListener {
     UserRepository userRepository;
 
     @Qualifier("fanoutMember")
-    @RabbitListener(queues = "#{autoDeleteQueue.name}")
+    @RabbitListener(queues = "deals.member.queuehanggu")
     public void receive(User user) {
         if (userRepository.doesUserExist(user.getIdUser()) == Boolean.FALSE){
             databaseMapper.createNewUser(user);

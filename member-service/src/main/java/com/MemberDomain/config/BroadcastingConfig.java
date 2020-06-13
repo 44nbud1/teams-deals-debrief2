@@ -79,13 +79,13 @@ public class BroadcastingConfig {
     }
 
     @Bean
-    public Queue autoDeleteQueue() {
-        return new AnonymousQueue();
+    public Queue memberQueue() {
+        return new Queue("deals.member.queuehanggu");
     }
 
     @Bean
     public Binding binding(FanoutExchange fanout,
-                           Queue autoDeleteQueue) {
-        return BindingBuilder.bind(autoDeleteQueue).to(fanout);
+                           Queue memberQueue) {
+        return BindingBuilder.bind(memberQueue).to(fanout);
     }
 }
