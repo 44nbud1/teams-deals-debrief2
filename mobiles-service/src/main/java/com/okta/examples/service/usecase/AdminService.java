@@ -24,16 +24,16 @@ public class AdminService {
     @Autowired
     AdminValidation validate;
 
-    public ResponseEntity<?> createMerchant(String idUser, String idMerchant, CreateMerchantRequest createMerchantRequest, String path){
+    public ResponseEntity<?> createMerchant(String idUser, String idMerchant, JSONObject data, String path){
 
-        System.out.println("Create Merchant. " +new Date());
-        ResponseEntity<?> check = validate.createMerchant(createMerchantRequest, path);
+        System.out.println("Create Merchant Validation. " +new Date());
+        ResponseEntity<?> check = validate.test(data, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
-        System.out.println("Create Merchant. Send data to voucher domain :" + Parser.toJsonString(createMerchantRequest));
-        ResponseEntity<?> fromVoucher = voucher.createMerchant(idUser, idMerchant, createMerchantRequest);
+        System.out.println("Create Merchant. Send data to voucher domain :" + Parser.toJsonString(data));
+        ResponseEntity<?> fromVoucher = voucher.createMerchant(idUser, idMerchant, data);
         System.out.println("Create Merchant. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
 
         JSONObject jsonVoucher = Parser.parseJSON(fromVoucher.getBody().toString());

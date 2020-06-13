@@ -248,7 +248,6 @@ public class AdminRestController {
             @RequestParam(defaultValue = "voucherName") String sortBy,
             HttpServletRequest httpServletRequest)
     {
-        System.out.println(httpServletRequest.getHeader("Authorization").substring(7));
 
         String check = String.valueOf(page);
         System.out.println(page);
