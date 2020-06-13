@@ -1,6 +1,7 @@
 package com.danapprentech.debrief2.voucherservice.rabbit.consumer;
 
     import org.springframework.amqp.core.*;
+    import org.springframework.beans.factory.annotation.Qualifier;
     import org.springframework.context.annotation.Bean;
     import org.springframework.context.annotation.Configuration;
 
@@ -14,6 +15,12 @@ public class ConsumerFanoutConfig
     }
 
     @Bean
+    @Qualifier("fanoutMember")
+    public Queue memberQueue(){
+        return new Queue("deals.member.queuehanggu");
+    }
+
+    @Bean
     public Queue transactionQueue() {
         return new Queue("deals.order.queueaiewufc");
     }
@@ -24,7 +31,15 @@ public class ConsumerFanoutConfig
     }
 
     @Bean
+    @Qualifier("fanoutMember")
+    public Binding bindingMember(FanoutExchange fanoutMember,
+                           Queue memberQueue) {
+        return BindingBuilder.bind(memberQueue).to(fanoutMember);
+    }
+
+    @Bean
     public Consumer consumers() {
         return new Consumer();
     }
+
 }

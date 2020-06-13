@@ -8,6 +8,7 @@ import com.danapprentech.debrief2.voucherservice.rabbit.producer.RabbitMqProduce
 import com.danapprentech.debrief2.voucherservice.repository.VoucherRepository;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -66,4 +67,13 @@ public class Consumer
         mqProducer.sendToRabbitVoucher(voucherResponse);
 
     }
+
+    //deals.member.hanggu
+    @Qualifier("fanoutMember")
+    @RabbitListener(queues = "deals.member.queuehanggu")
+    public void receive(Member user)
+    {
+        System.out.println(user);
+    }
+
 }
