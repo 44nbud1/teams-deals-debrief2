@@ -48,15 +48,13 @@ public class AdminRestController {
                                           @RequestBody VoucherRequest voucherRequest,
                                           HttpServletRequest httpServletRequest)
     {
-        System.out.println(httpServletRequest.getHeader("Authorization").substring(7));
-
         if (!idUser.equalsIgnoreCase("12"))
         {
             return new ResponseEntity<>(new MessageResponse("User not found","022","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.NOT_FOUND);
         }
 
-        if (voucherOutletService.findById(idMerchant) == null)
+        if (merchantRepository.findByIdMerchant(idMerchant) == null)
         {
             return new ResponseEntity<>(new MessageResponse("Id Merchant Not Found","054","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.NOT_FOUND);
@@ -120,6 +118,13 @@ public class AdminRestController {
         if (voucherRequest.getVoucherPrice() > 1000000)
         {
             return new ResponseEntity<>(new MessageResponse("Your data is invalid","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        if (voucherRequest.getVoucherName().length() < 3 || voucherRequest.getVoucherName().length() > 20)
+        {
+            return new ResponseEntity<>(new MessageResponse("Voucher name must be at least 3, and less than 20 " +
+                    "characters","067","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
