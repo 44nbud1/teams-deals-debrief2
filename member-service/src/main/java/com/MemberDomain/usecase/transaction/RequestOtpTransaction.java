@@ -1,6 +1,8 @@
 package com.MemberDomain.usecase.transaction;
 
-import com.MemberDomain.adapter.wrapper.ResponseWrapper;
+import com.MemberDomain.adapter.status.DealsStatus;
+import com.MemberDomain.adapter.wrapper.ResponseFailed;
+import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.request.OtpRequest;
 import com.MemberDomain.model.response.OtpResponse;
 import com.MemberDomain.model.response.ProfileResponse;
@@ -10,6 +12,7 @@ import com.MemberDomain.usecase.validation.UserValidation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,15 +24,22 @@ public class RequestOtpTransaction {
     @Autowired
     UserRepository userRepository;
 
-    public JSONObject requestOtp(OtpRequest otpRequest){
+    public ResponseEntity<?> requestOtp(OtpRequest otpRequest, String path){
 
-        userValidation.requestOtp(otpRequest);
+        ResponseEntity<?> check = userValidation.requestOtp(otpRequest, path);
 
-        String phoneNumber = otpRequest.getPhoneNumber();
-        ProfileResponse profileResponse = userRepository.requestOtp(""+phoneNumber);
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
+
+        if (otpRequest.getPhoneNumber().startsWith("0")){
+            otpRequest.setPhoneNumber("+62"+otpRequest.getPhoneNumber().substring(1));
+        }
+
+        ProfileResponse profileResponse = userRepository.requestOtp(otpRequest.getPhoneNumber());
 
         if (profileResponse == null){
-            throw new RegisterException("The phone number does not exist.", HttpStatus.NOT_FOUND);
+            return ResponseFailed.wrapResponse(DealsStatus.PHONE_NUMBER_NOT_EXISTS, path);
         }
 
         String idUser = profileResponse.getIdUser();
@@ -37,13 +47,14 @@ public class RequestOtpTransaction {
 
         if (otpResponse == null){
             userRepository.createOtp(""+idUser);
-            return ResponseWrapper.wrap("Your OTP has sent to your phone number.", 200, idUser);
+        }
+        else{
+            userRepository.updateOtp(""+idUser);
         }
 
-        userRepository.updateOtp(""+idUser);
         JSONObject result = new JSONObject();
         result.put("idUser", idUser);
-        return ResponseWrapper.wrap("Your OTP has sent to your phone number.", 200, result);
+        return ResponseSuccess.wrapResponse(result, DealsStatus.REQUEST_OTP, path);
     }
 }
 

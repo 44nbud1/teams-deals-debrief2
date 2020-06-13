@@ -17,7 +17,7 @@ public class ForgotPasswordRequest {
         StringBuilder sb = new StringBuilder();
 
         sb.append("User Password = ").append(password).append(" - ");
-        sb.append("Confirm Password = ").append(password).append(" - ");
+        sb.append("Confirm Password = ").append(confirmPassword).append(" - ");
 
         return sb.toString();
     }

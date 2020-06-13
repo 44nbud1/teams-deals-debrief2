@@ -1,17 +1,18 @@
 package com.MemberDomain.usecase.transaction;
 
-import com.MemberDomain.adapter.wrapper.ResponseWrapper;
+import com.MemberDomain.adapter.status.DealsStatus;
+import com.MemberDomain.adapter.wrapper.ResponseFailed;
+import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.request.MatchOtpRequest;
 import com.MemberDomain.model.response.OtpResponse;
 import com.MemberDomain.model.response.ProfileResponse;
-import com.MemberDomain.usecase.exception.MatchOtpException;
 import com.MemberDomain.usecase.exception.RegisterException;
 import com.MemberDomain.usecase.port.UserRepository;
 import com.MemberDomain.usecase.validation.UserValidation;
-import org.joda.time.DateTime;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,29 +24,35 @@ public class MatchOtpTransaction {
     @Autowired
     UserRepository userRepository;
 
-    public JSONObject matchOtp(String idUser, MatchOtpRequest matchOtp){
+    public ResponseEntity<?> matchOtp(String idUser, MatchOtpRequest matchOtp, String path){
 
-        userValidation.matchOtp(matchOtp);
+        ResponseEntity<?> check = userValidation.matchOtp(matchOtp, path);
+
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
 
         ProfileResponse profileResponse = userRepository.getUserProfile(""+idUser);
 
         if (profileResponse == null){
-            throw new RegisterException("User is not found.", HttpStatus.NOT_FOUND);
+            return ResponseFailed.wrapResponse(DealsStatus.USER_NOT_FOUND, path);
         }
 
         String userOtp = matchOtp.getOtp();
         OtpResponse matchingOtp = userRepository.matchOtp(""+idUser, ""+userOtp);
 
-        if(matchingOtp == null || !userOtp.equals(matchingOtp.getOtp())) {
-            return ResponseWrapper.wrap("OTP Not Match.", 200, matchingOtp);
+        if(matchingOtp == null) {
+            return ResponseFailed.wrapResponse(DealsStatus.OTP_NOT_MATCH, path);
         }
 
-        if (userOtp.equals(matchingOtp.getOtp())){
-            return ResponseWrapper.wrap("OTP Match.", 200, matchingOtp);
+        OtpResponse matchingOtpDate = userRepository.matchOtpDate(""+idUser, ""+userOtp);
+
+        if (matchingOtpDate == null){
+            return ResponseFailed.wrapResponse(DealsStatus.OTP_EXPIRED, path);
         }
 
         JSONObject result = new JSONObject();
-        return ResponseWrapper.wrap("OTP Match.", 200, result);
+        return ResponseSuccess.wrapResponse(result, DealsStatus.OTP_MATCH, path);
     }
 }
 
