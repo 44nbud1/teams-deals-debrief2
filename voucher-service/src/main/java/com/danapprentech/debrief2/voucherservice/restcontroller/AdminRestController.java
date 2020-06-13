@@ -416,8 +416,8 @@ public class AdminRestController {
         merchantResp.put("data",merchantsResponse);
         merchantResp.put("timestamp",new Date());
         merchantResp.put("path","/api/admin/voucher-detail-voucher/"+idVoucher);
-        merchantResp.put("message","Vouchers are successfully collected");
-        merchantResp.put("status","040");
+        merchantResp.put("message","Show detail voucher.");
+        merchantResp.put("status","046");
 
         return ResponseEntity.ok(merchantResp);
     }
