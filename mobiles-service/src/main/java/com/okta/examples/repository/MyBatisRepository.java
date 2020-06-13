@@ -116,4 +116,12 @@ public interface MyBatisRepository {
             @Result(column = "amount")
     })
     Integer checkSessionExpiredWithoutId(@Param("idSession") String idSession);
+
+    final String getIdUserSession = "SELECT id_user from session where " +
+            "id_session = #{idSession} and status = 1";
+    @Select(getIdUserSession)
+    @Results(value = {
+            @Result(column = "id_user")
+    })
+    String getIdUserSession(@Param("idSession") String idSession);
 }

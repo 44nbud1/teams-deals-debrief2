@@ -55,11 +55,48 @@ public class SessionValidation {
             return false;
         }
 
+        String[] split = request.getServletPath().split("/");
+        String idUser = sessionService.getIdUserSession(idSession);
+        if (split[2].equalsIgnoreCase("user")) {
+            if (idUser.equals("12") || idUser.equals("13")) {
+                return false;
+            }
+        }else if (split[2].equalsIgnoreCase("admin")){
+            if (!idUser.equals("12")) {
+                if (!idUser.equals("13")) {
+                    return false;
+                }
+            }
+        }
+
         if (sessionService.checkSessionExpiredWithoutId(idSession) == 0){
             sessionService.destroySessionWithoutId(idSession);
             return false;
         }
 
+        return true;
+    }
+
+    public boolean requestAdmin(HttpServletRequest request){
+
+        String header = request.getHeader("Authorization");
+        if (header == null || !header.startsWith("Bearer ")){
+            return false;
+        }
+
+        String idSession = header.substring(7);
+        if (sessionService.checkSessionWithoutId(idSession) == 0){
+            return false;
+        }
+        if (!sessionService.getIdUserSession(idSession).equals("12") ||
+                !sessionService.getIdUserSession(idSession).equals("13")){
+            return false;
+        }
+
+        if (sessionService.checkSessionExpiredWithoutId(idSession) == 0){
+            sessionService.destroySessionWithoutId(idSession);
+            return false;
+        }
         return true;
     }
 

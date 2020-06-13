@@ -102,9 +102,9 @@ public class AuthenticationService {
         }
 
         //Create user
-        JSONObject user = (JSONObject) jsonMember.get("user");
-        String idUser = ""+user.get("id");
-        String idSession= UUID.randomUUID().toString();
+        JSONObject user = (JSONObject) jsonMember.get("data");
+        String idUser = ""+user.get("idUser");
+        String idSession= UUID.randomUUID().toString()+idUser;
 
         //Check user session
         System.out.println("Check if id : "+ idUser+" already have session");
@@ -164,6 +164,7 @@ public class AuthenticationService {
         }
 
         JSONObject user = (JSONObject) jsonMember.get("data");
+        String idUser = ""+user.get("idUser");
 
         //Wrap response
         return ResponseSuccess.wrapResponse(user, DealsStatus.REQUEST_OTP, path);

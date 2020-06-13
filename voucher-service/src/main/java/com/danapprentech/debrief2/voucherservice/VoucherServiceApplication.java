@@ -59,7 +59,7 @@ public class VoucherServiceApplication {
 			merchant1.setIdMerchant(1001L);
 			merchant1.setMerchantName("kfc");
 			merchant1.setMerchantCategory(merchantCategories1);
-			repository.save(merchant1);
+//			repository.save(merchant1);
 
 			MerchantCategory merchantCategories2 = merchantCategoryRepository.findByIdMerchantCategory(2002L);
 			merchant2.setCreatedAt(new Date());
@@ -67,7 +67,7 @@ public class VoucherServiceApplication {
 			merchant2.setIdMerchant(1002L);
 			merchant2.setMerchantCategory(merchantCategories2);
 			merchant2.setMerchantName("telkom");
-			repository.save(merchant2);
+//			repository.save(merchant2);
 
 			Voucher voucher = new Voucher();
 			voucher.setStatus(Boolean.TRUE);
@@ -82,7 +82,7 @@ public class VoucherServiceApplication {
 			voucher.setMerchant(merchant2);
 			voucher.setVoucherName("Bayar Indiehome");
 			voucher.setVoucherPrice(10000D);
-			voucherRepository.save(voucher);
+//			voucherRepository.save(voucher);
 
 			Voucher voucher2 = new Voucher();
 			voucher2.setStatus(Boolean.TRUE);
@@ -97,7 +97,7 @@ public class VoucherServiceApplication {
 			voucher2.setMerchant(merchant1);
 			voucher2.setVoucherName("Crazy Deals");
 			voucher2.setVoucherPrice(10000D);
-			voucherRepository.save(voucher2);
+//			voucherRepository.save(voucher2);
 
 		};
 

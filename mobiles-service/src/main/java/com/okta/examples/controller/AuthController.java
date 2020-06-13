@@ -21,31 +21,32 @@ public class AuthController {
 
     @GetMapping("/")
     public ResponseEntity<?> welcome(HttpServletRequest request){
-        return new ResponseEntity<>("Welcome. Your session id : "+request.getSession().getId(), HttpStatus.OK);
+        System.out.println("Test Welcome");
+        return new ResponseEntity<>("Welcome to DANA Deals gitu gitu.", HttpStatus.OK);
     }
 
-    @PostMapping(value = "/register")
+    @PostMapping(value = "/api/auth/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest, HttpServletRequest request){
         return authentication.register(registerRequest, request.getServletPath());
     }
 
-    @PostMapping(value = "/login")
+    @PostMapping(value = "/api/auth/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         return authentication.login(loginRequest, request.getServletPath());
     }
 
-    @PostMapping(value ="/request-otp")
+    @PostMapping(value ="/api/auth/request-otp")
     public ResponseEntity<?> requestOtp(@RequestBody JSONObject data, HttpServletRequest request){
         return authentication.requestOtp(data, request.getServletPath());
     }
 
-    @PostMapping(value ="/{idUser}/match-otp")
+    @PostMapping(value ="/api/auth/{idUser}/match-otp")
     public ResponseEntity<?> matchOtp(@PathVariable("idUser") String idUser,
                                       @RequestBody JSONObject data, HttpServletRequest request){
         return authentication.matchOtp(idUser, data, request.getServletPath());
     }
 
-    @PostMapping(value = "/{idUser}/forgot-password")
+    @PostMapping(value = "/api/auth/{idUser}/forgot-password")
     public ResponseEntity<?> forgotPassword(@PathVariable("idUser") String idUser,
                                             @RequestBody ForgotPasswordRequest forgotPasswordRequest,
                                             HttpServletRequest request){
