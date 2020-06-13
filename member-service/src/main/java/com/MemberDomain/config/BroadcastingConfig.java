@@ -79,13 +79,21 @@ public class BroadcastingConfig {
     }
 
     @Bean
+    @Qualifier("fanoutMember")
     public Queue memberQueue() {
         return new Queue("deals.member.queuehanggu");
     }
 
     @Bean
+    @Qualifier("fanoutOrder")
+    public Queue transactionQueue() {
+        return new Queue("deals.order.queueaiewufc");
+    }
+
+    @Bean
+    @Qualifier("fanoutOrder")
     public Binding binding(FanoutExchange fanout,
-                           Queue memberQueue) {
-        return BindingBuilder.bind(memberQueue).to(fanout);
+                           Queue transactionQueue) {
+        return BindingBuilder.bind(transactionQueue).to(fanout);
     }
 }

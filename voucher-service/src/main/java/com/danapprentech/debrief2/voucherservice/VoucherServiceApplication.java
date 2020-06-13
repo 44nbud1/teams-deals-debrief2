@@ -27,6 +27,7 @@ public class VoucherServiceApplication {
 
 	}
 
+	/*
 	@Bean
 	public CommandLineRunner init(MerchantRepository repository,
 								  MerchantCategoryRepository merchantCategoryRepository,
@@ -102,4 +103,5 @@ public class VoucherServiceApplication {
 
 
 	}
+	*/
 }
