@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Transaction {
+public class TransactionConsumer {
     private Integer idTransaction;
     private String idUser;
     private Double amount;
