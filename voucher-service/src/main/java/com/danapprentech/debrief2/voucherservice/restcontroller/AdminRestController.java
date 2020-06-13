@@ -158,6 +158,12 @@ public class AdminRestController {
                     HttpStatus.BAD_REQUEST);
         }
 
+        if (testDate.before(new Date()))
+        {
+            return new ResponseEntity<>(new MessageResponse("Your data is invalid","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+                    HttpStatus.BAD_REQUEST);
+        }
+
         Date currentDate = new Date();
 
         // convert date to calendar
