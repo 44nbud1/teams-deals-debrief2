@@ -128,6 +128,24 @@ public class AdminRestController {
                     HttpStatus.BAD_REQUEST);
         }
 
+        if (voucherRequest.getDiscount() <= 0 ||voucherRequest.getDiscount() >= 100)
+        {
+            return new ResponseEntity<>(new MessageResponse("Your data is invalid","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        if (voucherRequest.getVoucherPrice() < 0 ||voucherRequest.getVoucherPrice() > 1000000)
+        {
+            return new ResponseEntity<>(new MessageResponse("Your data is invalid","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        if (voucherRequest.getMaxDiscount() < 0 ||voucherRequest.getMaxDiscount() > 1000000)
+        {
+            return new ResponseEntity<>(new MessageResponse("Your data is invalid","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+                    HttpStatus.BAD_REQUEST);
+        }
+
         Date currentDate = new Date();
 
         // convert date to calendar
