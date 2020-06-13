@@ -86,7 +86,7 @@ public class UserController {
     }
 
     // match OTP
-    @PostMapping("/auth/match-otp")
+    @PostMapping("/auth/{idUser}/match-otp")
     public ResponseEntity<?> matchOtp(@PathVariable String idUser, @RequestBody MatchOtpRequest otp) {
         JSONObject result = matchOtpTransaction.matchOtp(idUser, otp);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
