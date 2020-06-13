@@ -343,10 +343,10 @@ public class AdminRestController {
     @GetMapping("/admin/findByMerchantName-voucher")
     public ResponseEntity<?> findByMerchantName(
             @RequestParam Optional<Integer> page,
-            @RequestParam Optional<String> merchantName,
+            @RequestParam String merchantName,
             @RequestParam(defaultValue = "merchantName") String sortBy)
     {
-        Merchant merchants = merchantRepository.findByMerchantNameContainingIgnoreCase(merchantName.orElse(""));
+        Merchant merchants = merchantRepository.findByMerchantNameStartsWithIgnoreCase(merchantName);
 
         if (merchants == null)
         {
