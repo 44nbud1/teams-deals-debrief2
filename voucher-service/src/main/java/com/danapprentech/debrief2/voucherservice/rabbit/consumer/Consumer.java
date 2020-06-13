@@ -2,7 +2,7 @@ package com.danapprentech.debrief2.voucherservice.rabbit.consumer;//package com.
 
 import com.danapprentech.debrief2.voucherservice.model.Voucher;
 import com.danapprentech.debrief2.voucherservice.model.response.VoucherResponse;
-import com.danapprentech.debrief2.voucherservice.rabbit.model.Transaction;
+import com.danapprentech.debrief2.voucherservice.rabbit.model.TransactionConsumer;
 import com.danapprentech.debrief2.voucherservice.rabbit.model.UpdateQtyConsumer;
 import com.danapprentech.debrief2.voucherservice.rabbit.producer.RabbitMqProducer;
 import com.danapprentech.debrief2.voucherservice.repository.VoucherRepository;
@@ -39,7 +39,7 @@ public class Consumer
 
     @Qualifier("shareOrderForVoucher")
     @RabbitListener(queues = "deals.queue.order.voucher")
-    public void receive1(Transaction updateQtyConsumer) throws InterruptedException
+    public void receive1(TransactionConsumer updateQtyConsumer) throws InterruptedException
     {
         System.out.println("-------------");
         Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
