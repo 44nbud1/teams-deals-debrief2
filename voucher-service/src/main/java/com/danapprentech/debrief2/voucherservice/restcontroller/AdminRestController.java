@@ -350,7 +350,7 @@ public class AdminRestController {
 
         if (merchants == null)
         {
-            return new ResponseEntity<>(new MessageResponse("Page is not found","038",
+            return new ResponseEntity<>(new MessageResponse("Voucher not found.","062",
                     "/api/admin/findByMerchantName-voucher",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
