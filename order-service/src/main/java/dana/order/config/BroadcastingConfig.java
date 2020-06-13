@@ -67,34 +67,46 @@ public class BroadcastingConfig {
     }
 
     @Bean
-    @Qualifier("fanoutOrder")
-    public FanoutExchange fanout(){
-        return new FanoutExchange("deals.order.yes1sfe94hksjf");
+    @Qualifier("shareOrderForVoucher")
+    public FanoutExchange fanoutOrderForVoucher(){
+        return new FanoutExchange("deals.fanout.order.voucher");
     }
 
     @Bean
-    @Qualifier("fanoutMember")
-    public FanoutExchange fanoutMember(){
-        return new FanoutExchange("deals.member.hanggu");
+    @Qualifier("shareOrderForMember")
+    public FanoutExchange fanoutOrderForMember(){
+        return new FanoutExchange("deals.fanout.order.member");
     }
 
     @Bean
-    @Qualifier("fanoutOrder")
-    public Queue transactionQueue() {
-        return new Queue("deals.order.queueaiewufc");
+    @Qualifier("shareMemberForOrder")
+    public FanoutExchange fanoutMemberForOrder(){
+        return new FanoutExchange("deals.fanout.member.order");
     }
 
     @Bean
-    @Qualifier("fanoutMember")
-    public Queue memberQueue(){
-        return new Queue("deals.member.queuehanggu");
+    @Qualifier("shareOrderForVoucher")
+    public Queue queueOrderForVoucher() {
+        return new Queue("deals.queue.order.voucher");
     }
 
     @Bean
-    @Qualifier("fanoutMember")
-    public Binding binding(FanoutExchange fanoutMember,
-                            Queue memberQueue) {
-        return BindingBuilder.bind(memberQueue).to(fanoutMember);
+    @Qualifier("shareOrderForMember")
+    public Queue queueOrderForMember() {
+        return new Queue("deals.queue.order.member");
+    }
+
+    @Bean
+    @Qualifier("shareMemberForOrder")
+    public Queue queueMemberForOrder() {
+        return new Queue("deals.queue.member.order");
+    }
+
+    @Bean
+    @Qualifier("shareMemberForOrder")
+    public Binding binding(FanoutExchange fanoutMemberForOrder,
+                            Queue queueMemberForOrder) {
+        return BindingBuilder.bind(queueMemberForOrder).to(fanoutMemberForOrder);
     }
 
 }

@@ -8,6 +8,7 @@ import com.danapprentech.debrief2.voucherservice.rabbit.producer.RabbitMqProduce
 import com.danapprentech.debrief2.voucherservice.repository.VoucherRepository;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,8 @@ public class Consumer
 //        voucherRepository.save(vouchers);
 //    }
 
-    @RabbitListener(queues = "deals.order.queueaiewufc")
+    @Qualifier("shareOrderForVoucher")
+    @RabbitListener(queues = "deals.queue.order.voucher")
     public void receive1(Transaction updateQtyConsumer) throws InterruptedException
     {
         System.out.println("-------------");

@@ -8,6 +8,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MemberListener {
@@ -18,8 +20,9 @@ public class MemberListener {
     @Autowired
     UserRepository userRepository;
 
-    @Qualifier("fanoutMember")
-    @RabbitListener(queues = "deals.member.queuehanggu")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Qualifier("shareMemberForOrder")
+    @RabbitListener(queues = "deals.queue.member.order")
     public void receive(User user) {
         System.out.println(user);
         if (userRepository.doesUserExist(user.getIdUser()) == Boolean.FALSE){

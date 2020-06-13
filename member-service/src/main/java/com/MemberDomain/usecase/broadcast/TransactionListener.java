@@ -21,8 +21,8 @@ public class TransactionListener {
     @Autowired
     MemberBroadcaster memberBroadcaster;
 
-    @Qualifier("fanoutOrder")
-    @RabbitListener(queues = "deals.order.queueaiewufc")
+    @Qualifier("shareOrderForMember")
+    @RabbitListener(queues = "deals.queue.order.member")
     public void receive(Transaction transaction) {
         UserDataResponse userDataResponse = userMapper.getUserData(transaction.getIdUser());
 

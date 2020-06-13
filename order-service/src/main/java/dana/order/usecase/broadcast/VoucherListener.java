@@ -8,6 +8,8 @@ import org.json.simple.JSONObject;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,6 +24,7 @@ public class VoucherListener {
     @Autowired
     VoucherRepository voucherRepository;
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @RabbitListener(queues = "${spring.rabbitmq.queue.listener}",containerFactory = "createListener")
     public void recieveMessage(NewVoucher vouchers) {
 
