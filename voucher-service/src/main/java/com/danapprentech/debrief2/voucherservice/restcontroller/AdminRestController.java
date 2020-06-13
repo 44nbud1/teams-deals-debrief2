@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.*;
 
 
@@ -143,6 +144,17 @@ public class AdminRestController {
         if (voucherRequest.getMaxDiscount() < 0 ||voucherRequest.getMaxDiscount() > 1000000)
         {
             return new ResponseEntity<>(new MessageResponse("Your data is invalid","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        Calendar testCalendar = Calendar.getInstance();
+        testCalendar.setTime(new Date());
+        testCalendar.add(Calendar.DATE, 30);
+        Date testDate = voucherRequest.getExpiredDate();
+
+        if (testDate.after(testCalendar.getTime())){
+            return new ResponseEntity<>(new MessageResponse("Expiration date is maximum 1 month from today",
+                    "069","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
