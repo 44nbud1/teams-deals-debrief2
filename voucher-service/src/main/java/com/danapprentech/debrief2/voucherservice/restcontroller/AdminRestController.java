@@ -121,6 +121,13 @@ public class AdminRestController {
                     HttpStatus.BAD_REQUEST);
         }
 
+        if (voucherRequest.getVoucherName().length() < 3 || voucherRequest.getVoucherName().length() > 20)
+        {
+            return new ResponseEntity<>(new MessageResponse("Voucher name must be at least 3, and less than 20 " +
+                    "characters","067","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+                    HttpStatus.BAD_REQUEST);
+        }
+
         Date currentDate = new Date();
 
         // convert date to calendar
