@@ -70,7 +70,7 @@ public class HistoryRepositoryImpl implements HistoryRepository {
             c.setTime(toCalculateStartDate);
             c.add(Calendar.DATE, -7);
 
-            endDate = sdf.format(c.getTime());
+            startDate = sdf.format(c.getTime());
         }
 
         if (json.get("startDate") == null && json.get("endDate") == null){

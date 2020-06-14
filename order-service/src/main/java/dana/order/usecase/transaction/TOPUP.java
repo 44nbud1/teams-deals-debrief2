@@ -74,7 +74,7 @@ public class TOPUP {
         String phoneNumber = transactionRepository.getPhoneNumberFromVA(""+json.get("virtualNumber"));
 
         if (userRepository.doesPhoneNumberCorrect(""+json.get("idUser"), phoneNumber) == Boolean.FALSE){
-            throw new TOPUPFailedException(DealsStatus.WRONG_VA_TOPUP);
+            throw new TOPUPFailedException(DealsStatus.VIRTUAL_ACCOUNT_INVALID);
         }
 
         if (transactionRepository.checkTOPUPThirdParty(partyCode) == Boolean.FALSE){
