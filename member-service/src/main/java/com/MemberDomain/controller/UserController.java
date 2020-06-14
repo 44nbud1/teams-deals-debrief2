@@ -7,10 +7,7 @@ import com.MemberDomain.model.request.*;
 import com.MemberDomain.model.response.OtpResponse;
 import com.MemberDomain.model.response.ProfileResponse;
 import com.MemberDomain.model.response.UserDataResponse;
-import com.MemberDomain.usecase.transaction.LoginTransaction;
-import com.MemberDomain.usecase.transaction.MatchOtpTransaction;
-import com.MemberDomain.usecase.transaction.RegisterTransaction;
-import com.MemberDomain.usecase.transaction.RequestOtpTransaction;
+import com.MemberDomain.usecase.transaction.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +32,15 @@ public class UserController {
 
     @Autowired
     private MatchOtpTransaction matchOtpTransaction;
+
+    @Autowired
+    private ForgotPasswordTransaction forgotPasswordTransaction;
+
+    @Autowired
+    private GetProfileTransaction getProfileTransaction;
+
+    @Autowired
+    private EditProfileTransaction editProfileTransaction;
 
     @Autowired
     private UserMapper userMapper;
@@ -91,33 +97,24 @@ public class UserController {
 
     // forgot password
     @PostMapping("/auth/{idUser}/forgot-password")
-    public ResponseEntity<?> forgotPassword(@PathVariable String idUser, @RequestBody ForgotPasswordRequest forgot){
-        if(!forgot.getPassword().equals(forgot.getConfirmPassword())){
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("message", "Password is missed match.");
-            jsonObject.put("status", "404");
-            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        }
-        ProfileResponse selectedUser = userMapper.getUserProfile(idUser);
-        if (selectedUser == null) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("message", "User is not found");
-            jsonObject.put("status", "404");
-            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        }
-        else{
-            userMapper.changePassword(forgot.getPassword(), idUser);
-            JSONObject jsonObject = new JSONObject();
-            JSONObject empty = new JSONObject();
-            jsonObject.put("data", empty);
-            jsonObject.put("message", "You need to request new OTP.");
-            jsonObject.put("status", "200");
-            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-        }
+    public ResponseEntity<?> forgotPassword(@PathVariable String idUser, @RequestBody ForgotPasswordRequest forgotPasswordRequest, HttpServletRequest request) { ;
+        return forgotPasswordTransaction.forgotPassword(idUser, forgotPasswordRequest, request.getServletPath());
+    }
+
+    // get profile
+    @GetMapping("/user/{idUser}")
+    public ResponseEntity<?> getProfile(@PathVariable String idUser, HttpServletRequest request) { ;
+        return getProfileTransaction.getProfile(idUser,  request.getServletPath());
+    }
+
+    // edit profile
+    @PutMapping("/user/{idUser}")
+    public ResponseEntity<?> editProfile(@PathVariable String idUser, @RequestBody EditProfileRequest editProfileRequest, HttpServletRequest request) { ;
+        return editProfileTransaction.editProfile(idUser, editProfileRequest, request.getServletPath());
     }
 
     // get user profile
-    @GetMapping("/user/{idUser}")
+    @GetMapping("/userasdasd/{idUser}")
     public ResponseEntity<?> profile(@PathVariable String idUser){
         ProfileResponse profile = userMapper.getUserProfile(idUser);
         if (profile == null) {

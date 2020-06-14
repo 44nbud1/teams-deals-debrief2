@@ -96,4 +96,19 @@ public class UserRepositoryImpl implements UserRepository {
         OtpResponse otpResponse = otpMapper.matchOTPDate(idUser, otp);
         return otpResponse;
     }
+
+    @Override
+    public void updatePassword(String idUser, String password) {
+        userMapper.changePassword(idUser, password);
+    }
+
+    @Override
+    public void updateName(String idUser, String name) {
+        userMapper.changeName(idUser, name);
+    }
+
+    @Override
+    public void updateEmail(String idUser, String email) {
+        userMapper.changeEmail(idUser, email);
+    }
 }

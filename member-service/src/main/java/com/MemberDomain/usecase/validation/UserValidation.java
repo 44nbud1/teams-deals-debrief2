@@ -124,16 +124,66 @@ public class UserValidation {
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
 
-        if (forgotPasswordRequest.getPassword() == null ||forgotPasswordRequest.getConfirmPassword() == null){
+        if (forgotPasswordRequest.getNewPassword() == null || forgotPasswordRequest.getConfirmPassword() == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
 
-        if (!Pattern.matches(regex_password, forgotPasswordRequest.getPassword())){
+        if (!Pattern.matches(regex_password, forgotPasswordRequest.getNewPassword())){
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
         }
 
-        if (!forgotPasswordRequest.getPassword().equals(forgotPasswordRequest.getConfirmPassword())){
+        if (!forgotPasswordRequest.getNewPassword().equals(forgotPasswordRequest.getConfirmPassword())){
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_MISS_MATCH, path);
+        }
+
+        return ResponseSuccess.wrapOk();
+    }
+
+    public ResponseEntity<?> editProfile(EditProfileRequest editProfileRequest, String path){
+
+        boolean content = false;
+
+        if (editProfileRequest.getName() != null) {
+            content = true;
+            if (!Pattern.matches(regex_name, editProfileRequest.getName())) {
+                return ResponseFailed.wrapResponse(DealsStatus.NAME_INVALID, path);
+            }
+        }
+
+        if (editProfileRequest.getEmail() != null){
+            content = true;
+            if (!Pattern.matches(regex_email, editProfileRequest.getEmail())) {
+                return ResponseFailed.wrapResponse(DealsStatus.EMAIL_INVALID, path);
+            }
+
+        }
+
+        if (editProfileRequest.getOldPassword() != null || editProfileRequest.getNewPassword() != null ||
+                editProfileRequest.getConfirmPassword() != null) {
+
+            if (editProfileRequest.getOldPassword() != null && editProfileRequest.getNewPassword() != null &&
+                    editProfileRequest.getConfirmPassword() != null){
+
+                content = true;
+                if (!Pattern.matches(regex_password, editProfileRequest.getOldPassword())){
+                    return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
+                }
+
+                if (!Pattern.matches(regex_password, editProfileRequest.getNewPassword())){
+                    return ResponseFailed.wrapResponse(DealsStatus.NEW_PASSWORD_INVALID, path);
+                }
+
+                if (!editProfileRequest.getConfirmPassword().equals(editProfileRequest.getNewPassword())){
+                    return ResponseFailed.wrapResponse(DealsStatus.NEW_PASSWORD_MISS_MATCH, path);
+                }
+
+            }else {
+                return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+            }
+        }
+
+        if (!content){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ONE_FIELD, path);
         }
 
         return ResponseSuccess.wrapOk();

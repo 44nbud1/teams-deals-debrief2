@@ -3,20 +3,19 @@ package com.MemberDomain.usecase.transaction;
 import com.MemberDomain.adapter.status.DealsStatus;
 import com.MemberDomain.adapter.wrapper.ResponseFailed;
 import com.MemberDomain.adapter.wrapper.ResponseSuccess;
-import com.MemberDomain.model.request.ForgotPasswordRequest;
-import com.MemberDomain.model.request.LoginRequest;
+import com.MemberDomain.model.request.EditProfileRequest;
 import com.MemberDomain.model.response.ProfileResponse;
-import com.MemberDomain.model.response.UserDataResponse;
 import com.MemberDomain.usecase.port.UserRepository;
 import com.MemberDomain.usecase.validation.UserValidation;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.regex.Pattern;
+
 @Service
-public class ForgotPasswordTransaction {
+public class EditProfileTransaction {
 
     @Autowired
     UserValidation userValidation;
@@ -24,9 +23,9 @@ public class ForgotPasswordTransaction {
     @Autowired
     UserRepository userRepository;
 
-    public ResponseEntity<?> forgotPassword(String idUser, ForgotPasswordRequest forgotPasswordRequest, String path){
+    public ResponseEntity<?> editProfile(String idUser, EditProfileRequest editProfileRequest, String path){
 
-        ResponseEntity<?> check = userValidation.forgotPassword(forgotPasswordRequest, path);
+        ResponseEntity<?> check = userValidation.editProfile(editProfileRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -38,10 +37,17 @@ public class ForgotPasswordTransaction {
             return ResponseFailed.wrapResponse(DealsStatus.USER_NOT_FOUND, path);
         }
 
-        forgotPasswordRequest.setNewPassword(encryptPassword(forgotPasswordRequest.getNewPassword()));
-        userRepository.updatePassword(idUser, forgotPasswordRequest.getNewPassword());
+        if (editProfileRequest.getName() != null) {
+            userRepository.updateName(idUser, editProfileRequest.getName());
+        }
 
-        return ResponseSuccess.wrapResponse(null, DealsStatus.FORGOT_PASSWORD, path);
+        if (editProfileRequest.getEmail() != null) {
+            editProfileRequest.setEmail(editProfileRequest.getEmail().toLowerCase());
+            userRepository.updateEmail(idUser, editProfileRequest.getEmail());
+        }
+
+        ProfileResponse newProfileResponse = userRepository.getUserProfile(""+idUser);
+        return ResponseSuccess.wrapResponse(newProfileResponse, DealsStatus.PROFILE_UPDATED, path);
     }
 
     private String encryptPassword(String password){
@@ -49,5 +55,6 @@ public class ForgotPasswordTransaction {
         return passwordEncoder.encode(password);
     }
 }
+
 
 

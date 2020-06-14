@@ -18,4 +18,7 @@ public interface UserRepository {
     void updateOtp(String idUser);
     OtpResponse matchOtp(String idUser, String otp);
     OtpResponse matchOtpDate(String idUser, String otp);
+    void updatePassword(String idUser, String password);
+    void updateName(String idUser, String name);
+    void updateEmail(String idUser, String email);
 }

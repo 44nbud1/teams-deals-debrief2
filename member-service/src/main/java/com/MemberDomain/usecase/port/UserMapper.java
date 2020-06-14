@@ -32,9 +32,9 @@ public interface UserMapper {
 
     final String getUserProfile = "SELECT * FROM tbl_users WHERE idUser = #{idUser}";
 
-    final String editProfile = "";
     final String changePassword = "UPDATE tbl_users SET password = #{password} WHERE idUser = #{idUser}";
-    final String editProfilePro = "";
+    final String changeName = "UPDATE tbl_users SET name = #{name} WHERE idUser = #{idUser}";
+    final String changeEmail = "UPDATE tbl_users SET email = #{email} WHERE idUser = #{idUser}";
 
     @Insert(registerUser)
     @Options(useGeneratedKeys = true, keyProperty = "idUser")
@@ -74,7 +74,13 @@ public interface UserMapper {
     ProfileResponse phoneOTPCheck(String phoneNumber);
 
     @Update(changePassword)
-    void changePassword(String password, String idUser);
+    void changePassword(String idUser, String password);
+
+    @Update(changeName)
+    void changeName(String idUser, String name);
+
+    @Update(changeEmail)
+    void changeEmail(String idUser, String email);
 
     @Select(getAll)
     @Results(value = {

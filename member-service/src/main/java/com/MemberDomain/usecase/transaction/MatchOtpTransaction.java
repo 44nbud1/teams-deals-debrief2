@@ -6,12 +6,9 @@ import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.request.MatchOtpRequest;
 import com.MemberDomain.model.response.OtpResponse;
 import com.MemberDomain.model.response.ProfileResponse;
-import com.MemberDomain.usecase.exception.RegisterException;
 import com.MemberDomain.usecase.port.UserRepository;
 import com.MemberDomain.usecase.validation.UserValidation;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -51,8 +48,7 @@ public class MatchOtpTransaction {
             return ResponseFailed.wrapResponse(DealsStatus.OTP_EXPIRED, path);
         }
 
-        JSONObject result = new JSONObject();
-        return ResponseSuccess.wrapResponse(result, DealsStatus.OTP_MATCH, path);
+        return ResponseSuccess.wrapResponse(null, DealsStatus.OTP_MATCH, path);
     }
 }
 

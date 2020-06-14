@@ -37,7 +37,7 @@ public class RegisterTransaction {
             registerRequest.setPhoneNumber("+62"+registerRequest.getPhoneNumber().substring(1));
         }
 
-        if (userRepository.doesEmailAvailable(""+registerRequest.getEmail()) == Boolean.FALSE){
+        if (userRepository.doesEmailAvailable(""+registerRequest.getEmail().toLowerCase()) == Boolean.FALSE){
             return ResponseFailed.wrapResponse(DealsStatus.EMAIL_EXISTS, path);
         }
 
@@ -45,6 +45,7 @@ public class RegisterTransaction {
             return ResponseFailed.wrapResponse(DealsStatus.PHONE_NUMBER_EXISTS, path);
         }
 
+        registerRequest.setEmail(registerRequest.getEmail().toLowerCase());
         registerRequest.setPassword(encryptPassword(registerRequest.getPassword()));
         userRepository.insertNewUser(registerRequest);
 
