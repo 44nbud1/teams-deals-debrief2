@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class AdminValidation {
 
     private final String regex_integer = "^[\\d]+$";
-    private final String regex_double = "^(?=.*[\\d])(?!.*[\\D]).+$|^[\\d][.][\\d]+$";
+    private final String regex_double = "^(?=.*[\\d])(?!.*[\\D]).+$|^[\\d]+[.]{1}[\\d]+$";
 
     public ResponseEntity<?> createMerchant(CreateMerchantRequest createMerchantRequest, String path){
 
