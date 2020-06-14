@@ -55,7 +55,7 @@ public class UserRestController
         vouchersRes.put("data",voucherResponses);
         vouchersRes.put("timestamp",new Date());
         vouchersRes.put("path","/api/user/show-all-voucher");
-        vouchersRes.put("message","Vouchers are successfully collected");
+        vouchersRes.put("message","Vouchers are successfully collected.");
         vouchersRes.put("status","040");
         return ResponseEntity.ok(vouchersRes);
     }
@@ -111,7 +111,7 @@ public class UserRestController
             merchantResp.put("path","/api/user/filter-voucher");
             merchantResp.put("idMerchantCategory",merchantsCat.getIdMerchantCategory() );
             merchantResp.put("merchantCategory",merchantsCat.getMerchantCategory() );
-            merchantResp.put("message","Vouchers are successfully collected");
+            merchantResp.put("message","Vouchers are successfully collected.");
             merchantResp.put("status","040");
             return ResponseEntity.ok(merchantResp);
         }
@@ -145,12 +145,12 @@ public class UserRestController
             merchantResp.put("path","/api/user/filter-voucher");
             merchantResp.put("idMerchantCategory",merchantsCat.getIdMerchantCategory() );
             merchantResp.put("merchantCategory",merchantsCat.getMerchantCategory() );
-            merchantResp.put("message","Vouchers are successfully collected");
+            merchantResp.put("message","Vouchers are successfully collected.");
             merchantResp.put("status","040");
             return ResponseEntity.ok(merchantResp);
         }
 
-        return new ResponseEntity<>(new MessageResponse("Voucher not found","062",
+        return new ResponseEntity<>(new MessageResponse("Voucher not found.","062",
                 "/api/user/filter-voucher",new Date()),
                 HttpStatus.NOT_FOUND);
     }
@@ -196,7 +196,7 @@ public class UserRestController
         merchantResp.put("path","/api/user/findByMerchantName-voucher");
         merchantResp.put("idMerchant",merchants.getIdMerchant() );
         merchantResp.put("merchantName",merchants.getMerchantName() );
-        merchantResp.put("message","Vouchers are successfully collected");
+        merchantResp.put("message","Vouchers are successfully collected.");
         merchantResp.put("status","040");
         return ResponseEntity.ok(merchantResp);
     }
@@ -210,14 +210,14 @@ public class UserRestController
     {
         if (sortBy == null)
         {
-            return new ResponseEntity<>(new MessageResponse("Please fill sort criteria","064",
+            return new ResponseEntity<>(new MessageResponse("Please fill sort criteria.","064",
                     "/api/user/sort-voucher",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (voucherRepository.findAll() == null)
         {
-            return new ResponseEntity<>(new MessageResponse("Voucher not found","062",
+            return new ResponseEntity<>(new MessageResponse("Voucher not found.","062",
                     "/api/user/sort-voucher",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
