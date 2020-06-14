@@ -62,7 +62,7 @@ public class Payment {
 
         if (voucherRepository.validateExpiration(transaction.getIdGoods()) == Boolean.FALSE){
             databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
-            throw new PaymentFailedException("The payment has failed! The voucher is currently not available.", HttpStatus.NOT_FOUND);
+            throw new PaymentFailedException("The voucher is currently not available.", HttpStatus.NOT_FOUND);
         }
 
         if (transactionRepository.checkATransactionExpiration(Integer.valueOf(""+json.get("idTransaction"))) == Boolean.FALSE){
@@ -105,18 +105,18 @@ public class Payment {
 
         if (voucherRepository.validateQuantity(transaction.getIdGoods()) == Boolean.FALSE){
             databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
-            throw new PaymentFailedException("The payment has failed! The voucher is currently out of stock.", HttpStatus.NOT_FOUND);
+            throw new PaymentFailedException("The voucher is currently out of stock.", HttpStatus.NOT_FOUND);
         }
 
         User user = databaseMapper.getUserById(""+json.get("idUser"));
 
         if (user.getBalance() - transaction.getAmount() < 0){
-            throw new PaymentFailedException("You have not enough balance to continue this transaction.", HttpStatus.PAYMENT_REQUIRED);
+            throw new PaymentFailedException("Your balance is not enough.", HttpStatus.PAYMENT_REQUIRED);
         }
 
         transactionRepository.setFinishATransaction(Integer.valueOf(""+json.get("idTransaction")));
         transactionBroadcaster.send(Integer.valueOf(""+json.get("idTransaction")));
 
-        return ResponseWrapper.wrap("Your payment is successful!", 200, null);
+        return ResponseWrapper.wrap("Your payment is successful.", 200, null);
     }
 }
