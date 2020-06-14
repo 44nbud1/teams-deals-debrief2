@@ -37,7 +37,7 @@ public class ValidateTOPUP {
     }
 
     public Boolean amountCheck(String amount){
-        String regex = "^(?=.*[\\d])(?!.*[\\D]).+$|^[\\d][.][\\d]+$";
+        String regex = "^(?=.*[\\d])(?!.*[\\D]).+$|^[\\d]+[.]{1}[\\d]+$";
         if(!Pattern.matches(regex, amount)){
             return Boolean.FALSE;
         }

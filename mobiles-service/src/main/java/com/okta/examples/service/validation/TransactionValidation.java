@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class TransactionValidation {
 
     private final String regex_va = "^[\\d]{15,16}$";
-    private final String regex_amount = "^(?=.*[\\d])(?!.*[\\D]).+$|^[\\d][.][\\d]+$";
+    private final String regex_amount = "^(?=.*[\\d])(?!.*[\\D]).+$|^[\\d]+[.]{1}[\\d]+$";
 
     public ResponseEntity<?> createOrder(JSONObject data, String path){
 

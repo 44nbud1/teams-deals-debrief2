@@ -1,9 +1,7 @@
 package com.MemberDomain.adapter.repository;
 
 import com.MemberDomain.model.request.RegisterRequest;
-import com.MemberDomain.model.response.OtpResponse;
-import com.MemberDomain.model.response.ProfileResponse;
-import com.MemberDomain.model.response.UserDataResponse;
+import com.MemberDomain.model.response.*;
 import com.MemberDomain.usecase.port.BalanceMapper;
 import com.MemberDomain.usecase.port.OtpMapper;
 import com.MemberDomain.usecase.port.UserRepository;
@@ -46,9 +44,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public ProfileResponse doLogin(String phoneNumber, String password) {
-        ProfileResponse profileResponse = userMapper.login(phoneNumber,password);
-        return profileResponse;
+    public LoginResponse getUserLoginData(String phoneNumber) {
+        LoginResponse loginResponse = userMapper.getUserLoginData(phoneNumber);
+        return loginResponse;
     }
 
     @Override
@@ -95,5 +93,26 @@ public class UserRepositoryImpl implements UserRepository {
     public OtpResponse matchOtpDate(String idUser, String otp) {
         OtpResponse otpResponse = otpMapper.matchOTPDate(idUser, otp);
         return otpResponse;
+    }
+
+    @Override
+    public PasswordResponse getUserPassword(String idUser) {
+        PasswordResponse passwordResponse = userMapper.getUserPassword(idUser);
+        return passwordResponse;
+    }
+
+    @Override
+    public void updatePassword(String idUser, String password) {
+        userMapper.changePassword(idUser, password);
+    }
+
+    @Override
+    public void updateName(String idUser, String name) {
+        userMapper.changeName(idUser, name);
+    }
+
+    @Override
+    public void updateEmail(String idUser, String email) {
+        userMapper.changeEmail(idUser, email);
     }
 }

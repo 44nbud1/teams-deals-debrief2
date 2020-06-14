@@ -1,22 +1,22 @@
 package com.MemberDomain.model.request;
 
 public class ForgotPasswordRequest {
-    private String password;
+    private String newPassword;
     private String confirmPassword;
 
     public ForgotPasswordRequest() {
     }
 
-    public ForgotPasswordRequest(String password, String confirmPassword) {
+    public ForgotPasswordRequest(String newPassword, String confirmPassword) {
         super();
-        this.password = password;
+        this.newPassword = newPassword;
         this.confirmPassword = confirmPassword;
     }
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
 
-        sb.append("User Password = ").append(password).append(" - ");
+        sb.append("User New Password = ").append(newPassword).append(" - ");
         sb.append("Confirm Password = ").append(confirmPassword).append(" - ");
 
         return sb.toString();
@@ -26,16 +26,16 @@ public class ForgotPasswordRequest {
         this("", confirmPassword);
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
 
-    public String getPassword() {
-        return password;
+    public String getNewPassword() {
+        return newPassword;
     }
 
     public String getConfirmPassword() {
