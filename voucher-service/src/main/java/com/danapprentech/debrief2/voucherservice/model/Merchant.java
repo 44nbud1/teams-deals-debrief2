@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "merchant")
-public class Merchant
+public class Merchant implements Serializable
 {
     @Id
     @Column(name = "id_merchant")

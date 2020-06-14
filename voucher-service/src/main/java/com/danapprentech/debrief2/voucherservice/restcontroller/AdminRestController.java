@@ -429,27 +429,47 @@ public class AdminRestController {
             @PathVariable Long idVoucher,
             @RequestBody UpdateVoucherRequest updateVoucherRequest)
     {
+        Boolean status = null;
+
+        if (updateVoucherRequest.getStatus().equals("true"))
+        {
+            status = Boolean.TRUE;
+        } else if (updateVoucherRequest.getStatus().equals("false"))
+        {
+            status = Boolean.FALSE;
+        } else {
+            return ResponseEntity.badRequest().body(new MessageResponse("Status invalid.","063",
+                    "/api/admin/update-status-voucher/{idVoucher}/restock",new Date()));
+        }
+
+
+        Voucher vouchers = voucherRepository.findByIdVoucher(idVoucher);
+
+        if (vouchers == null)
+        {
+            return ResponseEntity.badRequest().body(new MessageResponse("Voucher not found.","062",
+                    "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
+        }
+
         if (updateVoucherRequest.getStatus() == null)
         {
-            return ResponseEntity.badRequest().body(new MessageResponse("Status invalid","063",
+            return ResponseEntity.badRequest().body(new MessageResponse("Status invalid.","063",
                     "/api/admin/update-status-voucher/{idVoucher}/restock",new Date()));
         }
 
         // only change status
-        if (updateVoucherRequest.getStatus() == true && updateVoucherRequest.getQuota() == null)
+        if (status == true && updateVoucherRequest.getQuota() == null)
         {
-
-            Voucher vouchers = voucherRepository.findByIdVoucher(idVoucher);
 
             if (vouchers == null)
             {
-                return ResponseEntity.badRequest().body(new MessageResponse("Voucher not found","062",
+                return ResponseEntity.badRequest().body(new MessageResponse("Voucher not found.","062",
                         "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
             }
 
-            if (updateVoucherRequest.getStatus() == false)
+            if (status == false)
             {
-                return ResponseEntity.badRequest().body(new MessageResponse("Status invalid","063",
+                return ResponseEntity.badRequest().body(new MessageResponse("Status invalid.","063",
                         "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
             }
 
@@ -469,12 +489,16 @@ public class AdminRestController {
         }
 
         // only change stock
-        if (updateVoucherRequest.getStatus() == true && updateVoucherRequest.getQuota() != null)
+        if (status == true && updateVoucherRequest.getQuota() != null)
         {
+            if (vouchers.getQuota() + updateVoucherRequest.getQuota() > 1000)
+            {
+                return new ResponseEntity<>(new MessageResponse("Maximum voucher quota of 1000.","068",
+                        "/admin/update-status-voucher/"+idVoucher+"/restock",new Date()),
+                        HttpStatus.BAD_REQUEST);
+            }
 
-            Voucher vouchers = voucherRepository.findByIdVoucher(idVoucher);
-
-            if (vouchers.getStatus() == false && updateVoucherRequest.getStatus())
+            if (vouchers.getStatus() == false)
             {
                 return ResponseEntity.badRequest().body(new MessageResponse("Status invalid",
                         "063","/admin/update-status-voucher/{idVoucher}/restock",new Date()));
@@ -486,7 +510,7 @@ public class AdminRestController {
                         "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
             }
 
-            if (updateVoucherRequest.getStatus() == false)
+            if (status == false)
             {
                 return ResponseEntity.badRequest().body(new MessageResponse("Status invalid","063",
                         "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
@@ -502,9 +526,15 @@ public class AdminRestController {
                     "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
         }
 
+        if (status == false && vouchers.getQuota() != null)
+        {
+            return ResponseEntity.ok(new MessageResponse("We cannot update the voucher stock due " +
+                    "to inactive voucher status.","045",
+                    "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
+        }
+
         // only change status
-        if (updateVoucherRequest.getStatus() == false) {
-            Voucher vouchers = voucherRepository.findByIdVoucher(idVoucher);
+        if (status == false) {
 
             vouchers.setStatus(Boolean.FALSE);
             vouchers.setUpdateAt(new Date());

@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateVoucherRequest
 {
-    private Boolean status;
+    private String status;
     private Integer quota;
 }
