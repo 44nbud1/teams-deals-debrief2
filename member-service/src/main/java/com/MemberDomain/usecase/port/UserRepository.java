@@ -1,15 +1,13 @@
 package com.MemberDomain.usecase.port;
 
 import com.MemberDomain.model.request.RegisterRequest;
-import com.MemberDomain.model.response.OtpResponse;
-import com.MemberDomain.model.response.ProfileResponse;
-import com.MemberDomain.model.response.UserDataResponse;
+import com.MemberDomain.model.response.*;
 
 public interface UserRepository {
     Boolean doesEmailAvailable(String email);
     Boolean doesPhoneNumberAvailable(String phoneNumber);
     void insertNewUser(RegisterRequest registerRequest);
-    ProfileResponse doLogin(String phoneNumber, String password);
+    LoginResponse getUserLoginData(String phoneNumber);
     ProfileResponse getUserProfile(String idUser);
     UserDataResponse getUserData(String idUser);
     ProfileResponse requestOtp(String phoneNumber);
@@ -18,6 +16,7 @@ public interface UserRepository {
     void updateOtp(String idUser);
     OtpResponse matchOtp(String idUser, String otp);
     OtpResponse matchOtpDate(String idUser, String otp);
+    PasswordResponse getUserPassword(String idUser);
     void updatePassword(String idUser, String password);
     void updateName(String idUser, String name);
     void updateEmail(String idUser, String email);

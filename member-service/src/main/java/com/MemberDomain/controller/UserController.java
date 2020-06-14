@@ -42,35 +42,6 @@ public class UserController {
     @Autowired
     private EditProfileTransaction editProfileTransaction;
 
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private BalanceMapper balanceMapper;
-
-    @Autowired
-    private OtpMapper otpMapper;
-
-    //get all user
-    @GetMapping("/auth/user/all")
-    public ResponseEntity<?> getAllUser(){
-        List<UserDataResponse> allUser=  userMapper.getAll();
-        if (allUser.isEmpty()) {
-            JSONObject jsonObject = new JSONObject();
-            JSONObject empty = new JSONObject();
-            jsonObject.put("data", empty);
-            jsonObject.put("message", "User not found");
-            jsonObject.put("status", "404");
-            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        }else{
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", allUser);
-            jsonObject.put("message", "All user data has successfully sent");
-            jsonObject.put("status", "200");
-            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-        }
-    }
-
     //insert user
     @PostMapping("/auth/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest, HttpServletRequest request) {
@@ -111,25 +82,5 @@ public class UserController {
     @PutMapping("/user/{idUser}")
     public ResponseEntity<?> editProfile(@PathVariable String idUser, @RequestBody EditProfileRequest editProfileRequest, HttpServletRequest request) { ;
         return editProfileTransaction.editProfile(idUser, editProfileRequest, request.getServletPath());
-    }
-
-    // get user profile
-    @GetMapping("/userasdasd/{idUser}")
-    public ResponseEntity<?> profile(@PathVariable String idUser){
-        ProfileResponse profile = userMapper.getUserProfile(idUser);
-        if (profile == null) {
-            JSONObject jsonObject = new JSONObject();
-            JSONObject empty = new JSONObject();
-            jsonObject.put("message", "User not found");
-            jsonObject.put("status", "404");
-            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        }
-        else{
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", profile);
-            jsonObject.put("message", "User profile has successfully sent");
-            jsonObject.put("status", "200");
-            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-        }
     }
 }

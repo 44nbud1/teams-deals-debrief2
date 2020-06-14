@@ -6,12 +6,10 @@ import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.request.OtpRequest;
 import com.MemberDomain.model.response.OtpResponse;
 import com.MemberDomain.model.response.ProfileResponse;
-import com.MemberDomain.usecase.exception.RegisterException;
 import com.MemberDomain.usecase.port.UserRepository;
 import com.MemberDomain.usecase.validation.UserValidation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

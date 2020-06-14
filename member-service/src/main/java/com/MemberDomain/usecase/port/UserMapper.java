@@ -1,6 +1,8 @@
 package com.MemberDomain.usecase.port;
 
 import com.MemberDomain.model.request.RegisterRequest;
+import com.MemberDomain.model.response.LoginResponse;
+import com.MemberDomain.model.response.PasswordResponse;
 import com.MemberDomain.model.response.ProfileResponse;
 import com.MemberDomain.model.response.UserDataResponse;
 import org.apache.ibatis.annotations.*;
@@ -23,7 +25,7 @@ public interface UserMapper {
             "WHERE tu.idUser = tb.idUser AND tu.idRole = tr.idRole\n" +
             "ORDER BY tu.created_at ASC";
 
-    final String login = "SELECT * from tbl_users WHERE phoneNumber = #{phoneNumber} AND password = #{password}";
+    final String getUserLoginData = "SELECT * from tbl_users WHERE phoneNumber = #{phoneNumber}";
 
     final String getUserData = "SELECT tu.idUser, tu.name, tu.email, tu.phoneNumber, tb.balance, tu.idRole, tr.roleName\n" +
             "FROM tbl_users AS tu, tbl_balances AS tb, tbl_roles AS tr\n" +
@@ -31,6 +33,8 @@ public interface UserMapper {
             "AND tu.idUser = #{idUser}";
 
     final String getUserProfile = "SELECT * FROM tbl_users WHERE idUser = #{idUser}";
+
+    final String getUserPassword = "SELECT password FROM tbl_users WHERE idUser = #{idUser}";
 
     final String changePassword = "UPDATE tbl_users SET password = #{password} WHERE idUser = #{idUser}";
     final String changeName = "UPDATE tbl_users SET name = #{name} WHERE idUser = #{idUser}";
@@ -46,8 +50,8 @@ public interface UserMapper {
     @Select(phoneCheck)
     UserDataResponse phoneCheck(String phoneNumber);
 
-    @Select(login)
-    ProfileResponse login(String phoneNumber, String password);
+    @Select(getUserLoginData)
+    LoginResponse getUserLoginData(String phoneNumber);
 
     @Select(getUserData)
     @Results(value = {
@@ -69,6 +73,9 @@ public interface UserMapper {
             @Result(property = "phoneNumber", column = "phoneNumber")
     })
     ProfileResponse getUserProfile(String idUser);
+
+    @Select(getUserPassword)
+    PasswordResponse getUserPassword(String idUser);
 
     @Select(phoneCheck)
     ProfileResponse phoneOTPCheck(String phoneNumber);

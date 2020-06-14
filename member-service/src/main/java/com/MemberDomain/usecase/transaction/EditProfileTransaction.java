@@ -4,6 +4,7 @@ import com.MemberDomain.adapter.status.DealsStatus;
 import com.MemberDomain.adapter.wrapper.ResponseFailed;
 import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.request.EditProfileRequest;
+import com.MemberDomain.model.response.PasswordResponse;
 import com.MemberDomain.model.response.ProfileResponse;
 import com.MemberDomain.usecase.port.UserRepository;
 import com.MemberDomain.usecase.validation.UserValidation;
@@ -11,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.regex.Pattern;
 
 @Service
 public class EditProfileTransaction {
@@ -46,6 +45,17 @@ public class EditProfileTransaction {
             userRepository.updateEmail(idUser, editProfileRequest.getEmail());
         }
 
+        if (editProfileRequest.getNewPassword() != null) {
+            PasswordResponse passwordResponse = userRepository.getUserPassword(idUser);
+            if (!decode(editProfileRequest.getOldPassword(), passwordResponse.getPassword())) {
+                return ResponseFailed.wrapResponse(DealsStatus.OLD_PASSWORD_NOT_MATCH, path);
+            }
+            else{
+                editProfileRequest.setNewPassword(encryptPassword(editProfileRequest.getNewPassword()));
+                userRepository.updatePassword(idUser, editProfileRequest.getNewPassword());
+            }
+        }
+
         ProfileResponse newProfileResponse = userRepository.getUserProfile(""+idUser);
         return ResponseSuccess.wrapResponse(newProfileResponse, DealsStatus.PROFILE_UPDATED, path);
     }
@@ -53,6 +63,11 @@ public class EditProfileTransaction {
     private String encryptPassword(String password){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
+    }
+
+    public boolean decode(String password, String hashedPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.matches(password, hashedPassword);
     }
 }
 
