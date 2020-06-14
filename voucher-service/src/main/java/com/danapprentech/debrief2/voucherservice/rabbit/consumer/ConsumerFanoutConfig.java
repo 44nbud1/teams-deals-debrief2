@@ -34,13 +34,13 @@ public class ConsumerFanoutConfig
     @Bean
     @Qualifier("shareMemberForVoucher")
     public FanoutExchange fanoutMemberForVoucher(){
-        return new FanoutExchange("deals.fanout.member.order");
+        return new FanoutExchange("deals.fanout.member.voucher");
     }
 
     @Bean
     @Qualifier("shareMemberForVoucher")
     public Queue queueMemberForVoucher() {
-        return new Queue("deals.queue.member.order");
+        return new Queue("deals.queue.member.voucher");
     }
 
     @Bean
