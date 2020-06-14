@@ -525,15 +525,14 @@ public class AdminRestController {
                     "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
         }
 
-        if (status == false && vouchers.getQuota() != null)
-        {
-            return ResponseEntity.badRequest().body(new MessageResponse("We cannot update the voucher stock due " +
-                    "to inactive voucher status.","045",
-                    "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
-        }
-
         // only change status
         if (status == false) {
+            if (updateVoucherRequest.getQuota() != null)
+            {
+                    return ResponseEntity.badRequest().body(new MessageResponse("We cannot update the voucher stock due " +
+                    "to inactive voucher status.","045",
+                    "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
+            }
 
             vouchers.setStatus(Boolean.FALSE);
             vouchers.setUpdateAt(new Date());
@@ -543,6 +542,14 @@ public class AdminRestController {
             return ResponseEntity.ok(new MessageResponse("Successfully change status", "044",
                     "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
         }
+
+//        if (status == false && vouchers.getQuota() != null)
+//        {
+//            return ResponseEntity.badRequest().body(new MessageResponse("We cannot update the voucher stock due " +
+//                    "to inactive voucher status.","045",
+//                    "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
+//        }
+
         else {
             return ResponseEntity.badRequest().body(new MessageResponse("Status invalid", "063",
                     "/admin/update-status-voucher/{idVoucher}/restock", new Date()));
