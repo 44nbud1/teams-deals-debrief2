@@ -2,15 +2,15 @@ package com.okta.examples.model.request;
 
 public class ForgotPasswordRequest {
 
-    private String newPassword;
+    private String password;
     private String confirmPassword;
 
-    public String getNewPassword() {
-        return newPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getConfirmPassword() {

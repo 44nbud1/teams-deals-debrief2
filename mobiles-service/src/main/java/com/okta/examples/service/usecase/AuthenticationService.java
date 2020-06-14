@@ -156,7 +156,11 @@ public class AuthenticationService {
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
-
+        String phoneNumber = (""+data.get("phoneNumber"));
+        if (phoneNumber.startsWith("0")){
+            phoneNumber = "+62"+phoneNumber.substring(1);
+        }
+        data.put("phoneNumber", phoneNumber);
         //Request otp validation in member domain
         System.out.println("Request OTP. Send data to member domain : "+ Parser.toJsonString(data));
         ResponseEntity<?> fromMember = member.requestOtp(data);

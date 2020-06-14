@@ -70,17 +70,17 @@ public enum DealsStatus {
     MAXIMUM_QUOTA("068", "Maximum voucher quota of 1000.", HttpStatus.BAD_REQUEST),
     EXPIRATION_DATE_INVALID("069", "Expiration date is maximum 1 month from today.", HttpStatus.BAD_REQUEST),
     FILL_MERCHANT_CATEGORY("070", "Please fill merchant category.", HttpStatus.BAD_REQUEST),
-    WRONG_VA_TOPUP("071", "TOPUP failed! You have entered a wrong virtual number", HttpStatus.NOT_FOUND),
-    TRANSACTION_WRONG_USER("072", "The transaction does not belong to this user", HttpStatus.BAD_REQUEST),
-    ALREADY_FINISH_TRANSACTION("073", "There is nothing to do with an already finished transaction", HttpStatus.NOT_ACCEPTABLE),
+    WRONG_VA_TOPUP("071", "TOPUP failed! You have entered a wrong virtual number.", HttpStatus.NOT_FOUND),
+    TRANSACTION_WRONG_USER("072", "The transaction does not belong to this user.", HttpStatus.BAD_REQUEST),
+    ALREADY_FINISH_TRANSACTION("073", "There is nothing to do with an already finished transaction.", HttpStatus.NOT_ACCEPTABLE),
     HISTORY_INVALID_CATEGORY("074", "Category only consist of COMPLETED and IN-PROGRESS contnent.", HttpStatus.BAD_REQUEST),
     HISTORY_INVALID_PAGE("075", "Page parameter uses only numbers.", HttpStatus.BAD_REQUEST),
-    HISTORY_INVALID_PAGINATION("076", "A page cannot have pagination numbers less than 0", HttpStatus.BAD_REQUEST),
+    HISTORY_INVALID_PAGINATION("076", "A page cannot have pagination numbers less than 0.", HttpStatus.BAD_REQUEST),
     HISTORY_INVALID_DATE("077", "Please use a valid date format (YYYY-mm-dd).", HttpStatus.BAD_REQUEST),
-    HISTORY_FALSE_DATES("078", "Start date cannot be more current than end date", HttpStatus.BAD_REQUEST),
-    HISTORY_INVALID_SEARCH("079", "Maximum search per history is within 7 days", HttpStatus.BAD_REQUEST),
-    INVALID_TRANSACTION_ID("080", "Transaction ID is invalid", HttpStatus.BAD_REQUEST),
-    INVALID_VOUCHER_ID("081", "Voucher ID is invalid", HttpStatus.BAD_REQUEST);
+    HISTORY_FALSE_DATES("078", "Start date cannot be more current than end date.", HttpStatus.BAD_REQUEST),
+    HISTORY_INVALID_SEARCH("079", "Maximum search per history is within 7 days.", HttpStatus.BAD_REQUEST),
+    INVALID_TRANSACTION_ID("080", "Transaction ID is invalid.", HttpStatus.BAD_REQUEST),
+    INVALID_VOUCHER_ID("081", "Voucher ID is invalid.", HttpStatus.BAD_REQUEST);
 
     private final String value;
     private final String message;

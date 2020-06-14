@@ -3,6 +3,7 @@ package com.okta.examples.service.usecase;
 import com.okta.examples.repository.MyBatisRepository;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 @MapperScan("com.okta.examples.repository")
 @Service
@@ -16,7 +17,7 @@ public class SessionService {
     }
 
     public void startSession(String idUser, String idSession){
-        repository.startSession(idUser, idSession );
+        repository.startSession(idUser, encryptPassword(idSession) );
     }
 
     public void destroySession(String idUser){
@@ -33,5 +34,8 @@ public class SessionService {
 
     public String getIdUserSession(String idSession){ return repository.getIdUserSession(idSession);}
 
-
+    private String encryptPassword(String password){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
+    }
 }

@@ -34,7 +34,7 @@ public class Template {
         try {
             //result= restTemplate.postForEntity(api, data, JSONObject.class);
             HttpHeaders headers = new HttpHeaders();
-            headers.setBearerAuth("dasdasdasdasdasda");
+            headers.setBearerAuth("test");
             HttpEntity entity = new HttpEntity(data, headers);
             result = restTemplate.exchange(api, HttpMethod.POST, entity, JSONObject.class);
         }
@@ -56,7 +56,7 @@ public class Template {
         System.out.println(api);
         try {
             HttpHeaders headers = new HttpHeaders();
-            headers.setBearerAuth("dasdasdasdasdasda");
+            headers.setBearerAuth("test");
             HttpEntity entity = new HttpEntity(headers);
             result= restTemplate.exchange(api, HttpMethod.GET, entity, JSONObject.class);
         }
