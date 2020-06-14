@@ -18,6 +18,9 @@ public class UserValidation {
 
     public ResponseEntity<?> editProfile(EditProfileRequest editProfileRequest, String path){
 
+        if (editProfileRequest == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
         boolean content = false;
 
         if (editProfileRequest.getName() != null) {

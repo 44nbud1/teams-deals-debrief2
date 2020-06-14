@@ -1,5 +1,6 @@
 package com.okta.examples.service.usecase;
 
+import com.okta.examples.adapter.parser.OrderMessage;
 import com.okta.examples.adapter.status.DealsStatus;
 import com.okta.examples.adapter.parser.Parser;
 import com.okta.examples.model.response.ResponseFailed;
@@ -20,6 +21,9 @@ public class TransactionService {
     @Autowired
     TransactionValidation validate;
 
+    @Autowired
+    OrderMessage orderMessage;
+
     public ResponseEntity<?> createOrderVoucher(String idUser, JSONObject data, String path){
 
         ResponseEntity<?> check = validate.createOrder(data, path);
@@ -36,7 +40,7 @@ public class TransactionService {
         String status = ""+ jsonOrder.get("status");
 
         if (!fromOrder.getStatusCode().is2xxSuccessful()){
-            return ResponseFailed.wrapResponseFailed(message, status, fromOrder.getStatusCode(), path);
+            return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
         }
 
         JSONObject order = (JSONObject) jsonOrder.get("data");
@@ -60,7 +64,7 @@ public class TransactionService {
         String status = ""+ jsonOrder.get("status");
 
         if (!fromOrder.getStatusCode().is2xxSuccessful()){
-            return ResponseFailed.wrapResponseFailed(message, status, fromOrder.getStatusCode(), path);
+            return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
         }
 
         return ResponseSuccess.wrapResponse(null, DealsStatus.PAYMENT_SUCCESS, path);
@@ -84,7 +88,7 @@ public class TransactionService {
         String status = ""+ jsonOrder.get("status");
 
         if (!fromOrder.getStatusCode().is2xxSuccessful()){
-            return ResponseFailed.wrapResponseFailed(message, status, fromOrder.getStatusCode(), path);
+            return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
         }
 
         return ResponseSuccess.wrapResponse(null, DealsStatus.TOPUP_SUCCESS, path);
@@ -103,7 +107,7 @@ public class TransactionService {
         String status = ""+ jsonOrder.get("status");
 
         if (!fromOrder.getStatusCode().is2xxSuccessful()){
-            return ResponseFailed.wrapResponseFailed(message, status, fromOrder.getStatusCode(), path);
+            return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
         }
 
         JSONObject order = (JSONObject) jsonOrder.get("data");
@@ -123,7 +127,7 @@ public class TransactionService {
         String status = ""+ jsonOrder.get("status");
 
         if (!fromOrder.getStatusCode().is2xxSuccessful()){
-            return ResponseFailed.wrapResponseFailed(message, status, fromOrder.getStatusCode(), path);
+            return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
         }
 
         JSONObject order = (JSONObject) jsonOrder.get("data");

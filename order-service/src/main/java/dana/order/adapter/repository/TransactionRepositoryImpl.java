@@ -22,7 +22,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
         if (transaction != null && user.getUpdatedAt().compareTo(transaction.getUpdatedAt()) >= 0){
                 return Boolean.TRUE;
-        }else if (transaction == null) {
+        }else if(transaction == null){
             return Boolean.TRUE;
         }else {
             return Boolean.FALSE;
@@ -37,9 +37,9 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
         if (transaction != null && voucher.getUpdatedAt().compareTo(transaction.getUpdatedAt()) >= 0){
             return Boolean.TRUE;
-        }else if (transaction == null) {
+        }else if(transaction == null){
             return Boolean.TRUE;
-        }else {
+        }else{
             return Boolean.FALSE;
         }
 
