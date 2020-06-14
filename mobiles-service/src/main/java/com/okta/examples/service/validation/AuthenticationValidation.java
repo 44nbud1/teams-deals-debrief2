@@ -17,7 +17,7 @@ public class AuthenticationValidation {
 
     private final String regex_email = "^[\\w!#$%&’+/=?`{|}~^-]+(?:\\.[\\w!#$%&’+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
     private final String regex_password = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=\\S+$).{8,}$";
-    private final String regex_telephone = "^[\\+]{1}[0-9]{11,13}$";
+    private final String regex_telephone = "^([\\+][6][2])|([0]){1}[8]{1}[^046]{1}[0-9]+$";
     private final String regex_name = "^(?=.{1,9}[a-zA-Z\\'\\-][ ])(?=.*[\\s])(?!.*[0-9])(?!.*[!@#$%^&*]).{3,20}$|^(?=.*[a-zA-Z\\'\\-])(?!.*[0-9])(?!.*[!@#$%^&*]).{3,10}$";
     private final String regex_otp = "[0-9]{4}";
 
