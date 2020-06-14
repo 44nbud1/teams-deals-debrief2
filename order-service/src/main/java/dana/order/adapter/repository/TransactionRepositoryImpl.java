@@ -20,8 +20,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         Transaction transaction = databaseMapper.getLatestUserSuccessfulTransaction(idUser);
         User user = databaseMapper.getUserById(idUser);
 
-        if (transaction != null && transaction.getUpdatedAt().compareTo(user.getUpdatedAt()) >= 0){
-            return Boolean.FALSE;
+        if (transaction != null && transaction.getUpdatedAt().after(user.getUpdatedAt())){
+            if (!transaction.getUpdatedAt().equals(user.getUpdatedAt())){
+                return Boolean.FALSE;
+            }
         }
 
         return Boolean.TRUE;
@@ -32,8 +34,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         Transaction transaction = databaseMapper.getLatestVoucherSuccessfulTransaction(idVoucher);
         Voucher voucher = databaseMapper.getVoucherById(idVoucher);
 
-        if (transaction != null && transaction.getUpdatedAt().compareTo(voucher.getUpdatedAt()) >= 0){
-            return Boolean.FALSE;
+        if (transaction != null && transaction.getUpdatedAt().after(voucher.getUpdatedAt())){
+            if (!transaction.getUpdatedAt().equals(voucher.getUpdatedAt())){
+                return Boolean.FALSE;
+            }
         }
         return Boolean.TRUE;
     }
