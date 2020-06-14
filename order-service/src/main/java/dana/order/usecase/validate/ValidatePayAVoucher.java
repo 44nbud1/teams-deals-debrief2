@@ -1,5 +1,6 @@
 package dana.order.usecase.validate;
 
+import dana.order.entity.DealsStatus;
 import dana.order.usecase.exception.OrderFailedException;
 import dana.order.usecase.exception.PaymentFailedException;
 import org.json.simple.JSONObject;
@@ -12,11 +13,11 @@ import java.util.regex.Pattern;
 public class ValidatePayAVoucher {
     public void check(JSONObject json){
         if(json.get("idTransaction") == null){
-            throw new PaymentFailedException("Transaction ID cannot be empty.", HttpStatus.BAD_REQUEST);
+            throw new PaymentFailedException(DealsStatus.FILL_ALL_FORMS);
         }
 
         if(idTransactionCheck(""+json.get("idTransaction")) == Boolean.FALSE){
-            throw new PaymentFailedException("Transaction ID is invalid.", HttpStatus.BAD_REQUEST);
+            throw new PaymentFailedException(DealsStatus.INVALID_TRANSACTION_ID);
         }
     }
 

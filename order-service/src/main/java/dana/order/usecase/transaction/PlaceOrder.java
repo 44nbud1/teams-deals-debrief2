@@ -1,6 +1,7 @@
 package dana.order.usecase.transaction;
 
 import dana.order.adapter.wrapper.ResponseWrapper;
+import dana.order.entity.DealsStatus;
 import dana.order.entity.Transaction;
 import dana.order.usecase.exception.OrderFailedException;
 import dana.order.usecase.exception.UserException;
@@ -37,11 +38,11 @@ public class PlaceOrder{
         validateBuyAVoucher.check(json);
 
         if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            throw new UserException("The user is not found.", HttpStatus.NOT_FOUND);
+            throw new UserException(DealsStatus.USER_NOT_FOUND);
         }
 
         if (voucherRepository.validateExpiration(Integer.valueOf(""+json.get("idVoucher"))) == Boolean.FALSE){
-            throw new OrderFailedException("The voucher is currently not available.", HttpStatus.NOT_FOUND);
+            throw new OrderFailedException(DealsStatus.VOUCHER_NOT_AVAILABLE);
         }
 
         Boolean consistency = Boolean.FALSE;
@@ -58,7 +59,7 @@ public class PlaceOrder{
         }
 
         if (consistency == Boolean.FALSE){
-            throw new OrderFailedException("We cannot process your transaction for now. Please try again later!", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new OrderFailedException(DealsStatus.TRANSACTION_CANT_PROCESS);
         }
 
         consistency = Boolean.FALSE; counter = 0;
@@ -74,11 +75,11 @@ public class PlaceOrder{
         }
 
         if (consistency == Boolean.FALSE){
-            throw new OrderFailedException("We cannot process your transaction for now. Please try again later!", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new OrderFailedException(DealsStatus.TRANSACTION_CANT_PROCESS);
         }
 
         if (voucherRepository.validateQuantity(Integer.valueOf(""+json.get("idVoucher"))) == Boolean.FALSE){
-            throw new OrderFailedException("The voucher is currently out of stock.", HttpStatus.NOT_FOUND);
+            throw new OrderFailedException(DealsStatus.VOUCHER_OUT_OF_STOCK);
         }
 
         voucherRepository.insertNewOrder(""+json.get("idUser"), Integer.valueOf(""+json.get("idVoucher")));

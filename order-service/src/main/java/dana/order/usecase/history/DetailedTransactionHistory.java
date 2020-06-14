@@ -30,17 +30,17 @@ public class DetailedTransactionHistory {
     public JSONObject get(JSONObject json){
 
         if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            throw new UserException("The user is not found.", HttpStatus.NOT_FOUND);
+            throw new UserException(DealsStatus.USER_NOT_FOUND);
         }
 
         Transaction transaction = databaseMapper.getTransactionById(Integer.valueOf(""+json.get("idTransaction")));
 
         if (transaction == null){
-            throw new PaymentFailedException("The transaction is not found.", HttpStatus.NOT_FOUND);
+            throw new PaymentFailedException(DealsStatus.TRANSACTION_NOT_FOUND);
         }
 
         if (!transaction.getIdUser().equals(""+json.get("idUser"))){
-            throw new PaymentFailedException("The transaction does not belong to this user.", HttpStatus.BAD_REQUEST);
+            throw new PaymentFailedException(DealsStatus.TRANSACTION_WRONG_USER);
         }
 
         JSONObject transactionDetails = historyRepository.getUserDetailedHistory(transaction.getIdTransaction());

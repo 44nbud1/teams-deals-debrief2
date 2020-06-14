@@ -1,4 +1,4 @@
-package com.okta.examples.adapter.status;
+package dana.order.entity;
 
 import org.springframework.http.HttpStatus;
 
