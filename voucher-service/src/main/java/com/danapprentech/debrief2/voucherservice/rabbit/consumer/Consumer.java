@@ -42,32 +42,34 @@ public class Consumer
     @RabbitListener(queues = "deals.queue.order.voucher")
     public void receive1(TransactionConsumer updateQtyConsumer) throws InterruptedException
     {
-        System.out.println("-------------");
-        Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
-        Voucher vouchers = voucherRepository.findByIdVoucher(update);
-        System.out.println(vouchers.getQuota() );
-        vouchers.setQuota(vouchers.getQuota()-1);
-        vouchers.setUpdateAt(new Date());
-        System.out.println("update sukses");
-        System.out.println(vouchers.getQuota());
-        voucherRepository.save(vouchers);
+        if (updateQtyConsumer.getIdGoods() != null)
+        {
 
-        // kirim keyogi
+            System.out.println("-------------");
+            Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
+            Voucher vouchers = voucherRepository.findByIdVoucher(update);
+            System.out.println(vouchers.getQuota());
+            vouchers.setQuota(vouchers.getQuota() - 1);
+            vouchers.setUpdateAt(new Date());
+            System.out.println("update sukses");
+            System.out.println(vouchers.getQuota());
+            voucherRepository.save(vouchers);
 
-        Voucher voucher = voucherRepository.findByVoucherName(vouchers.getVoucherName());
-        // response
-        VoucherResponse voucherResponse = new VoucherResponse();
-        voucherResponse.setVoucherName(voucher.getVoucherName());
-        voucherResponse.setDiscount(voucher.getDiscount());
-        voucherResponse.setVoucherPrice(voucher.getVoucherPrice());
-        voucherResponse.setMaxDiscount(voucher.getMaxDiscount());
-        voucherResponse.setQuota(voucher.getQuota());
-        voucherResponse.setExpiredDate(voucher.getExpiredDate());
-        voucherResponse.setStatus(voucher.getStatus());
-        voucherResponse.setIdMerchant(voucher.getMerchant().getIdMerchant());
-        voucherResponse.setIdVoucher(voucher.getIdVoucher());
-        mqProducer.sendToRabbitVoucher(voucherResponse);
-
+            // kirim keyogi
+            Voucher voucher = voucherRepository.findByVoucherName(vouchers.getVoucherName());
+            // response
+            VoucherResponse voucherResponse = new VoucherResponse();
+            voucherResponse.setVoucherName(voucher.getVoucherName());
+            voucherResponse.setDiscount(voucher.getDiscount());
+            voucherResponse.setVoucherPrice(voucher.getVoucherPrice());
+            voucherResponse.setMaxDiscount(voucher.getMaxDiscount());
+            voucherResponse.setQuota(voucher.getQuota());
+            voucherResponse.setExpiredDate(voucher.getExpiredDate());
+            voucherResponse.setStatus(voucher.getStatus());
+            voucherResponse.setIdMerchant(voucher.getMerchant().getIdMerchant());
+            voucherResponse.setIdVoucher(voucher.getIdVoucher());
+            mqProducer.sendToRabbitVoucher(voucherResponse);
+        }
     }
 
 
