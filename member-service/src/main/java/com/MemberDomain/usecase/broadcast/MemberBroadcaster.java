@@ -19,11 +19,16 @@ public class MemberBroadcaster {
     FanoutExchange fanoutMemberForOrder;
 
     @Autowired
+    @Qualifier("shareMemberForVoucher")
+    FanoutExchange fanoutMemberForVoucher;
+
+    @Autowired
     UserMapper userMapper;
 
     public void send(String idUser){
         UserDataResponse userDataResponse = userMapper.getUserData(idUser);
         System.out.println(userDataResponse.toString());
         rabbitTemplate.convertAndSend(fanoutMemberForOrder.getName(), "", userDataResponse);
+        rabbitTemplate.convertAndSend(fanoutMemberForVoucher.getName(), "", userDataResponse);
     }
 }

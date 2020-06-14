@@ -73,9 +73,21 @@ public class BroadcastingConfig {
     }
 
     @Bean
+    @Qualifier("shareMemberForVoucher")
+    public FanoutExchange fanoutMemberForVoucher(){
+        return new FanoutExchange("deals.fanout.member.voucher");
+    }
+
+    @Bean
     @Qualifier("shareOrderForMember")
     public FanoutExchange fanoutOrderForMember(){
         return new FanoutExchange("deals.fanout.order.member");
+    }
+
+    @Bean
+    @Qualifier("shareMemberForVoucher")
+    public Queue queueMemberForVoucher(){
+        return new Queue("deals.queue.member.voucher");
     }
 
     @Bean
