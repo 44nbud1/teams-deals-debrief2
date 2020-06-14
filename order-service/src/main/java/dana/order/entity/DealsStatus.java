@@ -1,4 +1,4 @@
-package com.okta.examples.adapter.status;
+package dana.order.entity;
 
 import org.springframework.http.HttpStatus;
 
@@ -22,7 +22,7 @@ public enum DealsStatus {
     OTP_EXPIRED("017", "Your OTP has expired.", HttpStatus.BAD_REQUEST),
     REQUEST_NEW_OTP("018", "Please request a new OTP!", HttpStatus.BAD_REQUEST),
     FORGOT_PASSWORD("019", "You have successfully changed your password.", HttpStatus.OK),
-    PROFILE_COLLECTED("020", "Successfully display profile data.", HttpStatus.OK),
+    PROFILE_COLLECTED("020", "Your profiles have been collected.", HttpStatus.OK),
     NOT_AUTHORIZED("021","You are not authorized.", HttpStatus.UNAUTHORIZED),
     USER_NOT_FOUND("022", "User not found.", HttpStatus.NOT_FOUND),
     PROFILE_UPDATED("023", "Your profiles have been updated.", HttpStatus.OK),
@@ -79,8 +79,8 @@ public enum DealsStatus {
     HISTORY_INVALID_DATE("077", "Please use a valid date format (YYYY-mm-dd).", HttpStatus.BAD_REQUEST),
     HISTORY_FALSE_DATES("078", "Start date cannot be more current than end date.", HttpStatus.BAD_REQUEST),
     HISTORY_INVALID_SEARCH("079", "Maximum search per history is within 7 days.", HttpStatus.BAD_REQUEST),
-    INVALID_TRANSACTION_ID("080", "Transaction ID is invalid", HttpStatus.BAD_REQUEST),
-    INVALID_VOUCHER_ID("081", "Voucher ID is invalid", HttpStatus.BAD_REQUEST);
+    INVALID_TRANSACTION_ID("080", "Transaction ID is invalid.", HttpStatus.BAD_REQUEST),
+    INVALID_VOUCHER_ID("081", "Voucher ID is invalid.", HttpStatus.BAD_REQUEST);
 
     private final String value;
     private final String message;

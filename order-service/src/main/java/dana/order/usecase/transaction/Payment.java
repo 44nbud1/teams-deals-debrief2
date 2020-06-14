@@ -1,6 +1,7 @@
 package dana.order.usecase.transaction;
 
 import dana.order.adapter.wrapper.ResponseWrapper;
+import dana.order.entity.DealsStatus;
 import dana.order.entity.Transaction;
 import dana.order.entity.User;
 import dana.order.usecase.broadcast.TransactionBroadcaster;
@@ -43,31 +44,31 @@ public class Payment {
         validatePayAVoucher.check(json);
 
         if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            throw new UserException("The user is not found.", HttpStatus.NOT_FOUND);
+            throw new UserException(DealsStatus.USER_NOT_FOUND);
         }
 
         Transaction transaction = databaseMapper.getTransactionById(Integer.valueOf(""+json.get("idTransaction")));
 
         if (transaction == null){
-            throw new PaymentFailedException("The transaction is not found.", HttpStatus.NOT_FOUND);
+            throw new PaymentFailedException(DealsStatus.TRANSACTION_NOT_FOUND);
         }
 
         if (!transaction.getIdUser().equals(""+json.get("idUser"))){
-            throw new PaymentFailedException("The transaction does not belong to this user.", HttpStatus.BAD_REQUEST);
+            throw new PaymentFailedException(DealsStatus.TRANSACTION_WRONG_USER);
         }
 
         if (transaction.getIdTransactionStatus() != 4){
-            throw new PaymentFailedException("There is nothing to do with an already finished transaction.", HttpStatus.NOT_ACCEPTABLE);
+            throw new PaymentFailedException(DealsStatus.ALREADY_FINISH_TRANSACTION);
         }
 
         if (voucherRepository.validateExpiration(transaction.getIdGoods()) == Boolean.FALSE){
             databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
-            throw new PaymentFailedException("The voucher is currently not available.", HttpStatus.NOT_FOUND);
+            throw new PaymentFailedException(DealsStatus.VOUCHER_NOT_AVAILABLE);
         }
 
         if (transactionRepository.checkATransactionExpiration(Integer.valueOf(""+json.get("idTransaction"))) == Boolean.FALSE){
             databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
-            throw new PaymentFailedException("This transaction has expired.", HttpStatus.NOT_ACCEPTABLE);
+            throw new PaymentFailedException(DealsStatus.TRANSACTION_EXPIRED);
         }
 
         Boolean consistency = Boolean.FALSE;
@@ -84,7 +85,7 @@ public class Payment {
         }
 
         if (consistency == Boolean.FALSE){
-            throw new OrderFailedException("We cannot process your transaction for now. Please try again later!", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new OrderFailedException(DealsStatus.TRANSACTION_CANT_PROCESS);
         }
 
         consistency = Boolean.FALSE; counter = 0;
@@ -100,18 +101,18 @@ public class Payment {
         }
 
         if (consistency == Boolean.FALSE){
-            throw new OrderFailedException("We cannot process your transaction for now. Please try again later!", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new OrderFailedException(DealsStatus.TRANSACTION_CANT_PROCESS);
         }
 
         if (voucherRepository.validateQuantity(transaction.getIdGoods()) == Boolean.FALSE){
             databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
-            throw new PaymentFailedException("The voucher is currently out of stock.", HttpStatus.NOT_FOUND);
+            throw new PaymentFailedException(DealsStatus.VOUCHER_OUT_OF_STOCK);
         }
 
         User user = databaseMapper.getUserById(""+json.get("idUser"));
 
         if (user.getBalance() - transaction.getAmount() < 0){
-            throw new PaymentFailedException("Your balance is not enough.", HttpStatus.PAYMENT_REQUIRED);
+            throw new PaymentFailedException(DealsStatus.BALANCE_NOT_ENOUGH);
         }
 
         transactionRepository.setFinishATransaction(Integer.valueOf(""+json.get("idTransaction")));

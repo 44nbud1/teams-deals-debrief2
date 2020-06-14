@@ -1,20 +1,13 @@
 package dana.order.usecase.exception;
 
+import dana.order.entity.DealsStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 public class UserException extends ResponseStatusException {
-    private Integer dealsStatus;
 
-    public UserException(String message, HttpStatus status){
-        super(status, message);
+    public UserException(DealsStatus status){
+        super(status.getStatus(), status.getMessage());
     }
 
-    public Integer getDealsStatus() {
-        return dealsStatus;
-    }
-
-    public void setDealsStatus(Integer dealsStatus) {
-        this.dealsStatus = dealsStatus;
-    }
 }

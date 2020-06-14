@@ -1,6 +1,7 @@
 package dana.order.usecase.history;
 
 import dana.order.adapter.wrapper.ResponseWrapper;
+import dana.order.entity.DealsStatus;
 import dana.order.entity.TransactionHistoryModel;
 import dana.order.usecase.exception.UserException;
 import dana.order.usecase.port.HistoryRepository;
@@ -30,7 +31,7 @@ public class TransactionHistory {
         validateTransactionHistory.check(json);
 
         if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            throw new UserException("User is not found.", HttpStatus.NOT_FOUND);
+            throw new UserException(DealsStatus.USER_NOT_FOUND);
         }
 
         JSONObject result = historyRepository.getUserHistory(json);
