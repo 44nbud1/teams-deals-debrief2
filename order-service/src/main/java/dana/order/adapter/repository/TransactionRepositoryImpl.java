@@ -20,11 +20,14 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         Transaction transaction = databaseMapper.getLatestUserSuccessfulTransaction(idUser);
         User user = databaseMapper.getUserById(idUser);
 
-        if (transaction != null && transaction.getUpdatedAt().after(user.getUpdatedAt())){
+        if (transaction != null && user.getUpdatedAt().compareTo(transaction.getUpdatedAt()) >= 0){
+                return Boolean.TRUE;
+        }else if(transaction == null){
+            return Boolean.TRUE;
+        }else {
             return Boolean.FALSE;
         }
 
-        return Boolean.TRUE;
     }
 
     public Boolean validateVoucherConsistency(Integer idVoucher){
@@ -32,10 +35,14 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         Transaction transaction = databaseMapper.getLatestVoucherSuccessfulTransaction(idVoucher);
         Voucher voucher = databaseMapper.getVoucherById(idVoucher);
 
-        if (transaction != null && transaction.getUpdatedAt().after(voucher.getUpdatedAt())){
+        if (transaction != null && voucher.getUpdatedAt().compareTo(transaction.getUpdatedAt()) >= 0){
+            return Boolean.TRUE;
+        }else if(transaction == null){
+            return Boolean.TRUE;
+        }else{
             return Boolean.FALSE;
         }
-        return Boolean.TRUE;
+
     }
 
     public Boolean checkATransactionExpiration(Integer idTransaction){

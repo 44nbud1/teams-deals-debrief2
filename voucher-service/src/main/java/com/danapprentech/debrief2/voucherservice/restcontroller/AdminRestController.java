@@ -408,6 +408,8 @@ public class AdminRestController {
         voucherResponse.setIdMerchant(vouchers.getMerchant().getIdMerchant());
         voucherResponse.setVoucherName(vouchers.getVoucherName());
         voucherResponse.setVoucherPrice(vouchers.getVoucherPrice());
+        voucherResponse.setMerchantName(vouchers.getMerchantName());
+        voucherResponse.setIdVoucher(vouchers.getIdVoucher());
 
         List<VoucherResponse> merchantsResponse = new ArrayList<>();
         merchantsResponse.add(voucherResponse);

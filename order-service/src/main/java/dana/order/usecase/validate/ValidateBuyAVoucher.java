@@ -1,5 +1,6 @@
 package dana.order.usecase.validate;
 
+import dana.order.entity.DealsStatus;
 import dana.order.usecase.exception.OrderFailedException;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -11,11 +12,11 @@ import java.util.regex.Pattern;
 public class ValidateBuyAVoucher {
     public void check(JSONObject json){
         if(json.get("idVoucher") == null){
-            throw new OrderFailedException("Voucher ID cannot be empty.", HttpStatus.BAD_REQUEST);
+            throw new OrderFailedException(DealsStatus.FILL_ALL_FORMS);
         }
 
         if(idVoucherCheck(""+json.get("idVoucher")) == Boolean.FALSE){
-            throw new OrderFailedException("Voucher ID is invalid.", HttpStatus.BAD_REQUEST);
+            throw new OrderFailedException(DealsStatus.INVALID_VOUCHER_ID);
         }
     }
 

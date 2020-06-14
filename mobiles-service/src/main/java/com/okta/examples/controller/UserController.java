@@ -91,7 +91,7 @@ public class UserController {
                                                 @RequestParam(value = "filter-end-date", required = false) String filterEnd,
                                                 @RequestParam(value = "page", required = false) Integer page,
                                                 HttpServletRequest request){
-        if (!sessionValidation.requestVoucher(request)){
+        if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return transactionService.transactionHistory(idUser, category, filterStart, filterEnd, page, request.getServletPath());
@@ -110,7 +110,7 @@ public class UserController {
     @GetMapping("/show-all-voucher")
     public ResponseEntity<?> getAllVoucher(@RequestParam(value = "page", required = false) String page,
                                            HttpServletRequest request) {
-        if (!sessionValidation.requestVoucher(request)){
+        if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return voucherService.getAllVoucher(page, request.getServletPath());
@@ -120,7 +120,7 @@ public class UserController {
     public ResponseEntity<?> filterVoucher(@RequestParam(value = "merchantCategory", required = false) String merchantCategory,
                                            @RequestParam(value = "page", required = false) String page,
                                            HttpServletRequest request){
-        if (!sessionValidation.requestVoucher(request)){
+        if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return voucherService.filterVoucher(merchantCategory, page, request.getServletPath());
@@ -130,7 +130,7 @@ public class UserController {
     public ResponseEntity<?> searchVoucher(@RequestParam(value = "merchantName", required = false) String merchantName,
                                            @RequestParam(value = "page", required = false) String page,
                                            HttpServletRequest request){
-        if (!sessionValidation.requestVoucher(request)){
+        if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return voucherService.searchVoucher(merchantName, page, request.getServletPath());
@@ -140,7 +140,7 @@ public class UserController {
     public ResponseEntity<?> sortVoucher(@RequestParam(value = "sortBy", required = false) String name,
                                          @RequestParam(value = "page", required = false) String page,
                                          HttpServletRequest request){
-        if (!sessionValidation.requestVoucher(request)){
+        if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return voucherService.sortVoucher(name, page, request.getServletPath());

@@ -1,5 +1,6 @@
 package dana.order.usecase.validate;
 
+import dana.order.entity.DealsStatus;
 import dana.order.usecase.exception.TOPUPFailedException;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -11,19 +12,19 @@ import java.util.regex.Pattern;
 public class ValidateTOPUP {
     public void check(JSONObject json){
         if (json.get("virtualNumber") == null){
-            throw new TOPUPFailedException("Virtual Number cannot be empty.", HttpStatus.BAD_REQUEST);
+            throw new TOPUPFailedException(DealsStatus.FILL_ALL_FORMS);
         }
 
         if (json.get("amount") == null){
-            throw new TOPUPFailedException("TOPUP amount cannot be empty.", HttpStatus.BAD_REQUEST);
+            throw new TOPUPFailedException(DealsStatus.FILL_ALL_FORMS);
         }
 
         if (virtualNumberCheck(""+json.get("virtualNumber")) == Boolean.FALSE){
-            throw new TOPUPFailedException("Virtual Number is invalid.", HttpStatus.BAD_REQUEST);
+            throw new TOPUPFailedException(DealsStatus.VIRTUAL_ACCOUNT_INVALID);
         }
 
         if (amountCheck(""+json.get("amount")) == Boolean.FALSE){
-            throw new TOPUPFailedException("Amount is invalid.", HttpStatus.BAD_REQUEST);
+            throw new TOPUPFailedException(DealsStatus.AMOUNT_INVALID);
         }
     }
 

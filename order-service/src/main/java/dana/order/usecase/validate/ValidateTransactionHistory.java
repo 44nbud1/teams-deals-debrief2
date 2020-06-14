@@ -1,5 +1,6 @@
 package dana.order.usecase.validate;
 
+import dana.order.entity.DealsStatus;
 import dana.order.usecase.exception.HistoryFailedException;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -19,30 +20,30 @@ public class ValidateTransactionHistory {
             if ((""+json.get("category")).equals("COMPLETED") || (""+json.get("category")).equals("IN-PROGRESS")){
                 // skip
             }else {
-                throw new HistoryFailedException("Category only consists of COMPLETED or IN-PROGRESS content.", HttpStatus.BAD_REQUEST);
+                throw new HistoryFailedException(DealsStatus.HISTORY_INVALID_CATEGORY);
             }
         }
 
         if (json.get("page") != null){
             if (checkPage(""+json.get("page")) == Boolean.FALSE){
-                throw new HistoryFailedException("Page parameter uses only numbers.", HttpStatus.BAD_REQUEST);
+                throw new HistoryFailedException(DealsStatus.HISTORY_INVALID_PAGE);
             }
 
             Integer page = Integer.valueOf(""+json.get("page"));
             if (page < 0){
-                throw new HistoryFailedException("A page cannot have pagination numbers less than 0.", HttpStatus.BAD_REQUEST);
+                throw new HistoryFailedException(DealsStatus.HISTORY_INVALID_PAGINATION);
             }
         }
 
         if (json.get("startDate") != null){
             if (checkDate(""+json.get("startDate")) == Boolean.FALSE){
-                throw new HistoryFailedException("Please use a valid date format (yyyy-mm-dd) for history start date.", HttpStatus.BAD_REQUEST);
+                throw new HistoryFailedException(DealsStatus.HISTORY_INVALID_DATE);
             }
         }
 
         if (json.get("endDate") != null){
             if (checkDate(""+json.get("endDate")) == Boolean.FALSE){
-                throw new HistoryFailedException("Please use a valid date format (yyyy-mm-dd) for history end date.", HttpStatus.BAD_REQUEST);
+                throw new HistoryFailedException(DealsStatus.HISTORY_INVALID_DATE);
             }
         }
 
@@ -57,7 +58,7 @@ public class ValidateTransactionHistory {
             } catch (ParseException e) {e.printStackTrace();}
 
             if (startDate.after(endDate)){
-                throw new HistoryFailedException("Start date cannot be more current than end date.", HttpStatus.BAD_REQUEST);
+                throw new HistoryFailedException(DealsStatus.HISTORY_FALSE_DATES);
             }
 
             // Maximum search for history is within 7 days
@@ -71,7 +72,7 @@ public class ValidateTransactionHistory {
             }catch (ParseException e){e.printStackTrace();}
 
             if (endDate.after(testDate)){
-                throw new HistoryFailedException("Maximum search for history is within 7 days.", HttpStatus.BAD_REQUEST);
+                throw new HistoryFailedException(DealsStatus.HISTORY_INVALID_SEARCH);
             }
         }
     }

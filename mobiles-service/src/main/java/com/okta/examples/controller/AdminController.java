@@ -31,7 +31,7 @@ public class AdminController {
                                             @PathVariable("idMerchant") String idMerchant,
                                             @RequestBody(required = false) JSONObject data,
                                             HttpServletRequest request){
-        if (!sessionValidation.requestVoucher(request)){
+        if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         data.put("idUser",sessionService.getIdUserSession(request.getHeader("Authorization").substring(7)));
@@ -41,7 +41,7 @@ public class AdminController {
     @GetMapping("/show-all-voucher")
     public ResponseEntity<?> getAllVoucher(@RequestParam(value = "page", required = false) String page,
                                            HttpServletRequest request) {
-        if (!sessionValidation.requestVoucher(request)){
+        if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return adminService.getAllVoucher(page, request.getServletPath());
@@ -51,7 +51,7 @@ public class AdminController {
     public ResponseEntity<?> filterVoucher(@RequestParam("filterByStatus") String merchantCategory,
                                            @RequestParam(value = "page", required = false) String page,
                                            HttpServletRequest request){
-        if (!sessionValidation.requestVoucher(request)){
+        if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return adminService.filterVoucher(merchantCategory, page, request.getServletPath());
@@ -61,7 +61,7 @@ public class AdminController {
     public ResponseEntity<?> searchVoucher(@RequestParam("merchantName") String merchantName,
                                            @RequestParam(value = "page", required = false) String page,
                                            HttpServletRequest request){
-        if (!sessionValidation.requestVoucher(request)){
+        if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return adminService.searchVoucher(merchantName, page, request.getServletPath());
@@ -71,7 +71,7 @@ public class AdminController {
     public ResponseEntity<?> sortVoucher(@RequestParam("sortBy") String name,
                                          @RequestParam(value = "page", required = false) String page,
                                          HttpServletRequest request){
-        if (!sessionValidation.requestVoucher(request)){
+        if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return adminService.sortVoucher(name, page, request.getServletPath());
@@ -80,7 +80,7 @@ public class AdminController {
     @GetMapping("/voucher-detail-voucher/{idVoucher}")
     public ResponseEntity<?> voucherDetail(@PathVariable("idVoucher") String idVoucher,
                                            HttpServletRequest request){
-        if (!sessionValidation.requestVoucher(request)){
+        if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return adminService.voucherDetail(idVoucher, request.getServletPath());
@@ -90,7 +90,7 @@ public class AdminController {
     public ResponseEntity<?> updateVoucher(@PathVariable("idVoucher") String idVoucher,
                                            @RequestBody(required = false) JSONObject data,
                                            HttpServletRequest request){
-        if (!sessionValidation.requestVoucher(request)){
+        if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return adminService.updateVoucher(idVoucher, data, request.getServletPath());

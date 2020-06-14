@@ -1,6 +1,7 @@
 package dana.order.usecase.transaction;
 
 import dana.order.adapter.wrapper.ResponseWrapper;
+import dana.order.entity.DealsStatus;
 import dana.order.entity.Transaction;
 import dana.order.entity.User;
 import dana.order.usecase.broadcast.TransactionBroadcaster;
@@ -39,7 +40,7 @@ public class TOPUP {
         validateTOPUP.check(json);
 
         if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            throw new UserException("The user is not found.", HttpStatus.NOT_FOUND);
+            throw new UserException(DealsStatus.USER_NOT_FOUND);
         }
 
         Boolean consistency = Boolean.FALSE;
@@ -56,28 +57,28 @@ public class TOPUP {
         }
 
         if (consistency == Boolean.FALSE){
-            throw new TOPUPFailedException("We cannot process your transaction for now. Please try again later!", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new TOPUPFailedException(DealsStatus.TRANSACTION_CANT_PROCESS);
         }
 
         if (Double.valueOf(""+json.get("amount")) < 10000){
-            throw new TOPUPFailedException("TOPUP failed! The minimum TOPUP amount is Rp 10.000,00.", HttpStatus.NOT_ACCEPTABLE);
+            throw new TOPUPFailedException(DealsStatus.MINIMUM_TOPUP);
         }
 
         User user = databaseMapper.getUserById(""+json.get("idUser"));
 
         if (user.getBalance() + Double.valueOf(""+json.get("amount")) > 1000000){
-            throw new TOPUPFailedException("TOPUP failed! You have reached your maximum balance amount.", HttpStatus.NOT_ACCEPTABLE);
+            throw new TOPUPFailedException(DealsStatus.MAXIMUM_BALANCE);
         }
 
         String partyCode = transactionRepository.getPartyCode(""+json.get("virtualNumber"));
         String phoneNumber = transactionRepository.getPhoneNumberFromVA(""+json.get("virtualNumber"));
 
         if (userRepository.doesPhoneNumberCorrect(""+json.get("idUser"), phoneNumber) == Boolean.FALSE){
-            throw new TOPUPFailedException("TOPUP failed! You have entered a wrong virtual number.", HttpStatus.NOT_FOUND);
+            throw new TOPUPFailedException(DealsStatus.WRONG_VA_TOPUP);
         }
 
         if (transactionRepository.checkTOPUPThirdParty(partyCode) == Boolean.FALSE){
-            throw new TOPUPFailedException("TOPUP failed! The merchant is currently not available for balance TOPUP.", HttpStatus.NOT_FOUND);
+            throw new TOPUPFailedException(DealsStatus.MERCHANT_NOT_AVAILABLE);
         }
 
         transactionRepository.TOPUPBalance(""+json.get("idUser"), Double.valueOf(""+json.get("amount")),
