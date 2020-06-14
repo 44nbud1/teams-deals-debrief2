@@ -6,7 +6,18 @@ import org.springframework.web.server.ResponseStatusException;
 
 public class OrderFailedException extends ResponseStatusException {
 
+    private String internalStatusCode;
+
     public OrderFailedException(DealsStatus status){
         super(status.getStatus(), status.getMessage());
+        this.internalStatusCode = status.getValue();
+    }
+
+    public String getInternalStatusCode() {
+        return internalStatusCode;
+    }
+
+    public void setInternalStatusCode(String internalStatusCode) {
+        this.internalStatusCode = internalStatusCode;
     }
 }
