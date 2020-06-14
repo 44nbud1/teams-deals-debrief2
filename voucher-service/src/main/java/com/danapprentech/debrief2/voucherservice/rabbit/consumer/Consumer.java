@@ -2,6 +2,7 @@ package com.danapprentech.debrief2.voucherservice.rabbit.consumer;//package com.
 
 import com.danapprentech.debrief2.voucherservice.model.Voucher;
 import com.danapprentech.debrief2.voucherservice.model.response.VoucherResponse;
+import com.danapprentech.debrief2.voucherservice.rabbit.model.MemberConsumer;
 import com.danapprentech.debrief2.voucherservice.rabbit.model.TransactionConsumer;
 import com.danapprentech.debrief2.voucherservice.rabbit.model.UpdateQtyConsumer;
 import com.danapprentech.debrief2.voucherservice.rabbit.producer.RabbitMqProducer;
@@ -68,4 +69,6 @@ public class Consumer
         mqProducer.sendToRabbitVoucher(voucherResponse);
 
     }
+
+
 }
