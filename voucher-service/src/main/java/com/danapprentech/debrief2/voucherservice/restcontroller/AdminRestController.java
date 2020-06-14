@@ -474,7 +474,7 @@ public class AdminRestController {
 
             Voucher vouchers = voucherRepository.findByIdVoucher(idVoucher);
 
-            if (vouchers.getStatus() != false && updateVoucherRequest.getStatus())
+            if (vouchers.getStatus() == false && updateVoucherRequest.getStatus())
             {
                 return ResponseEntity.badRequest().body(new MessageResponse("Status invalid",
                         "063","/admin/update-status-voucher/{idVoucher}/restock",new Date()));
