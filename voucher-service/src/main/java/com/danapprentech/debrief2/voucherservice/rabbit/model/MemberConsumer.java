@@ -22,7 +22,7 @@ public class MemberConsumer
     @Id
     @Column(name = "id_user")
     private String idUser;
-    private String name;
+    private String phoneNumber;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at")

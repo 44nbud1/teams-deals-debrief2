@@ -44,7 +44,6 @@ public class Consumer
     {
         if (updateQtyConsumer.getIdGoods() != null)
         {
-
             System.out.println("-------------");
             Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
             Voucher vouchers = voucherRepository.findByIdVoucher(update);
@@ -70,7 +69,6 @@ public class Consumer
             voucherResponse.setIdVoucher(voucher.getIdVoucher());
             mqProducer.sendToRabbitVoucher(voucherResponse);
         }
+        System.out.println("yogi kirim ke Members");
     }
-
-
 }
