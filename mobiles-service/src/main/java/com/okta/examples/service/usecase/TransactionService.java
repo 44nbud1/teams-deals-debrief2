@@ -87,7 +87,7 @@ public class TransactionService {
             return ResponseFailed.wrapResponseFailed(message, status, fromOrder.getStatusCode(), path);
         }
 
-        return ResponseSuccess.wrapResponse(null, DealsStatus.PAYMENT_SUCCESS, path);
+        return ResponseSuccess.wrapResponse(null, DealsStatus.TOPUP_SUCCESS, path);
 
 //        return ResponseSuccess.wrap200(null, "TOP UP completed successfully.",
 //                "/api/user/"+idUser+"/transaction/topup");

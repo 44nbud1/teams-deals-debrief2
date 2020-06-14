@@ -49,7 +49,7 @@ public class AdminController {
 
     @GetMapping("/filterByStatus-voucher")
     public ResponseEntity<?> filterVoucher(@RequestParam("filterByStatus") String merchantCategory,
-                                           @RequestParam("page") String page,
+                                           @RequestParam(value = "page", required = false) String page,
                                            HttpServletRequest request){
         if (!sessionValidation.requestVoucher(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
@@ -59,7 +59,7 @@ public class AdminController {
 
     @GetMapping("/findByMerchantName-voucher")
     public ResponseEntity<?> searchVoucher(@RequestParam("merchantName") String merchantName,
-                                           @RequestParam("page") String page,
+                                           @RequestParam(value = "page", required = false) String page,
                                            HttpServletRequest request){
         if (!sessionValidation.requestVoucher(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
@@ -69,7 +69,7 @@ public class AdminController {
 
     @GetMapping("/sort-voucher")
     public ResponseEntity<?> sortVoucher(@RequestParam("sortBy") String name,
-                                         @RequestParam("page") String page,
+                                         @RequestParam(value = "page", required = false) String page,
                                          HttpServletRequest request){
         if (!sessionValidation.requestVoucher(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
@@ -86,4 +86,13 @@ public class AdminController {
         return adminService.voucherDetail(idVoucher, request.getServletPath());
     }
 
+    @PutMapping("/update-status-voucher/{idVoucher}/restock")
+    public ResponseEntity<?> updateVoucher(@PathVariable("idVoucher") String idVoucher,
+                                           @RequestBody(required = false) JSONObject data,
+                                           HttpServletRequest request){
+        if (!sessionValidation.requestVoucher(request)){
+            return ResponseFailed.unAuthorized(request.getServletPath());
+        }
+        return adminService.updateVoucher(idVoucher, data, request.getServletPath());
+    }
 }

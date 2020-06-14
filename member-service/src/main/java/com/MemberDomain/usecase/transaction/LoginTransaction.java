@@ -1,6 +1,8 @@
 package com.MemberDomain.usecase.transaction;
 
-import com.MemberDomain.adapter.wrapper.ResponseWrapper;
+import com.MemberDomain.adapter.status.DealsStatus;
+import com.MemberDomain.adapter.wrapper.ResponseFailed;
+import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.request.LoginRequest;
 import com.MemberDomain.model.response.ProfileResponse;
 import com.MemberDomain.model.response.UserDataResponse;
@@ -11,6 +13,7 @@ import com.MemberDomain.usecase.validation.UserValidation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,25 +25,28 @@ public class LoginTransaction {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    UserMapper userMapper;
+    public ResponseEntity<?> login(LoginRequest loginRequest, String path){
 
-    public JSONObject login(LoginRequest loginRequest){
+        ResponseEntity<?> check = userValidation.login(loginRequest, path);
 
-        userValidation.login(loginRequest);
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
 
-        String phoneNumber = loginRequest.getPhoneNumber();
-        String password = loginRequest.getPassword();
+        if (loginRequest.getPhoneNumber().startsWith("0")){
+            loginRequest.setPhoneNumber("+62"+loginRequest.getPhoneNumber().substring(1));
+        }
 
-        ProfileResponse profileResponse = userRepository.doLogin(""+phoneNumber, ""+password);
+        ProfileResponse profileResponse = userRepository.doLogin(""+loginRequest.getPhoneNumber(),
+                ""+loginRequest.getPassword());
 
         if (profileResponse == null){
-            throw new RegisterException("Your data do not match our records.", HttpStatus.NOT_FOUND);
+            return ResponseFailed.wrapResponse(DealsStatus.DATA_NOT_MATCH, path);
         }
 
         UserDataResponse userDataResponse = userRepository.getUserData(profileResponse.getIdUser());
 
-        return ResponseWrapper.wrap("Your registration is successful.", 200, userDataResponse);
+        return ResponseSuccess.wrapResponse(userDataResponse, DealsStatus.LOGIN_SUCCESS, path);
     }
 }
 

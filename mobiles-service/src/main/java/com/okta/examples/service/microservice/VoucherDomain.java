@@ -18,7 +18,7 @@ public class VoucherDomain {
     private Template template;
 
     private final String api = "http://localhost:8081/api";
-
+    private final String apis = "http://localhost:8081";
     public ResponseEntity<?> getVoucher(){
         return template.get(api+"/admin/filterByStatus-voucher?filterByStatus=false");
     }
@@ -75,5 +75,9 @@ public class VoucherDomain {
         return template.get(api+"/admin/sort-voucher" +
                 "?sortBy=" +name+"&" +
                 "page=" +page);
+    }
+
+    public ResponseEntity<?> updateVoucher(String idVoucher, JSONObject data, String path){
+        return template.put(apis+path, data);
     }
 }

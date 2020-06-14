@@ -17,6 +17,8 @@ public interface OtpMapper {
 
     final String matchOTP = "SELECT * FROM tbl_otps WHERE idUser =  #{idUser} AND otp = #{otp};";
 
+    final String matchOTPDate = "SELECT * FROM tbl_otps WHERE idUser =  #{idUser} AND otp = #{otp} AND expiredDate > NOW();";
+
     @Insert(createOTP)
     void createOTP(String idUser);
 
@@ -28,4 +30,7 @@ public interface OtpMapper {
 
     @Select(matchOTP)
     OtpResponse matchOTP(String idUser, String otp);
+
+    @Select(matchOTPDate)
+    OtpResponse matchOTPDate(String idUser, String otp);
 }

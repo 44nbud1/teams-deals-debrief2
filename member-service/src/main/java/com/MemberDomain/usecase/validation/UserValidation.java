@@ -1,9 +1,13 @@
 package com.MemberDomain.usecase.validation;
 
+import com.MemberDomain.adapter.status.DealsStatus;
+import com.MemberDomain.adapter.wrapper.ResponseFailed;
+import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.request.*;
 import com.MemberDomain.usecase.exception.*;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
@@ -17,86 +21,122 @@ public class UserValidation {
     private final String regex_name = "^(?=.{1,9}[a-zA-Z\\'\\-][ ])(?=.*[\\s])(?!.*[0-9])(?!.*[!@#$%^&*]).{3,20}$|^(?=.*[a-zA-Z\\'\\-])(?!.*[0-9])(?!.*[!@#$%^&*]).{3,10}$";
     private final String regex_otp = "[0-9]{4}";
 
-    public void register(RegisterRequest registerRequest) {
+    public ResponseEntity<?> register(RegisterRequest registerRequest, String path) {
 
-        if (registerRequest.getName().isEmpty() || registerRequest.getEmail().isEmpty() ||
-                registerRequest.getPhoneNumber().isEmpty() || registerRequest.getPassword().isEmpty() ||
-                registerRequest.getConfirmPassword().isEmpty()){
-            throw new RegisterException("Please fill in all the forms!", HttpStatus.BAD_REQUEST);
+        if (registerRequest == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
+
+        if (registerRequest.getEmail() == null || registerRequest.getPhoneNumber() == null ||
+                registerRequest.getPassword()== null || registerRequest.getName() == null ||
+                registerRequest.getConfirmPassword() == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
 
         if (!Pattern.matches(regex_name, registerRequest.getName())){
-            throw new RegisterException("Name is invalid.", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.NAME_INVALID, path);
         }
         if (!Pattern.matches(regex_email, registerRequest.getEmail())) {
-            throw new RegisterException("Email is invalid.", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.EMAIL_INVALID, path);
         }
 
         if (!Pattern.matches(regex_password, registerRequest.getPassword())) {
-            throw new RegisterException("Password is invalid.", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
         }
-
+        if (registerRequest.getPhoneNumber().startsWith("0")){
+            registerRequest.setPhoneNumber("+62"+registerRequest.getPhoneNumber().substring(1));
+        }
         if(!Pattern.matches(regex_telephone, registerRequest.getPhoneNumber())){
-            throw new RegisterException("Phone Number is invalid.", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.PHONE_NUMBER_INVALID, path);
         }
 
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())){
-            throw new RegisterException("Password is missed match.", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_MISS_MATCH, path);
         }
+
+        return ResponseSuccess.wrapOk();
     }
 
-    public void login(LoginRequest loginRequest){
+    public ResponseEntity<?> login(LoginRequest loginRequest, String path){
 
-        if (loginRequest.getPhoneNumber() == null || loginRequest.getPassword()== null){
-            throw new LoginException("Please fill in all the forms!", HttpStatus.BAD_REQUEST);
+        if (loginRequest == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
 
+        if (loginRequest.getPhoneNumber() == null || loginRequest.getPassword()== null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
+        if (loginRequest.getPhoneNumber().startsWith("0")){
+            loginRequest.setPhoneNumber("+62"+loginRequest.getPhoneNumber().substring(1));
+        }
         if(!Pattern.matches(regex_telephone, loginRequest.getPhoneNumber())){
-            throw new LoginException("Phone Number is invalid.", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.PHONE_NUMBER_INVALID, path);
         }
 
         if (!Pattern.matches(regex_password, loginRequest.getPassword())) {
-            throw new LoginException("Password is invalid.", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
         }
 
+        return ResponseSuccess.wrapOk();
     }
 
-    public void requestOtp(OtpRequest otpRequest){
+    public ResponseEntity<?> requestOtp(OtpRequest otpRequest, String path){
+
+        if (otpRequest == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
 
         if (otpRequest.getPhoneNumber() == null){
-            throw new RequestOtpException("Please fill in all the forms.", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
+
+        if (otpRequest.getPhoneNumber().startsWith("0")){
+            otpRequest.setPhoneNumber("+62"+otpRequest.getPhoneNumber().substring(1));
         }
 
         if(!Pattern.matches(regex_telephone, ""+otpRequest.getPhoneNumber())){
-            throw new RequestOtpException("Phone Number is invalid.", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.PHONE_NUMBER_INVALID, path);
         }
+
+        return ResponseSuccess.wrapOk();
     }
 
-    public void matchOtp(MatchOtpRequest matchOtpRequest){
+    public ResponseEntity<?> matchOtp(MatchOtpRequest matchOtpRequest, String path){
+
+        if (matchOtpRequest == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
 
         if (matchOtpRequest.getOtp() == null){
-            throw new MatchOtpException("Please fill in all the forms!", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
 
         if(!Pattern.matches(regex_otp, ""+matchOtpRequest.getOtp())){
-            throw new MatchOtpException("OTP is invalid.", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
         }
+
+        return ResponseSuccess.wrapOk();
     }
 
-    public void forgotPassword(ForgotPasswordRequest forgotPasswordRequest){
+    public ResponseEntity<?> forgotPassword(ForgotPasswordRequest forgotPasswordRequest, String path){
+
+        if (forgotPasswordRequest == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
 
         if (forgotPasswordRequest.getPassword() == null ||forgotPasswordRequest.getConfirmPassword() == null){
-            throw new ForgotPasswordException("Please fill in all the forms!", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
 
         if (!Pattern.matches(regex_password, forgotPasswordRequest.getPassword())){
-            throw new ForgotPasswordException("Password is invalid.", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
         }
 
         if (!forgotPasswordRequest.getPassword().equals(forgotPasswordRequest.getConfirmPassword())){
-            throw new ForgotPasswordException("Password is missed match.", HttpStatus.BAD_REQUEST);
+            return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_MISS_MATCH, path);
         }
 
+        return ResponseSuccess.wrapOk();
     }
 }
 

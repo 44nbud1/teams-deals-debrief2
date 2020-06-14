@@ -23,6 +23,10 @@ public class AuthenticationValidation {
 
     public ResponseEntity<?> register(RegisterRequest registerRequest, String path) {
 
+        if (registerRequest == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
+
         if (registerRequest.getEmail() == null || registerRequest.getPhoneNumber() == null ||
             registerRequest.getPassword()== null || registerRequest.getName() == null ||
             registerRequest.getConfirmPassword() == null){
@@ -39,7 +43,9 @@ public class AuthenticationValidation {
         if (!Pattern.matches(regex_password, registerRequest.getPassword())) {
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
         }
-
+        if (registerRequest.getPhoneNumber().startsWith("0")){
+            registerRequest.setPhoneNumber("+62"+registerRequest.getPhoneNumber().substring(1));
+        }
         if(!Pattern.matches(regex_telephone, registerRequest.getPhoneNumber())){
             return ResponseFailed.wrapResponse(DealsStatus.PHONE_NUMBER_INVALID, path);
         }
@@ -53,10 +59,16 @@ public class AuthenticationValidation {
 
     public ResponseEntity<?> login(LoginRequest loginRequest, String path){
 
-        if (loginRequest.getPhoneNumber() == null || loginRequest.getPassword()== null){
+        if (loginRequest == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
 
+        if (loginRequest.getPhoneNumber() == null || loginRequest.getPassword()== null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
+        if (loginRequest.getPhoneNumber().startsWith("0")){
+            loginRequest.setPhoneNumber("+62"+loginRequest.getPhoneNumber().substring(1));
+        }
         if(!Pattern.matches(regex_telephone, loginRequest.getPhoneNumber())){
             return ResponseFailed.wrapResponse(DealsStatus.PHONE_NUMBER_INVALID, path);
         }
@@ -69,6 +81,10 @@ public class AuthenticationValidation {
     }
 
     public ResponseEntity<?> requestOtp(JSONObject data, String path){
+
+        if (data == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
 
         if (data.get("phoneNumber") == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
@@ -83,6 +99,10 @@ public class AuthenticationValidation {
 
     public ResponseEntity<?> matchOtp(JSONObject data, String path){
 
+        if (data == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
+
         if (data.get("otp") == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
@@ -95,6 +115,10 @@ public class AuthenticationValidation {
     }
 
     public ResponseEntity<?> forgotPassword(ForgotPasswordRequest forgotPasswordRequest, String path){
+
+        if (forgotPasswordRequest == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
 
         if (forgotPasswordRequest.getNewPassword() == null ||forgotPasswordRequest.getConfirmPassword() == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);

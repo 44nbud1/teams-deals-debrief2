@@ -90,4 +90,10 @@ public class UserRepositoryImpl implements UserRepository {
         OtpResponse otpResponse = otpMapper.matchOTP(idUser, otp);
         return otpResponse;
     }
+
+    @Override
+    public OtpResponse matchOtpDate(String idUser, String otp) {
+        OtpResponse otpResponse = otpMapper.matchOTPDate(idUser, otp);
+        return otpResponse;
+    }
 }

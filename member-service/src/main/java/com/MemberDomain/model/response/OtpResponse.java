@@ -31,7 +31,7 @@ public class OtpResponse {
         return sb.toString();
     }
 
-    public OtpResponse(String otp, String idUser, DateTime expiredDate){
+    public OtpResponse(String idUser, String otp, DateTime expiredDate){
         this("", idUser, otp, expiredDate);
     }
 

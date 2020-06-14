@@ -40,6 +40,10 @@ public class AuthenticationService {
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
+
+//        if (registerRequest.getPhoneNumber().startsWith("0")){
+//            registerRequest.setPhoneNumber("+62"+registerRequest.getPhoneNumber().substring(1));
+//        }
 //        registerRequest.setPassword(encryptPassword(registerRequest.getPassword()));
         //Register validation in member domain
         System.out.println("Register. Send data to member domain : "+ Parser.toJsonString(registerRequest));
@@ -86,6 +90,10 @@ public class AuthenticationService {
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
+
+//        if (loginRequest.getPhoneNumber().startsWith("0")){
+//            loginRequest.setPhoneNumber("+62"+loginRequest.getPhoneNumber().substring(1));
+//        }
 
         //Login validation in member domain
         System.out.println("Login. Send data to member domain : "+ Parser.toJsonString(loginRequest));
