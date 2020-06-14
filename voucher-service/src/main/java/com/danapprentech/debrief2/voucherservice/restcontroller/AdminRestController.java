@@ -442,7 +442,6 @@ public class AdminRestController {
                     "/api/admin/update-status-voucher/{idVoucher}/restock",new Date()));
         }
 
-
         Voucher vouchers = voucherRepository.findByIdVoucher(idVoucher);
 
         if (vouchers == null)
@@ -528,7 +527,7 @@ public class AdminRestController {
 
         if (status == false && vouchers.getQuota() != null)
         {
-            return ResponseEntity.ok(new MessageResponse("We cannot update the voucher stock due " +
+            return ResponseEntity.badRequest().body(new MessageResponse("We cannot update the voucher stock due " +
                     "to inactive voucher status.","045",
                     "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
         }
