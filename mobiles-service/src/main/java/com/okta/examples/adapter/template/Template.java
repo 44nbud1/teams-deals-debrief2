@@ -11,8 +11,8 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.ConnectException;
 import java.net.SocketException;
+import java.rmi.ConnectException;
 
 @Service
 public class Template {
@@ -66,6 +66,9 @@ public class Template {
         catch (HttpServerErrorException e){
             result = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
+        catch (RestClientException e){
+            result = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return result;
     }
 
@@ -82,6 +85,9 @@ public class Template {
         catch (HttpServerErrorException e){
             result = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
+        catch (RestClientException e){
+            result = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return result;
     }
 
@@ -97,6 +103,9 @@ public class Template {
         }
         catch (HttpServerErrorException e){
             result = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+        }
+        catch (RestClientException e){
+            result = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return result;
     }

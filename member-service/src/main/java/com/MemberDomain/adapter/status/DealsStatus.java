@@ -1,4 +1,4 @@
-package com.okta.examples.adapter.status;
+package com.MemberDomain.adapter.status;
 
 import org.springframework.http.HttpStatus;
 

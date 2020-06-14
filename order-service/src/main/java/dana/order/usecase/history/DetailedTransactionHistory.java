@@ -45,6 +45,6 @@ public class DetailedTransactionHistory {
 
         JSONObject transactionDetails = historyRepository.getUserDetailedHistory(transaction.getIdTransaction());
 
-        return ResponseWrapper.wrap("Your detailed transaction history has been collected", 200, transactionDetails);
+        return ResponseWrapper.wrap("Your transaction history has been collected", 200, transactionDetails);
     }
 }

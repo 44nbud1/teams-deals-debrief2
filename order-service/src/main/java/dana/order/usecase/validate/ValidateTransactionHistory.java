@@ -36,13 +36,13 @@ public class ValidateTransactionHistory {
 
         if (json.get("startDate") != null){
             if (checkDate(""+json.get("startDate")) == Boolean.FALSE){
-                throw new HistoryFailedException("Please use a valid date format (yyyy-mm-dd) for history start date.", HttpStatus.BAD_REQUEST);
+                throw new HistoryFailedException("Please use a valid date format (yyyy-mm-dd).", HttpStatus.BAD_REQUEST);
             }
         }
 
         if (json.get("endDate") != null){
             if (checkDate(""+json.get("endDate")) == Boolean.FALSE){
-                throw new HistoryFailedException("Please use a valid date format (yyyy-mm-dd) for history end date.", HttpStatus.BAD_REQUEST);
+                throw new HistoryFailedException("Please use a valid date format (yyyy-mm-dd).", HttpStatus.BAD_REQUEST);
             }
         }
 

@@ -23,6 +23,11 @@ public class VoucherService {
 
     public ResponseEntity<?> getAllVoucher(String page, String path){
 
+        ResponseEntity<?> check = validate.getAllVoucher(page, path);
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
+
         ResponseEntity<?> fromVoucher = voucher.getAllVoucher(page, path);
         System.out.println("Get All Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
 
@@ -44,6 +49,11 @@ public class VoucherService {
 
     public ResponseEntity<?> filterVoucher(String merchantCategory, String page, String path){
 
+        ResponseEntity<?> check = validate.filterVoucher(merchantCategory, page, path);
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
+
         ResponseEntity<?> fromVoucher = voucher.filterVoucher(merchantCategory, page);
         System.out.println("Filter Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
 
@@ -62,6 +72,11 @@ public class VoucherService {
 
     public ResponseEntity<?> searchVoucher(String merchantName, String page, String path){
 
+        ResponseEntity<?> check = validate.searchVoucher(merchantName, page, path);
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
+
         ResponseEntity<?> fromVoucher = voucher.searchVoucher(merchantName, page);
         System.out.println("Search Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
 
@@ -79,6 +94,11 @@ public class VoucherService {
     }
 
     public ResponseEntity<?> sortVoucher(String name, String page, String path){
+
+        ResponseEntity<?> check = validate.sortVoucher(name, page, path);
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
 
         ResponseEntity<?> fromVoucher = voucher.sortVoucher(name, page);
         System.out.println("Sort Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());

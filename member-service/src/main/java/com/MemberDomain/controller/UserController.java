@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -66,124 +67,26 @@ public class UserController {
 
     //insert user
     @PostMapping("/auth/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
-        JSONObject result = registerTransaction.createAccount(registerRequest);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest, HttpServletRequest request) {
+        return registerTransaction.createAccount(registerRequest, request.getServletPath());
     }
 
     // login user
     @PostMapping("/auth/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        JSONObject result = loginTransaction.login(loginRequest);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+        return loginTransaction.login(loginRequest, request.getServletPath());
     }
 
     // request OTP
     @PostMapping("/auth/request-otp")
-    public ResponseEntity<?> requestOtp(@RequestBody OtpRequest otpRequest) {
-        JSONObject result = requestOtpTransaction.requestOtp(otpRequest);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    public ResponseEntity<?> requestOtp(@RequestBody OtpRequest otpRequest, HttpServletRequest request) {
+        return requestOtpTransaction.requestOtp(otpRequest, request.getServletPath());
     }
 
     // match OTP
     @PostMapping("/auth/{idUser}/match-otp")
-    public ResponseEntity<?> matchOtp(@PathVariable String idUser, @RequestBody MatchOtpRequest otp) {
-        JSONObject result = matchOtpTransaction.matchOtp(idUser, otp);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
-    }
-
-    // match otp
-    @PostMapping("/auth/{idUser}/match-otpasdasd")
-    public ResponseEntity<?> matchOTPasd(@PathVariable String idUser, @RequestBody MatchOtpRequest otp){
-        ProfileResponse userCheck = userMapper.getUserProfile(idUser);
-        if (userCheck == null) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("message", "User is not found");
-            jsonObject.put("status", "404");
-            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        }
-
-        OtpResponse checkOTP = otpMapper.checkOTP(idUser);
-        if(checkOTP == null){
-            JSONObject jsonObject = new JSONObject();
-            JSONObject empty = new JSONObject();
-            jsonObject.put("data", empty);
-            jsonObject.put("message", "You need to request new OTP.");
-            jsonObject.put("status", "200");
-            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-        }
-        else{
-            OtpResponse matchOTP = otpMapper.matchOTP(idUser, otp.getOtp());
-            if(matchOTP.getOtp() != otp.getOtp()){
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("Status", "");
-                jsonObject.put("Message", "OTP is invalid.");
-                jsonObject.put("Http status", "400");
-                return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-            }
-            else{
-                JSONObject jsonObject = new JSONObject();
-                JSONObject empty = new JSONObject();
-                jsonObject.put("data", empty);
-                jsonObject.put("message", "OTP Match.");
-                jsonObject.put("status", "200");
-                return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-            }
-        }
-    }
-
-    // request otp
-    @PostMapping("/auth/request-otpasd")
-    public ResponseEntity<?> requestOTP(@RequestBody OtpRequest otp){
-        ProfileResponse phoneCheck = userMapper.phoneOTPCheck(otp.getPhoneNumber());
-        if (phoneCheck == null) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("Status", "013");
-            jsonObject.put("Message", "Phone number does not exist");
-            jsonObject.put("HTTP Status", "404");
-            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        }
-        else{
-            OtpResponse checkOTP = otpMapper.checkOTP(phoneCheck.getIdUser());
-            if(checkOTP == null){
-                otpMapper.createOTP(phoneCheck.getIdUser());
-                JSONObject jsonObject = new JSONObject();
-                JSONObject empty = new JSONObject();
-                jsonObject.put("data", phoneCheck.getIdUser());
-                jsonObject.put("message", "Your OTP has sent to your phone number.");
-                jsonObject.put("status", "200");
-                return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-            }
-            else{
-                otpMapper.updateOTP(phoneCheck.getIdUser());
-                JSONObject jsonObject = new JSONObject();
-                JSONObject empty = new JSONObject();
-                jsonObject.put("data", phoneCheck.getIdUser());
-                jsonObject.put("message", "Your OTP has sent to your phone number.");
-                jsonObject.put("status", "200");
-                return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-            }
-        }
-    }
-
-    // get user profile
-    @GetMapping("/user/{idUser}")
-    public ResponseEntity<?> profile(@PathVariable String idUser){
-        ProfileResponse profile = userMapper.getUserProfile(idUser);
-        if (profile == null) {
-            JSONObject jsonObject = new JSONObject();
-            JSONObject empty = new JSONObject();
-            jsonObject.put("message", "User not found");
-            jsonObject.put("status", "404");
-            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
-        }
-        else{
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", profile);
-            jsonObject.put("message", "User profile has successfully sent");
-            jsonObject.put("status", "200");
-            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
-        }
+    public ResponseEntity<?> matchOtp(@PathVariable String idUser, @RequestBody MatchOtpRequest matchOtpRequest, HttpServletRequest request) { ;
+        return matchOtpTransaction.matchOtp(idUser, matchOtpRequest, request.getServletPath());
     }
 
     // forgot password
@@ -208,6 +111,26 @@ public class UserController {
             JSONObject empty = new JSONObject();
             jsonObject.put("data", empty);
             jsonObject.put("message", "You need to request new OTP.");
+            jsonObject.put("status", "200");
+            return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+        }
+    }
+
+    // get user profile
+    @GetMapping("/user/{idUser}")
+    public ResponseEntity<?> profile(@PathVariable String idUser){
+        ProfileResponse profile = userMapper.getUserProfile(idUser);
+        if (profile == null) {
+            JSONObject jsonObject = new JSONObject();
+            JSONObject empty = new JSONObject();
+            jsonObject.put("message", "User not found");
+            jsonObject.put("status", "404");
+            return new ResponseEntity<>(jsonObject, HttpStatus.NOT_FOUND);
+        }
+        else{
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("data", profile);
+            jsonObject.put("message", "User profile has successfully sent");
             jsonObject.put("status", "200");
             return new ResponseEntity<>(jsonObject, HttpStatus.OK);
         }
