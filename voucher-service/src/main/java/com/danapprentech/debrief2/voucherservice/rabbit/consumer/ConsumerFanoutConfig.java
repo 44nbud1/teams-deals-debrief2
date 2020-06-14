@@ -27,6 +27,32 @@ public class ConsumerFanoutConfig
         return BindingBuilder.bind(queueOrderForVoucher).to(fanoutOrderForVoucher);
     }
 
+
+    //
+
+
+    @Bean
+    @Qualifier("shareMemberForVoucher")
+    public FanoutExchange fanoutMemberForVoucher(){
+        return new FanoutExchange("deals.fanout.member.order");
+    }
+
+    @Bean
+    @Qualifier("shareMemberForVoucher")
+    public Queue queueMemberForVoucher() {
+        return new Queue("deals.queue.member.order");
+    }
+
+    @Bean
+    @Qualifier("shareMemberForVoucher")
+    public Binding binding2(FanoutExchange fanoutMemberForVoucher,
+                            Queue queueMemberForVoucher) {
+        return BindingBuilder.bind(queueMemberForVoucher).to(fanoutMemberForVoucher);
+    }
+
+
+    //
+
     @Bean
     public Consumer consumers() {
         return new Consumer();

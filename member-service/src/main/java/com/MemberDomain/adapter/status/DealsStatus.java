@@ -50,6 +50,7 @@ public enum DealsStatus {
     LOGIN_ANOTHER_DEVICE("047", "You have logged in at another device.", HttpStatus.OK),
     VOUCHER_OUT_OF_STOCK("048", "The voucher is currently out of stock.", HttpStatus.NOT_FOUND),
     TRANSACTION_CANT_PROCESS("049", "We cannot process your transaction for now. Please try again later!", HttpStatus.INTERNAL_SERVER_ERROR),
+    OLD_PASSWORD_NOT_MATCH("049", "Old password not match with user old password!", HttpStatus.BAD_REQUEST),
     FILL_OTP("051", "Please fill otp.", HttpStatus.BAD_REQUEST),
     TRANSACTION_CREATED("052","A new transaction has been created!", HttpStatus.CREATED),
     VOUCHER_NAME_EXISTS("053", "Voucher name is exist.", HttpStatus.BAD_REQUEST),
