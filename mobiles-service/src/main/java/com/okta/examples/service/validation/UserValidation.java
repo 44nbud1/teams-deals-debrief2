@@ -4,6 +4,7 @@ import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.model.request.EditProfileRequest;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.model.response.ResponseSuccess;
+import org.json.simple.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class UserValidation {
         return true;
     }
 
-    public ResponseEntity<?> editProfile(EditProfileRequest editProfileRequest, String path){
+    public ResponseEntity<JSONObject> editProfile(EditProfileRequest editProfileRequest, String path){
 
         if (editProfileRequest == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
