@@ -35,6 +35,12 @@ public class MatchOtpTransaction {
             return ResponseFailed.wrapResponse(DealsStatus.USER_NOT_FOUND, path);
         }
 
+        OtpResponse checkUserOtp = userRepository.checkUserOtp(idUser);
+
+        if(checkUserOtp == null){
+            return ResponseFailed.wrapResponse(DealsStatus.REQUEST_NEW_OTP, path);
+        }
+
         String userOtp = matchOtp.getOtp();
         OtpResponse matchingOtp = userRepository.matchOtp(""+idUser, ""+userOtp);
 
