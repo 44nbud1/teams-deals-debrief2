@@ -112,7 +112,7 @@ public class UserValidation {
         }
 
         if(!Pattern.matches(regex_otp, ""+matchOtpRequest.getOtp())){
-            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+            return ResponseFailed.wrapResponse(DealsStatus.OTP_NOT_MATCH, path);
         }
 
         return ResponseSuccess.wrapOk();
