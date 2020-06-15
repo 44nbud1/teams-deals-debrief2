@@ -1,7 +1,5 @@
 package com.okta.examples.controller;
 
-import com.okta.examples.adapter.status.DealsStatus;
-import com.okta.examples.model.request.CreateMerchantRequest;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.service.usecase.AdminService;
 import com.okta.examples.service.usecase.SessionService;

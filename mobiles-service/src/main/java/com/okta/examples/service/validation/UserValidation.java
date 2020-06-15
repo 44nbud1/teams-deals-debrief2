@@ -1,6 +1,6 @@
 package com.okta.examples.service.validation;
 
-import com.okta.examples.adapter.status.DealsStatus;
+import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.model.request.EditProfileRequest;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.model.response.ResponseSuccess;
@@ -12,9 +12,9 @@ import java.util.regex.Pattern;
 @Service
 public class UserValidation {
 
-    private final String regex_email = "^[\\w!#$%&’+/=?`{|}~^-]+(?:\\.[\\w!#$%&’+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+    private final String regex_email = "^(?=.*([A-Za-z0-9]+|[A-Za-z0-9]+[.][A-Za-z0-9])[@][A-Za-z0-9.\\-_]+[.][A-Za-z]+).+$";
     private final String regex_password = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=\\S+$).{8,}$";
-    private final String regex_name = "^(?=.{1,9}[a-zA-Z\\'\\-][ ])(?=.*[\\s])(?!.*[0-9])(?!.*[!@#$%^&*]).{3,20}$|^(?=.*[a-zA-Z\\'\\-])(?!.*[0-9])(?!.*[!@#$%^&*]).{3,10}$";
+    private final String regex_name = "^(?!.*^[\\s])(?!.*[\\s]$)(?!.*[0-9!@#$%^&*])(?=.*[a-zA-Z'\\-]{3,10}[\\s]|.*[a-zA-Z'\\-]{3,10}$)(?!.*['][\\-]|.*[\\-][']|.*[\\-][\\-]|.*['][']).{3,20}$";
 
     public ResponseEntity<?> editProfile(EditProfileRequest editProfileRequest, String path){
 

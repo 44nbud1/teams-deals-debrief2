@@ -1,6 +1,6 @@
 package com.okta.examples.service.validation;
 
-import com.okta.examples.adapter.status.DealsStatus;
+import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.model.response.ResponseSuccess;
 import org.json.simple.JSONObject;
@@ -15,7 +15,7 @@ public class TransactionValidation {
     private final String regex_va = "^[\\d]{14,16}$";
     private final String regex_amount = "^(?=.*[\\d])(?!.*[\\D]).+$|^[\\d]+[.]{1}[\\d]+$";
 
-    public ResponseEntity<?> createOrder(JSONObject data, String path){
+    public ResponseEntity<JSONObject> createOrder(JSONObject data, String path){
 
         if (data == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
@@ -28,7 +28,7 @@ public class TransactionValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> payOrder(JSONObject data, String path){
+    public ResponseEntity<JSONObject> payOrder(JSONObject data, String path){
 
         if (data == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
@@ -40,7 +40,7 @@ public class TransactionValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> payTopup(JSONObject data, String path){
+    public ResponseEntity<JSONObject> payTopup(JSONObject data, String path){
         if (data == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }

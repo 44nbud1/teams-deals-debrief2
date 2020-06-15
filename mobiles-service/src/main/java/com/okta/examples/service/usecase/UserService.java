@@ -1,7 +1,7 @@
 package com.okta.examples.service.usecase;
 
 import com.okta.examples.adapter.parser.Parser;
-import com.okta.examples.adapter.status.DealsStatus;
+import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.model.request.EditProfileRequest;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.model.response.ResponseSuccess;

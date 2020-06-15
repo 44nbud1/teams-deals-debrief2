@@ -1,7 +1,7 @@
 package com.okta.examples.service.usecase;
 
 import com.okta.examples.adapter.parser.Parser;
-import com.okta.examples.adapter.status.DealsStatus;
+import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.model.response.ResponseSuccess;
 import com.okta.examples.service.microservice.VoucherDomain;
@@ -36,6 +36,9 @@ public class VoucherService {
         String status = ""+ jsonVoucher.get("status");
 
         if (!fromVoucher.getStatusCode().is2xxSuccessful()){
+            if (fromVoucher.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromVoucher.getStatusCode(), path);
         }
 
@@ -62,6 +65,9 @@ public class VoucherService {
         String status = ""+ jsonVoucher.get("status");
 
         if (!fromVoucher.getStatusCode().is2xxSuccessful()){
+            if (fromVoucher.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromVoucher.getStatusCode(), path);
         }
 
@@ -85,6 +91,9 @@ public class VoucherService {
         String status = ""+ jsonVoucher.get("status");
 
         if (!fromVoucher.getStatusCode().is2xxSuccessful()){
+            if (fromVoucher.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromVoucher.getStatusCode(), path);
         }
 
@@ -108,6 +117,9 @@ public class VoucherService {
         String status = ""+ jsonVoucher.get("status");
 
         if (!fromVoucher.getStatusCode().is2xxSuccessful()){
+            if (fromVoucher.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromVoucher.getStatusCode(), path);
         }
 

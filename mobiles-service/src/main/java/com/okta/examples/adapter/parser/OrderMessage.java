@@ -1,7 +1,7 @@
 package com.okta.examples.adapter.parser;
 
 import org.springframework.stereotype.Service;
-import com.okta.examples.adapter.status.DealsStatus;
+import com.okta.examples.model.status.DealsStatus;
 
 @Service
 public class OrderMessage {
