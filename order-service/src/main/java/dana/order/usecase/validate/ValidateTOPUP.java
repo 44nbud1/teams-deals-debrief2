@@ -29,7 +29,7 @@ public class ValidateTOPUP {
     }
 
     public Boolean virtualNumberCheck(String va){
-        String regex = "^[\\d]{15,16}$";
+        String regex = "^[\\d]{14,16}$";
         if(!Pattern.matches(regex, va)){
             return Boolean.FALSE;
         }

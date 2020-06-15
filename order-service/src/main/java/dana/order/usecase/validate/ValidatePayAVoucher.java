@@ -21,7 +21,7 @@ public class ValidatePayAVoucher {
         }
     }
 
-    private Boolean idTransactionCheck(String idTransaction){
+    public Boolean idTransactionCheck(String idTransaction){
         String regex = "^[\\d]+$";
         if(!Pattern.matches(regex, idTransaction)){
             return Boolean.FALSE;

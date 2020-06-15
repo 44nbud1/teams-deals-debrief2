@@ -20,7 +20,7 @@ public class ValidateBuyAVoucher {
         }
     }
 
-    private Boolean idVoucherCheck(String idVoucher){
+    public Boolean idVoucherCheck(String idVoucher){
         String regex = "^[\\d]+$";
         if(!Pattern.matches(regex, idVoucher)){
             return Boolean.FALSE;

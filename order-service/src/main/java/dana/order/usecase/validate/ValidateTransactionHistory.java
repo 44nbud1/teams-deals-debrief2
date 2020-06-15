@@ -77,7 +77,7 @@ public class ValidateTransactionHistory {
         }
     }
 
-    private Boolean checkPage(String page){
+    public Boolean checkPage(String page){
         String regex = "^[\\d]+$";
         if(!Pattern.matches(regex, page)){
             return Boolean.FALSE;
@@ -85,8 +85,13 @@ public class ValidateTransactionHistory {
         return Boolean.TRUE;
     }
 
-    private Boolean checkDate(String date){
+    public Boolean checkDate(String date){
+        String regex = "^[\\d]{4}[-]{1}[\\d]{2}[-]{1}[\\d]{2}+$";
+        if(!Pattern.matches(regex, date)){
+            return Boolean.FALSE;
+        }
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        df.setLenient(false);
         try {
             df.parse(date);
             return Boolean.TRUE;
