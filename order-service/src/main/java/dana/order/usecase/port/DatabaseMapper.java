@@ -25,6 +25,8 @@ public interface DatabaseMapper {
             "ORDER BY updated_at DESC LIMIT 1";
     final String getUserById = "SELECT * FROM users WHERE id_user = #{idUser}";
     final String fallingATransaction = "UPDATE transactions SET id_transaction_status = 2 WHERE id_transaction = #{idTransaction} AND id_user = #{idUser}";
+    final String fallingAllExpiredTransaction = "UPDATE transactions SET id_transaction_status = 2 WHERE id_transaction_status = 4 " +
+            "AND NOW() > DATE_ADD(created_at, INTERVAL 20 MINUTE)";
     final String getTransactionById = "SELECT * FROM transactions WHERE id_transaction = #{idTransaction}";
     final String checkATransactionExpiration = "SELECT COUNT(*) AS amount FROM transactions WHERE id_transaction = #{idTransaction} AND id_transaction_status = 4 " +
             "AND NOW() > DATE_ADD(created_at, INTERVAL 20 MINUTE)";
@@ -66,6 +68,9 @@ public interface DatabaseMapper {
     final String checkVoucherExists = "SELECT COUNT(*) AS amount FROM vouchers WHERE id_voucher = #{idVoucher}";
     final String createNewUser = "INSERT INTO users (id_user, balance, phone_number) VALUES (#{idUser}, #{balance}, #{phoneNumber})";
     final String updateAUser = "UPDATE users SET balance = #{balance}, phone_number = #{phoneNumber} WHERE id_user = #{idUser}";
+
+    @Update(fallingAllExpiredTransaction)
+    void fallingAllExpiredTransaction();
 
     @Insert(createNewUser)
     void createNewUser(User user);
