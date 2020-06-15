@@ -17,7 +17,7 @@ public class ValidatePayAVoucher {
         }
 
         if(idTransactionCheck(""+json.get("idTransaction")) == Boolean.FALSE){
-            throw new PaymentFailedException(DealsStatus.INVALID_TRANSACTION_ID);
+            throw new PaymentFailedException(DealsStatus.DATA_INVALID);
         }
     }
 

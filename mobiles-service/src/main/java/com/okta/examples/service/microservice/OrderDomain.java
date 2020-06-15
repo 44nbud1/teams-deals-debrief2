@@ -30,7 +30,7 @@ public class OrderDomain {
         return template.post(api+"/api/user/"+idUser+"/transaction/topup", data);
     }
 
-    public ResponseEntity<?> transactionHistory(String idUser, String category, String filterStart, String filterEnd, Integer page, String path){
+    public ResponseEntity<?> transactionHistory(String idUser, String category, String filterStart, String filterEnd, String page, String path){
 
         String apiOrder = "";
         if (category != null){

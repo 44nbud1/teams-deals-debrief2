@@ -21,19 +21,19 @@ public class OrderMessage {
             case "Your balance is not enough.":
                 status = DealsStatus.BALANCE_NOT_ENOUGH.getValue();
                 break;
-            case "The transaction has expired.":
+            case "This payment has expired":
                 status = DealsStatus.TRANSACTION_EXPIRED.getValue();
                 break;
-            case "The transaction is not found.":
+            case "Transaction is not found":
                 status = DealsStatus.TRANSACTION_NOT_FOUND.getValue();
                 break;
-            case "TOPUP failed! You have reached your maximum balance amount.":
+            case "Top-up failed! You have reached your maximum balance.":
                 status = DealsStatus.MAXIMUM_BALANCE.getValue();
                 break;
             case "The merchant is currently not available for balance TOPUP.":
                 status = DealsStatus.MERCHANT_NOT_AVAILABLE.getValue();
                 break;
-            case "TOPUP failed! The minimum TOPUP amount is Rp 10.000,00.":
+            case "Minimum top-up amount is Rp 10.000,00":
                 status = DealsStatus.MINIMUM_TOPUP.getValue();
                 break;
             case "We cannot process your transaction for now. Please try again later!":
@@ -42,7 +42,7 @@ public class OrderMessage {
             case "The voucher is currently out of stock.":
                 status = DealsStatus.VOUCHER_OUT_OF_STOCK.getValue();
                 break;
-            case "Virtual Account is invalid.":
+            case "Virtual Account is invalid":
                 status = DealsStatus.VIRTUAL_ACCOUNT_INVALID.getValue();
                 break;
             case "Amount is invalid.":

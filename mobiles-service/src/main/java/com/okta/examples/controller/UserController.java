@@ -89,9 +89,9 @@ public class UserController {
                                                 @RequestParam(value = "category", required = false) String category,
                                                 @RequestParam(value = "filter-start-date", required = false) String filterStart,
                                                 @RequestParam(value = "filter-end-date", required = false) String filterEnd,
-                                                @RequestParam(value = "page", required = false) Integer page,
+                                                @RequestParam(value = "page", required = false) String page,
                                                 HttpServletRequest request){
-        if (!sessionValidation.requestId(request)){
+        if (!sessionValidation.request(idUser, request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return transactionService.transactionHistory(idUser, category, filterStart, filterEnd, page, request.getServletPath());

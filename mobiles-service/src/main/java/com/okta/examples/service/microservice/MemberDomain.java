@@ -42,7 +42,7 @@ public class MemberDomain {
         return template.post(api+"/api/auth/"+idUser+"/match-otp", data);
     }
 
-    public ResponseEntity<?> forgotPassword(String idUser, ForgotPasswordRequest forgotPasswordRequest){
+    public ResponseEntity<?> forgotPassword(String idUser, JSONObject forgotPasswordRequest){
         return template.post(api+"/api/auth/"+idUser+"/forgot-password", forgotPasswordRequest);
     }
 

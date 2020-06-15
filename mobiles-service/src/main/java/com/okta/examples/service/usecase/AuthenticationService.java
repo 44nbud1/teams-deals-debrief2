@@ -214,11 +214,18 @@ public class AuthenticationService {
     public ResponseEntity<?> forgotPassword(String idUser, ForgotPasswordRequest forgotPasswordRequest, String path){
 
         //Forgot password validation
-        validate.forgotPassword(forgotPasswordRequest, path);
+        ResponseEntity<?> check = validate.forgotPassword(forgotPasswordRequest, path);
 
+        if (!check.getStatusCode().is2xxSuccessful()){
+            return check;
+        }
+        JSONObject data = new JSONObject();
+        data.put("password", forgotPasswordRequest.getNewPassword());
+        data.put("newPassword", forgotPasswordRequest.getNewPassword());
+        data.put("confirmPassword", forgotPasswordRequest.getConfirmPassword());
         //Forgot password validation in member domain
         System.out.println("Forgot Password. Send data to member domain : "+ Parser.toJsonString(forgotPasswordRequest));
-        ResponseEntity<?> fromMember = member.forgotPassword(idUser, forgotPasswordRequest);
+        ResponseEntity<?> fromMember = member.forgotPassword(idUser, data);
         System.out.println("Forgot Password. Receive data from member domain :"+ fromMember.getBody().toString());
 
         JSONObject jsonMember = Parser.parseJSON(fromMember.getBody().toString());

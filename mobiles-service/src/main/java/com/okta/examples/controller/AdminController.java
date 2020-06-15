@@ -47,8 +47,8 @@ public class AdminController {
         return adminService.getAllVoucher(page, request.getServletPath());
     }
 
-    @GetMapping("/filterByStatus-voucher")
-    public ResponseEntity<?> filterVoucher(@RequestParam("filterByStatus") String merchantCategory,
+    @GetMapping("/voucher/filterByStatus")
+    public ResponseEntity<?> filterVoucher(@RequestParam(value = "filterByStatus", required = false) String merchantCategory,
                                            @RequestParam(value = "page", required = false) String page,
                                            HttpServletRequest request){
         if (!sessionValidation.requestId(request)){
