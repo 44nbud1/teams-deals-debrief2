@@ -14,7 +14,7 @@ public enum DealsStatus {
     PHONE_NUMBER_EXISTS("008", "Phone number already exists.", HttpStatus.BAD_REQUEST),
     PASSWORD_MISS_MATCH("009", "Password is missed match.", HttpStatus.BAD_REQUEST),
     LOGIN_SUCCESS("010", "You are logged in", HttpStatus.OK),
-    DATA_NOT_MATCH("011", "Your data do not match our records.", HttpStatus.BAD_REQUEST),
+    DATA_NOT_MATCH("011", "Your data do not match our records.", HttpStatus.NOT_FOUND),
     REQUEST_OTP("012", "Your OTP has sent to your phone number.", HttpStatus.OK),
     PHONE_NUMBER_NOT_EXISTS("013", "Phone number does not exist.", HttpStatus.NOT_FOUND),
     ALREADY_LOGIN("014", "You are still logged in.", HttpStatus.BAD_REQUEST),
