@@ -15,6 +15,7 @@ import dana.order.usecase.validate.ValidateTOPUP;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,12 +36,15 @@ public class TOPUP {
     @Autowired
     TransactionBroadcaster transactionBroadcaster;
 
-    public JSONObject execute(JSONObject json){
+    public ResponseEntity<?> execute(JSONObject json){
 
-        validateTOPUP.check(json);
+        DealsStatus validation = validateTOPUP.check(json);
+        if (!validation.getStatus().is2xxSuccessful()){
+            return ResponseWrapper.wrap(validation, null, ""+json.get("path"));
+        }
 
         if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            throw new UserException(DealsStatus.USER_NOT_FOUND);
+            return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, ""+json.get("path"));
         }
 
         Boolean consistency = Boolean.FALSE;
@@ -57,28 +61,28 @@ public class TOPUP {
         }
 
         if (consistency == Boolean.FALSE){
-            throw new TOPUPFailedException(DealsStatus.TRANSACTION_CANT_PROCESS);
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CANT_PROCESS, null, ""+json.get("path"));
         }
 
         if (Double.valueOf(""+json.get("amount")) < 10000){
-            throw new TOPUPFailedException(DealsStatus.MINIMUM_TOPUP);
+            return ResponseWrapper.wrap(DealsStatus.MINIMUM_TOPUP, null, ""+json.get("path"));
         }
 
         User user = databaseMapper.getUserById(""+json.get("idUser"));
 
         if (user.getBalance() + Double.valueOf(""+json.get("amount")) > 1000000){
-            throw new TOPUPFailedException(DealsStatus.MAXIMUM_BALANCE);
+            return ResponseWrapper.wrap(DealsStatus.MAXIMUM_BALANCE, null, ""+json.get("path"));
         }
 
         String partyCode = transactionRepository.getPartyCode(""+json.get("virtualNumber"));
         String phoneNumber = transactionRepository.getPhoneNumberFromVA(""+json.get("virtualNumber"));
 
         if (userRepository.doesPhoneNumberCorrect(""+json.get("idUser"), phoneNumber) == Boolean.FALSE){
-            throw new TOPUPFailedException(DealsStatus.VIRTUAL_ACCOUNT_INVALID);
+            return ResponseWrapper.wrap(DealsStatus.VIRTUAL_ACCOUNT_INVALID, null, ""+json.get("path"));
         }
 
         if (transactionRepository.checkTOPUPThirdParty(partyCode) == Boolean.FALSE){
-            throw new TOPUPFailedException(DealsStatus.MERCHANT_NOT_AVAILABLE);
+            return ResponseWrapper.wrap(DealsStatus.MERCHANT_NOT_AVAILABLE, null, ""+json.get("path"));
         }
 
         transactionRepository.TOPUPBalance(""+json.get("idUser"), Double.valueOf(""+json.get("amount")),
@@ -88,6 +92,6 @@ public class TOPUP {
 
         transactionBroadcaster.send(transaction.getIdTransaction());
 
-        return ResponseWrapper.wrap("Your TOPUP is successful.", 201, null);
+        return ResponseWrapper.wrap(DealsStatus.TOPUP_SUCCESS, null, ""+json.get("path"));
     }
 }

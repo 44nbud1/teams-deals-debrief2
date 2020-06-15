@@ -2,18 +2,14 @@ package dana.order.usecase.history;
 
 import dana.order.adapter.wrapper.ResponseWrapper;
 import dana.order.entity.DealsStatus;
-import dana.order.entity.TransactionHistoryModel;
-import dana.order.usecase.exception.UserException;
 import dana.order.usecase.port.DatabaseMapper;
 import dana.order.usecase.port.HistoryRepository;
 import dana.order.usecase.port.UserRepository;
 import dana.order.usecase.validate.ValidateTransactionHistory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class TransactionHistory {
@@ -30,18 +26,22 @@ public class TransactionHistory {
     @Autowired
     DatabaseMapper databaseMapper;
 
-    public JSONObject get(JSONObject json){
+    public ResponseEntity<?> get(JSONObject json){
 
-        validateTransactionHistory.check(json);
+        DealsStatus validation = validateTransactionHistory.check(json);
+
+        if (!validation.getStatus().is2xxSuccessful()){
+            return ResponseWrapper.wrap(validation, null, ""+json.get("path"));
+        }
 
         if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            throw new UserException(DealsStatus.USER_NOT_FOUND);
+            return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, ""+json.get("path"));
         }
 
         databaseMapper.fallingAllExpiredTransaction();
 
         JSONObject result = historyRepository.getUserHistory(json);
 
-        return ResponseWrapper.wrap("Your transaction history has been collected.", 200, result);
+        return ResponseWrapper.wrap(DealsStatus.TRANSACTION_HISTORY_COLLECTED, result, ""+json.get("path"));
     }
 }

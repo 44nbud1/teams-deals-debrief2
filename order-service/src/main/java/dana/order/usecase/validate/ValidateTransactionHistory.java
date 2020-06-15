@@ -4,46 +4,51 @@ import dana.order.entity.DealsStatus;
 import dana.order.usecase.exception.HistoryFailedException;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Service
 public class ValidateTransactionHistory {
 
-    public void check(JSONObject json){
+    public DealsStatus check(JSONObject json){
+
         if (json.get("category") != null){
             if ((""+json.get("category")).equals("COMPLETED") || (""+json.get("category")).equals("IN-PROGRESS")){
                 // skip
             }else {
-                throw new HistoryFailedException(DealsStatus.HISTORY_INVALID_CATEGORY);
+                return DealsStatus.HISTORY_INVALID_CATEGORY;
             }
         }
 
         if (json.get("page") != null){
             if (checkPage(""+json.get("page")) == Boolean.FALSE){
-                throw new HistoryFailedException(DealsStatus.HISTORY_INVALID_PAGE);
+                return DealsStatus.HISTORY_INVALID_PAGE;
             }
 
             Integer page = Integer.valueOf(""+json.get("page"));
             if (page < 0){
-                throw new HistoryFailedException(DealsStatus.HISTORY_INVALID_PAGINATION);
+                return DealsStatus.HISTORY_INVALID_PAGINATION;
             }
         }
 
         if (json.get("startDate") != null){
             if (checkDate(""+json.get("startDate")) == Boolean.FALSE){
-                throw new HistoryFailedException(DealsStatus.HISTORY_INVALID_DATE);
+                return DealsStatus.HISTORY_INVALID_DATE;
             }
         }
 
         if (json.get("endDate") != null){
             if (checkDate(""+json.get("endDate")) == Boolean.FALSE){
-                throw new HistoryFailedException(DealsStatus.HISTORY_INVALID_DATE);
+                return DealsStatus.HISTORY_INVALID_DATE;
             }
         }
 
@@ -58,7 +63,7 @@ public class ValidateTransactionHistory {
             } catch (ParseException e) {e.printStackTrace();}
 
             if (startDate.after(endDate)){
-                throw new HistoryFailedException(DealsStatus.HISTORY_FALSE_DATES);
+                return DealsStatus.HISTORY_FALSE_DATES;
             }
 
             // Maximum search for history is within 7 days
@@ -72,9 +77,11 @@ public class ValidateTransactionHistory {
             }catch (ParseException e){e.printStackTrace();}
 
             if (endDate.after(testDate)){
-                throw new HistoryFailedException(DealsStatus.HISTORY_INVALID_SEARCH);
+                return DealsStatus.HISTORY_INVALID_SEARCH;
             }
         }
+
+        return DealsStatus.OK;
     }
 
     public Boolean checkPage(String page){

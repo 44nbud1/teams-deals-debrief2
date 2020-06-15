@@ -3,8 +3,6 @@ package dana.order.usecase.transaction;
 import dana.order.adapter.wrapper.ResponseWrapper;
 import dana.order.entity.DealsStatus;
 import dana.order.entity.Transaction;
-import dana.order.usecase.exception.OrderFailedException;
-import dana.order.usecase.exception.UserException;
 import dana.order.usecase.port.DatabaseMapper;
 import dana.order.usecase.port.TransactionRepository;
 import dana.order.usecase.port.UserRepository;
@@ -12,7 +10,7 @@ import dana.order.usecase.port.VoucherRepository;
 import dana.order.usecase.validate.ValidateBuyAVoucher;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,16 +31,19 @@ public class PlaceOrder{
     @Autowired
     DatabaseMapper databaseMapper;
 
-    public JSONObject buyAVoucher(JSONObject json){
+    public ResponseEntity<?> buyAVoucher(JSONObject json){
 
-        validateBuyAVoucher.check(json);
+        DealsStatus validation = validateBuyAVoucher.check(json);
+        if (!validation.getStatus().is2xxSuccessful()){
+            return ResponseWrapper.wrap(validation, null, ""+json.get("path"));
+        }
 
         if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            throw new UserException(DealsStatus.USER_NOT_FOUND);
+            return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, ""+json.get("path"));
         }
 
         if (voucherRepository.validateExpiration(Integer.valueOf(""+json.get("idVoucher"))) == Boolean.FALSE){
-            throw new OrderFailedException(DealsStatus.VOUCHER_NOT_AVAILABLE);
+            return ResponseWrapper.wrap(DealsStatus.VOUCHER_NOT_AVAILABLE, null, ""+json.get("path"));
         }
 
         Boolean consistency = Boolean.FALSE;
@@ -59,7 +60,7 @@ public class PlaceOrder{
         }
 
         if (consistency == Boolean.FALSE){
-            throw new OrderFailedException(DealsStatus.TRANSACTION_CANT_PROCESS);
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CANT_PROCESS, null, ""+json.get("path"));
         }
 
         consistency = Boolean.FALSE; counter = 0;
@@ -75,11 +76,11 @@ public class PlaceOrder{
         }
 
         if (consistency == Boolean.FALSE){
-            throw new OrderFailedException(DealsStatus.TRANSACTION_CANT_PROCESS);
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CANT_PROCESS, null, ""+json.get("path"));
         }
 
         if (voucherRepository.validateQuantity(Integer.valueOf(""+json.get("idVoucher"))) == Boolean.FALSE){
-            throw new OrderFailedException(DealsStatus.VOUCHER_OUT_OF_STOCK);
+            return ResponseWrapper.wrap(DealsStatus.VOUCHER_OUT_OF_STOCK, null, ""+json.get("path"));
         }
 
         voucherRepository.insertNewOrder(""+json.get("idUser"), Integer.valueOf(""+json.get("idVoucher")));
@@ -88,6 +89,6 @@ public class PlaceOrder{
         JSONObject result = new JSONObject();
         result.put("idTransaction", transaction.getIdTransaction());
 
-        return ResponseWrapper.wrap("A new transaction has been created!", 201, result);
+        return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CREATED, result, ""+json.get("path"));
     }
 }

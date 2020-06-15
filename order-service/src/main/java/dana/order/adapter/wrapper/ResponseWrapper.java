@@ -1,15 +1,26 @@
 package dana.order.adapter.wrapper;
 
+import dana.order.entity.DealsStatus;
 import org.json.simple.JSONObject;
+import org.springframework.http.ResponseEntity;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ResponseWrapper {
-    public static JSONObject wrap(String message, Integer status, Object data){
-        JSONObject json = new JSONObject();
-        json.put("status", Integer.valueOf(status));
-        json.put("message", message);
-        json.put("data", data);
+    public static ResponseEntity<?> wrap(DealsStatus dealsStatus, Object data, String path){
 
-        return json;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        JSONObject result = new JSONObject();
+
+        result.put("timestamp", sdf.format(new Date()));
+        result.put("message", dealsStatus.getMessage());
+        result.put("data", data);
+        result.put("status", dealsStatus.getValue());
+        result.put("path", path);
+
+        return new ResponseEntity<>(result, dealsStatus.getStatus());
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -37,8 +38,8 @@ public class mobileController {
     @PostMapping(value = "/api/user/{idUser}/transaction/voucher", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> placeOrder(@PathVariable("idUser") String idUser, @RequestBody JSONObject json){
         json.put("idUser", idUser);
-        JSONObject result = placeOrder.buyAVoucher(json);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+        json.put("path", "/api/user/"+idUser+"/transaction/voucher");
+        return placeOrder.buyAVoucher(json);
     }
 
     @Transactional
@@ -46,16 +47,16 @@ public class mobileController {
     public ResponseEntity<?> payOrder(@PathVariable("idUser") String idUser,
                                       @RequestBody JSONObject json){
         json.put("idUser", idUser);
-        JSONObject result = payment.payAVoucher(json);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        json.put("path", "/api/user/"+idUser+"/transaction/voucher");
+        return payment.payAVoucher(json);
     }
 
     @Transactional
     @PostMapping(value = "/api/user/{idUser}/transaction/topup", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> TOPUP(@PathVariable("idUser") Integer idUser, @RequestBody JSONObject json){
         json.put("idUser", idUser);
-        JSONObject result = topup.execute(json);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        json.put("path", "/api/user/"+idUser+"/transaction/topup");
+        return topup.execute(json);
     }
 
     @GetMapping(value = "/api/user/{idUser}/transaction", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -70,8 +71,8 @@ public class mobileController {
         json.put("startDate", startDate);
         json.put("endDate", endDate);
         json.put("page", page);
-        JSONObject result = transactionHistory.get(json);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        json.put("path", "/api/user/"+idUser+"/transaction");
+        return transactionHistory.get(json);
     }
 
     @GetMapping(value = "/api/user/{idUser}/transaction/{idTransaction}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -80,7 +81,7 @@ public class mobileController {
         JSONObject json = new JSONObject();
         json.put("idUser", idUser);
         json.put("idTransaction", idTransaction);
-        JSONObject result = detailedTransactionHistory.get(json);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        json.put("path", "/api/user/"+idUser+"/transaction/"+idTransaction);
+        return detailedTransactionHistory.get(json);
     }
 }

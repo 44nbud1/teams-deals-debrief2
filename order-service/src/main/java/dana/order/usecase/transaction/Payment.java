@@ -16,6 +16,7 @@ import dana.order.usecase.validate.ValidatePayAVoucher;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,36 +40,39 @@ public class Payment {
     @Autowired
     TransactionBroadcaster transactionBroadcaster;
 
-    public JSONObject payAVoucher(JSONObject json){
+    public ResponseEntity<?> payAVoucher(JSONObject json){
 
-        validatePayAVoucher.check(json);
+        DealsStatus validation = validatePayAVoucher.check(json);
+        if (!validation.getStatus().is2xxSuccessful()){
+            return ResponseWrapper.wrap(validation, null, ""+json.get("path"));
+        }
 
         if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            throw new UserException(DealsStatus.USER_NOT_FOUND);
+            return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, ""+json.get("path"));
         }
 
         Transaction transaction = databaseMapper.getTransactionById(Integer.valueOf(""+json.get("idTransaction")));
 
         if (transaction == null){
-            throw new PaymentFailedException(DealsStatus.TRANSACTION_NOT_FOUND);
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_NOT_FOUND, null, ""+json.get("path"));
         }
 
         if (!transaction.getIdUser().equals(""+json.get("idUser"))){
-            throw new PaymentFailedException(DealsStatus.TRANSACTION_WRONG_USER);
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_WRONG_USER, null, ""+json.get("path"));
         }
 
         if (transaction.getIdTransactionStatus() != 4){
-            throw new PaymentFailedException(DealsStatus.ALREADY_FINISH_TRANSACTION);
+            return ResponseWrapper.wrap(DealsStatus.ALREADY_FINISH_TRANSACTION, null, ""+json.get("path"));
         }
 
         if (voucherRepository.validateExpiration(transaction.getIdGoods()) == Boolean.FALSE){
             databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
-            throw new PaymentFailedException(DealsStatus.VOUCHER_NOT_AVAILABLE);
+            return ResponseWrapper.wrap(DealsStatus.VOUCHER_NOT_AVAILABLE, null, ""+json.get("path"));
         }
 
         if (transactionRepository.checkATransactionExpiration(Integer.valueOf(""+json.get("idTransaction"))) == Boolean.FALSE){
             databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
-            throw new PaymentFailedException(DealsStatus.TRANSACTION_EXPIRED);
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_EXPIRED, null, ""+json.get("path"));
         }
 
         Boolean consistency = Boolean.FALSE;
@@ -85,7 +89,7 @@ public class Payment {
         }
 
         if (consistency == Boolean.FALSE){
-            throw new OrderFailedException(DealsStatus.TRANSACTION_CANT_PROCESS);
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CANT_PROCESS, null, ""+json.get("path"));
         }
 
         consistency = Boolean.FALSE; counter = 0;
@@ -101,23 +105,23 @@ public class Payment {
         }
 
         if (consistency == Boolean.FALSE){
-            throw new OrderFailedException(DealsStatus.TRANSACTION_CANT_PROCESS);
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CANT_PROCESS, null, ""+json.get("path"));
         }
 
         if (voucherRepository.validateQuantity(transaction.getIdGoods()) == Boolean.FALSE){
             databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
-            throw new PaymentFailedException(DealsStatus.VOUCHER_OUT_OF_STOCK);
+            return ResponseWrapper.wrap(DealsStatus.VOUCHER_OUT_OF_STOCK, null, ""+json.get("path"));
         }
 
         User user = databaseMapper.getUserById(""+json.get("idUser"));
 
         if (user.getBalance() - transaction.getAmount() < 0){
-            throw new PaymentFailedException(DealsStatus.BALANCE_NOT_ENOUGH);
+            return ResponseWrapper.wrap(DealsStatus.BALANCE_NOT_ENOUGH, null, ""+json.get("path"));
         }
 
         transactionRepository.setFinishATransaction(Integer.valueOf(""+json.get("idTransaction")));
         transactionBroadcaster.send(Integer.valueOf(""+json.get("idTransaction")));
 
-        return ResponseWrapper.wrap("Your payment is successful.", 200, null);
+        return ResponseWrapper.wrap(DealsStatus.PAYMENT_SUCCESS, null, ""+json.get("path"));
     }
 }

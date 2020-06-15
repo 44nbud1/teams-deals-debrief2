@@ -11,14 +11,16 @@ import java.util.regex.Pattern;
 
 @Service
 public class ValidatePayAVoucher {
-    public void check(JSONObject json){
+    public DealsStatus check(JSONObject json){
         if(json.get("idTransaction") == null){
-            throw new PaymentFailedException(DealsStatus.FILL_ALL_FORMS);
+            return DealsStatus.FILL_ALL_FORMS;
         }
 
         if(idTransactionCheck(""+json.get("idTransaction")) == Boolean.FALSE){
-            throw new PaymentFailedException(DealsStatus.DATA_INVALID);
+            return DealsStatus.DATA_INVALID;
         }
+
+        return DealsStatus.OK;
     }
 
     public Boolean idTransactionCheck(String idTransaction){

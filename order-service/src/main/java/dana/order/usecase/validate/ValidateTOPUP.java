@@ -10,22 +10,23 @@ import java.util.regex.Pattern;
 
 @Service
 public class ValidateTOPUP {
-    public void check(JSONObject json){
+    public DealsStatus check(JSONObject json){
         if (json.get("virtualNumber") == null){
-            throw new TOPUPFailedException(DealsStatus.FILL_ALL_FORMS);
+            return DealsStatus.FILL_ALL_FORMS;
         }
 
         if (json.get("amount") == null){
-            throw new TOPUPFailedException(DealsStatus.FILL_ALL_FORMS);
+            return DealsStatus.FILL_ALL_FORMS;
         }
 
         if (virtualNumberCheck(""+json.get("virtualNumber")) == Boolean.FALSE){
-            throw new TOPUPFailedException(DealsStatus.VIRTUAL_ACCOUNT_INVALID);
+            return DealsStatus.VIRTUAL_ACCOUNT_INVALID;
         }
 
         if (amountCheck(""+json.get("amount")) == Boolean.FALSE){
-            throw new TOPUPFailedException(DealsStatus.AMOUNT_INVALID);
+            return DealsStatus.AMOUNT_INVALID;
         }
+        return DealsStatus.OK;
     }
 
     public Boolean virtualNumberCheck(String va){
