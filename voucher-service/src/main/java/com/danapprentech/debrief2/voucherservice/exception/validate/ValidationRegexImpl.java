@@ -1,15 +1,15 @@
-package com.danapprentech.debrief2.voucherservice.exception;
+package com.danapprentech.debrief2.voucherservice.exception.validate;
 
+import com.danapprentech.debrief2.voucherservice.model.request.VoucherRequest;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class ValidationImpl implements Validation
+public class ValidationRegexImpl implements ValidationRegex
 {
     private Pattern pattern;
     private Matcher matcher;
@@ -46,24 +46,16 @@ public class ValidationImpl implements Validation
     }
 
     @Override
-    public boolean dateExp(Date date)
-    {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-
-        Date currentDate = new Date();
-        String bulan1 = null;
-
-        String a = dateFormat.format(currentDate);
-        System.out.println(a.length());
-
-        for (int i = 0; i < a.length(); i++)
-        {
-            bulan1 = (""+a.charAt(5)+(a.charAt(6)));
-//                char bulan = (a.charAt(6));
-            break;
-        }
-
-        return false;
+    public Calendar testCalendar() {
+        Calendar testCalendar = Calendar.getInstance();
+        testCalendar.setTime(new Date());
+        testCalendar.add(Calendar.DATE, 30);
+        return testCalendar;
     }
 
+    @Override
+    public Date testDate (VoucherRequest voucherRequest) {
+        Date testDate = voucherRequest.getExpiredDate();
+        return testDate;
+    }
 }

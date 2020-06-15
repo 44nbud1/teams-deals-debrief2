@@ -1,4 +1,4 @@
-package com.danapprentech.debrief2.voucherservice.exception;
+package com.danapprentech.debrief2.voucherservice.exception.validate;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
