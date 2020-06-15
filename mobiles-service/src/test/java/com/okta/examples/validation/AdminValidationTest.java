@@ -1,4 +1,4 @@
-package com.okta.example.validation;
+package com.okta.examples.validation;
 
 import org.springframework.boot.test.context.SpringBootTest;
 

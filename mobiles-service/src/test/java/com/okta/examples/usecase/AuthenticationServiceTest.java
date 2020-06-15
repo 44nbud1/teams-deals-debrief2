@@ -1,4 +1,4 @@
-package com.okta.example.usecase;
+package com.okta.examples.usecase;
 
 import com.okta.examples.service.usecase.AuthenticationService;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.okta.example;
+package com.okta.examples;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

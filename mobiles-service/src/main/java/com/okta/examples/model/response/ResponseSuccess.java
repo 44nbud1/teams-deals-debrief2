@@ -1,7 +1,7 @@
 package com.okta.examples.model.response;
 
 import com.okta.examples.adapter.clock.Timestamps;
-import com.okta.examples.adapter.status.DealsStatus;
+import com.okta.examples.model.status.DealsStatus;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +40,8 @@ public class ResponseSuccess {
         return new ResponseEntity<>(json, dealsStatus.getStatus());
     }
 
-    public static ResponseEntity<?> wrapOk(){
-        return new ResponseEntity<>("ok", HttpStatus.OK);
+    public static ResponseEntity<JSONObject> wrapOk(){
+        return new ResponseEntity<>(new JSONObject(), HttpStatus.OK);
     }
 
 }

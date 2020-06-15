@@ -1,13 +1,12 @@
-package com.okta.example.validation;
+package com.okta.examples.validation;
 
+import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.service.validation.TransactionValidation;
 import org.json.simple.JSONObject;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class TransactionValidationTest {
@@ -42,13 +41,16 @@ public class TransactionValidationTest {
 
         assertFalse(transactionValidation.payTopup(test, "").getStatusCode().is2xxSuccessful());
 
-        test.put("virtualNumber", "90800808088080");
-        test.put("amount", 76000);
-        assertTrue(transactionValidation.payOrder(test, "").getStatusCode().is2xxSuccessful());
+        test.put("virtualNumber", "9080087897994929");
+        test.put("amount", "10000.00");
+        assertTrue(transactionValidation.payTopup(test, "").getStatusCode().is2xxSuccessful());
 
         test.put("virtualNumber", "900");
-        test.put("amount", "76000");
-        assertFalse(transactionValidation.payOrder(test, "").getStatusCode().is2xxSuccessful());
+        assertEquals(DealsStatus.VIRTUAL_ACCOUNT_INVALID.getValue(), transactionValidation.payTopup(test, "/").getBody().get("status"));
+
+        test.put("virtualNumber", "9080087897994929");
+        test.put("amount", "aa");
+        assertEquals(DealsStatus.AMOUNT_INVALID.getValue(), transactionValidation.payTopup(test, "/").getBody().get("status"));
 
     }
 }

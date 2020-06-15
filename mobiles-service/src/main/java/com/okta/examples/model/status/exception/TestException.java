@@ -1,6 +1,6 @@
-package com.okta.examples.adapter.status.exception;
+package com.okta.examples.model.status.exception;
 
-import com.okta.examples.adapter.status.DealsStatus;
+import com.okta.examples.model.status.DealsStatus;
 
 public class TestException extends ResponseDealsStatusException {
 

@@ -1,4 +1,4 @@
-package com.okta.example.usecase;
+package com.okta.examples.usecase;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

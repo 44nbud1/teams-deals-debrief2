@@ -96,6 +96,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public void matchingOtp(String idUser) {
+        otpMapper.mathcingOTP(idUser);
+    }
+
+    @Override
+    public void unmatchingOtp(String idUser) {
+        otpMapper.unmatchingOTP(idUser);
+    }
+
+    @Override
     public PasswordResponse getUserPassword(String idUser) {
         PasswordResponse passwordResponse = userMapper.getUserPassword(idUser);
         return passwordResponse;

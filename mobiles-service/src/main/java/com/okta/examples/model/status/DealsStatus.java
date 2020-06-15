@@ -1,4 +1,4 @@
-package com.okta.examples.adapter.status;
+package com.okta.examples.model.status;
 
 import org.springframework.http.HttpStatus;
 
@@ -80,7 +80,8 @@ public enum DealsStatus {
     HISTORY_FALSE_DATES("078", "Start date cannot be more current than end date.", HttpStatus.BAD_REQUEST),
     HISTORY_INVALID_SEARCH("079", "Maximum search per history is within 7 days.", HttpStatus.BAD_REQUEST),
     INVALID_TRANSACTION_ID("080", "Transaction ID is invalid", HttpStatus.BAD_REQUEST),
-    INVALID_VOUCHER_ID("081", "Voucher ID is invalid", HttpStatus.BAD_REQUEST);
+    INVALID_VOUCHER_ID("081", "Voucher ID is invalid", HttpStatus.BAD_REQUEST),
+    REQUEST_TIME_OUT("082", "We cannot proccess your request for now. Please try again later", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String value;
     private final String message;

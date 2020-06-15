@@ -1,6 +1,6 @@
-package com.okta.examples.adapter.status.exception;
+package com.okta.examples.model.status.exception;
 
-import com.okta.examples.adapter.status.DealsStatus;
+import com.okta.examples.model.status.DealsStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 

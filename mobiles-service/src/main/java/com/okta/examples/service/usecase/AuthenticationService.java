@@ -1,6 +1,6 @@
 package com.okta.examples.service.usecase;
 
-import com.okta.examples.adapter.status.DealsStatus;
+import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.adapter.parser.Parser;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.model.response.ResponseSuccess;
@@ -56,6 +56,9 @@ public class AuthenticationService {
 
         //Check response
         if (!fromMember.getStatusCode().is2xxSuccessful()){
+            if (fromMember.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
            return ResponseFailed.wrapResponseFailed(message, status, fromMember.getStatusCode(), path);
         }
 
@@ -106,6 +109,9 @@ public class AuthenticationService {
 
         //Check response
         if (!fromMember.getStatusCode().is2xxSuccessful()){
+            if (fromMember.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromMember.getStatusCode(), path);
         }
 
@@ -157,9 +163,9 @@ public class AuthenticationService {
             return check;
         }
         String phoneNumber = (""+data.get("phoneNumber"));
-        if (phoneNumber.startsWith("0")){
-            phoneNumber = "+62"+phoneNumber.substring(1);
-        }
+//        if (phoneNumber.startsWith("0")){
+//            phoneNumber = "+62"+phoneNumber.substring(1);
+//        }
         data.put("phoneNumber", phoneNumber);
         //Request otp validation in member domain
         System.out.println("Request OTP. Send data to member domain : "+ Parser.toJsonString(data));
@@ -172,6 +178,9 @@ public class AuthenticationService {
 
         //Check response
         if (!fromMember.getStatusCode().is2xxSuccessful()){
+            if (fromMember.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromMember.getStatusCode(), path);
         }
 
@@ -202,6 +211,9 @@ public class AuthenticationService {
 
         //Check response
         if (!fromMember.getStatusCode().is2xxSuccessful()){
+            if (fromMember.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromMember.getStatusCode(), path);
         }
 
@@ -234,6 +246,9 @@ public class AuthenticationService {
 
         //Check response
         if (!fromMember.getStatusCode().is2xxSuccessful()){
+            if (fromMember.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromMember.getStatusCode(), path);
         }
 

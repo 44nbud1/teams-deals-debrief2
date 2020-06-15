@@ -1,8 +1,7 @@
 package com.okta.examples.service.usecase;
 
 import com.okta.examples.adapter.parser.Parser;
-import com.okta.examples.adapter.status.DealsStatus;
-import com.okta.examples.model.request.CreateMerchantRequest;
+import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.model.response.ResponseSuccess;
 import com.okta.examples.service.microservice.VoucherDomain;
@@ -10,6 +9,7 @@ import com.okta.examples.service.validation.AdminValidation;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +42,9 @@ public class AdminService {
         String status = ""+ jsonVoucher.get("status");
 
         if (!fromVoucher.getStatusCode().is2xxSuccessful()){
+            if (fromVoucher.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromVoucher.getStatusCode(), path);
         }
 
@@ -68,6 +71,9 @@ public class AdminService {
         String status = ""+ jsonVoucher.get("status");
 
         if (!fromVoucher.getStatusCode().is2xxSuccessful()){
+            if (fromVoucher.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromVoucher.getStatusCode(), path);
         }
 
@@ -94,6 +100,9 @@ public class AdminService {
         String status = ""+ jsonVoucher.get("status");
 
         if (!fromVoucher.getStatusCode().is2xxSuccessful()){
+            if (fromVoucher.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromVoucher.getStatusCode(), path);
         }
 
@@ -120,6 +129,9 @@ public class AdminService {
         String status = ""+ jsonVoucher.get("status");
 
         if (!fromVoucher.getStatusCode().is2xxSuccessful()){
+            if (fromVoucher.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromVoucher.getStatusCode(), path);
         }
 
@@ -146,6 +158,9 @@ public class AdminService {
         String status = ""+ jsonVoucher.get("status");
 
         if (!fromVoucher.getStatusCode().is2xxSuccessful()){
+            if (fromVoucher.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromVoucher.getStatusCode(), path);
         }
 
@@ -172,6 +187,9 @@ public class AdminService {
         String status = ""+ jsonVoucher.get("status");
 
         if (!fromVoucher.getStatusCode().is2xxSuccessful()){
+            if (fromVoucher.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromVoucher.getStatusCode(), path);
         }
 
@@ -198,6 +216,9 @@ public class AdminService {
         String status = ""+ jsonVoucher.get("status");
 
         if (!fromVoucher.getStatusCode().is2xxSuccessful()){
+            if (fromVoucher.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, status, fromVoucher.getStatusCode(), path);
         }
 
