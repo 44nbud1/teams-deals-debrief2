@@ -15,4 +15,5 @@ public interface VoucherService
     Voucher save(Voucher voucher);
     Optional<Voucher>findById(Long id);
     Page<Voucher> findAll();
+    Voucher findByVoucherName(String voucherName);
 }

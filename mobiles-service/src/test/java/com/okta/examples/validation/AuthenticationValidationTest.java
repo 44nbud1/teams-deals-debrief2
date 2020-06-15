@@ -9,6 +9,8 @@ import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Service;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -18,7 +20,8 @@ public class AuthenticationValidationTest {
     AuthenticationValidation authenticationValidation;
 
     @Test
-    public void registerTest(){
+    public void registerTestValidation(){
+        System.out.println("Registration Validation Test");
         RegisterRequest registerRequest = new RegisterRequest();
 
         assertFalse(authenticationValidation.register(registerRequest, "/").getStatusCode().is2xxSuccessful());
@@ -37,27 +40,22 @@ public class AuthenticationValidationTest {
         registerRequest.setEmail("kevinard11gmail.com");
         assertEquals(DealsStatus.EMAIL_INVALID.getValue(), authenticationValidation.register(registerRequest, "/").getBody().get("status"));
 
-        registerRequest.setName("kevin");
         registerRequest.setEmail("kevinard11@gmail.com");
         registerRequest.setPhoneNumber("+6280287878787");
         assertEquals(DealsStatus.PHONE_NUMBER_INVALID.getValue(), authenticationValidation.register(registerRequest, "/").getBody().get("status"));
 
-        registerRequest.setName("kevin");
-        registerRequest.setEmail("kevinard11@gmail.com");
         registerRequest.setPhoneNumber("+6281287878787");
         registerRequest.setPassword("P@sswrd");
         assertEquals(DealsStatus.PASSWORD_INVALID.getValue(), authenticationValidation.register(registerRequest, "/").getBody().get("status"));
 
-        registerRequest.setName("kevin");
-        registerRequest.setEmail("kevinard11@gmail.com");
-        registerRequest.setPhoneNumber("+6281287878787");
         registerRequest.setPassword("P@ssw0rd");
         registerRequest.setConfirmPassword("P@sw0rd");
         assertEquals(DealsStatus.PASSWORD_MISS_MATCH.getValue(), authenticationValidation.register(registerRequest, "/").getBody().get("status"));
     }
 
     @Test
-    public void loginTest(){
+    public void loginTestValidation(){
+        System.out.println("Login Validation Test");
         LoginRequest loginRequest = new LoginRequest();
 
         assertFalse(authenticationValidation.login(loginRequest, "/").getStatusCode().is2xxSuccessful());
@@ -75,7 +73,8 @@ public class AuthenticationValidationTest {
     }
     
     @Test
-    public void requestOtpTest(){
+    public void requestOtpTestValidation(){
+        System.out.println("Request Otp Validation Test");
         JSONObject test = new JSONObject();
         
         assertFalse(authenticationValidation.requestOtp(test, "/").getStatusCode().is2xxSuccessful());
@@ -89,7 +88,8 @@ public class AuthenticationValidationTest {
     }
 
     @Test
-    public void matchOtpTest(){
+    public void matchOtpTestValidation(){
+        System.out.println("Match Otp Validation Test");
         JSONObject test = new JSONObject();
 
         assertFalse(authenticationValidation.matchOtp(test, "/").getStatusCode().is2xxSuccessful());
@@ -103,19 +103,20 @@ public class AuthenticationValidationTest {
     }
 
     @Test
-    public void forgotPassword(){
+    public void forgotPasswordValidation(){
+        System.out.println("Forgot Password Validation Test");
         ForgotPasswordRequest forgotPasswordRequest = new ForgotPasswordRequest();
 
         assertFalse(authenticationValidation.forgotPassword(forgotPasswordRequest, "/").getStatusCode().is2xxSuccessful());
 
-        forgotPasswordRequest.setNewPassword("P@ssw0rd");
+        forgotPasswordRequest.setPassword("P@ssw0rd");
         forgotPasswordRequest.setConfirmPassword("P@ssw0rd");
         assertTrue(authenticationValidation.forgotPassword(forgotPasswordRequest, "/").getStatusCode().is2xxSuccessful());
 
-        forgotPasswordRequest.setNewPassword("Passw0rd");
+        forgotPasswordRequest.setPassword("Passw0rd");
         assertEquals(DealsStatus.PASSWORD_INVALID.getValue(), authenticationValidation.forgotPassword(forgotPasswordRequest, "/").getBody().get("status"));
 
-        forgotPasswordRequest.setNewPassword("P@ssw0rd");
+        forgotPasswordRequest.setPassword("P@ssw0rd");
         forgotPasswordRequest.setConfirmPassword("Passw0rd");
         assertEquals(DealsStatus.PASSWORD_MISS_MATCH.getValue(), authenticationValidation.forgotPassword(forgotPasswordRequest, "/").getBody().get("status"));
 

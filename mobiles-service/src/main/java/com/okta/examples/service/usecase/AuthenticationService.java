@@ -232,8 +232,8 @@ public class AuthenticationService {
             return check;
         }
         JSONObject data = new JSONObject();
-        data.put("password", forgotPasswordRequest.getNewPassword());
-        data.put("newPassword", forgotPasswordRequest.getNewPassword());
+        data.put("password", forgotPasswordRequest.getPassword());
+        data.put("newPassword", forgotPasswordRequest.getPassword());
         data.put("confirmPassword", forgotPasswordRequest.getConfirmPassword());
         //Forgot password validation in member domain
         System.out.println("Forgot Password. Send data to member domain : "+ Parser.toJsonString(forgotPasswordRequest));

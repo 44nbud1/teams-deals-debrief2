@@ -1,7 +1,133 @@
 package com.okta.examples.validation;
 
+import com.okta.examples.model.request.CreateMerchantRequest;
+import com.okta.examples.model.status.DealsStatus;
+import com.okta.examples.service.validation.AdminValidation;
+import org.json.simple.JSONObject;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Service;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class AdminValidationTest {
+
+    @Autowired
+    AdminValidation adminValidation;
+
+    @Test
+    public void createMerchantValidationTest(){
+        System.out.println("Create Merchant Validation Test");
+        JSONObject test = new JSONObject();
+
+        assertFalse(adminValidation.test(test, "/").getStatusCode().is2xxSuccessful());
+
+        test.put("voucherName", "Combo Asik");
+        test.put("voucherPrice", "1000");
+        test.put("discount", "50");
+        test.put("maxDiscount", "5000");
+        test.put("quota", "10");
+        test.put("expiredDate", "2020-06-14 12:06:14");
+        test.put("status", "true");
+        assertTrue(adminValidation.test(test, "/").getStatusCode().is2xxSuccessful());
+
+        test.put("voucherName", null);
+        assertEquals(DealsStatus.FILL_VOUCHER_NAME.getValue(), adminValidation.test(test, "/").getBody().get("status"));
+
+        test.put("voucherName", "Combo Asik");
+        test.put("voucherPrice", null);
+        assertEquals(DealsStatus.FILL_VOUCHER_PRICE.getValue(), adminValidation.test(test, "/").getBody().get("status"));
+
+        test.put("voucherName", "Combo Asik");
+        test.put("voucherPrice", "1000");
+        test.put("discount", null);
+        assertEquals(DealsStatus.FILL_DISCOUNT.getValue(), adminValidation.test(test, "/").getBody().get("status"));
+
+        test.put("voucherName", "Combo Asik");
+        test.put("voucherPrice", "1000");
+        test.put("discount", "50");
+        test.put("maxDiscount", null);
+        assertEquals(DealsStatus.FILL_MAX_DISCOUNT.getValue(), adminValidation.test(test, "/").getBody().get("status"));
+
+        test.put("voucherName", "Combo Asik");
+        test.put("voucherPrice", "1000");
+        test.put("discount", "50");
+        test.put("maxDiscount", "5000");
+        test.put("quota", null);
+        assertEquals(DealsStatus.FILL_QUOTA.getValue(), adminValidation.test(test, "/").getBody().get("status"));
+
+        test.put("voucherName", "Combo Asik");
+        test.put("voucherPrice", "1000");
+        test.put("discount", "50");
+        test.put("maxDiscount", "5000");
+        test.put("quota", "10");
+        test.put("expiredDate", null);
+        assertEquals(DealsStatus.FILL_EXPIRED_DATE.getValue(), adminValidation.test(test, "/").getBody().get("status"));
+
+        test.put("voucherName", "Combo Asik");
+        test.put("voucherPrice", "1000");
+        test.put("discount", "50");
+        test.put("maxDiscount", "5000");
+        test.put("quota", "10");
+        test.put("expiredDate", "2020-06-14 12:06:14");
+        test.put("status", null);
+        assertEquals(DealsStatus.FILL_STATUS.getValue(), adminValidation.test(test, "/").getBody().get("status"));
+
+        test.put("status", "true");
+        test.put("discount", "aa");
+        assertEquals(DealsStatus.DATA_INVALID.getValue(), adminValidation.test(test, "/").getBody().get("status"));
+
+        test.put("discount", "50");
+        test.put("maxDiscount", "aa");
+        assertEquals(DealsStatus.DATA_INVALID.getValue(), adminValidation.test(test, "/").getBody().get("status"));
+
+        test.put("maxDiscount", "5000");
+        test.put("quota", "aa");
+        assertEquals(DealsStatus.DATA_INVALID.getValue(), adminValidation.test(test, "/").getBody().get("status"));
+
+        test.put("quota", "10");
+        test.put("expiredDate", "aa");
+        assertEquals(DealsStatus.DATA_INVALID.getValue(), adminValidation.test(test, "/").getBody().get("status"));
+
+        test.put("expiredDate", "2020-06-14 12:06:14");
+        test.put("status", "aa");
+        assertEquals(DealsStatus.DATA_INVALID.getValue(), adminValidation.test(test, "/").getBody().get("status"));
+
+    }
+
+    @Test
+    public void getAllVoucherValidationTest(){
+        System.out.println("Get All Voucher Admin Validation Test");
+        String page = null;
+        assertFalse(adminValidation.getAllVoucher(page, "/").getStatusCode().is2xxSuccessful());
+
+        page = "0";
+        assertTrue(adminValidation.getAllVoucher(page, "/").getStatusCode().is2xxSuccessful());
+
+        page = "a";
+        assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), adminValidation.getAllVoucher(page, "/").getBody().get("status"));
+
+        page = "-1";
+        assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), adminValidation.getAllVoucher(page, "/").getBody().get("status"));
+
+    }
+
+    @Test
+    public void filterVoucherValidationTest(){
+        System.out.println("Get All Voucher Admin Validation Test");
+        String page = null; String merchantCategory = null;
+        assertFalse(adminValidation.filterVoucher(merchantCategory, page, "/").getStatusCode().is2xxSuccessful());
+
+        page = "0";
+        assertTrue(adminValidation.filterVoucher(merchantCategory, page, "/").getStatusCode().is2xxSuccessful());
+
+        page = "a";
+        assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), adminValidation.filterVoucher(merchantCategory, page, "/").getBody().get("status"));
+
+        page = "-1";
+        assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), adminValidation.filterVoucher(merchantCategory, page, "/").getBody().get("status"));
+
+    }
 }

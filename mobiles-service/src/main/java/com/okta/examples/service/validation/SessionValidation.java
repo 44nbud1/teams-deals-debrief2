@@ -127,6 +127,10 @@ public class SessionValidation {
         }
 
         String session = header.substring(7);
+
+        if (session.length() < 38){
+            return false;
+        }
         String idUser = session.substring(36);
         String idSession = sessionService.checkSession(idUser);
         if (idSession == null){
