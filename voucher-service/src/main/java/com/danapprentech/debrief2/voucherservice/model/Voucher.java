@@ -83,4 +83,5 @@ public class Voucher implements Serializable {
 	@NotNull
 	private Merchant merchant;
 
+
 }

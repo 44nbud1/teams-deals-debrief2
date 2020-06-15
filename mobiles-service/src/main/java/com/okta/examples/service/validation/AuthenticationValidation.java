@@ -109,7 +109,7 @@ public class AuthenticationValidation {
         }
 
         if(!Pattern.matches(regex_otp, ""+data.get("otp"))){
-            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+            return ResponseFailed.wrapResponse(DealsStatus.OTP_NOT_MATCH, path);
         }
 
         return ResponseSuccess.wrapOk();
@@ -121,15 +121,15 @@ public class AuthenticationValidation {
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
 
-        if (forgotPasswordRequest.getNewPassword() == null ||forgotPasswordRequest.getConfirmPassword() == null){
+        if (forgotPasswordRequest.getPassword() == null ||forgotPasswordRequest.getConfirmPassword() == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
 
-        if (!Pattern.matches(regex_password, forgotPasswordRequest.getNewPassword())){
+        if (!Pattern.matches(regex_password, forgotPasswordRequest.getPassword())){
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
         }
 
-        if (!forgotPasswordRequest.getNewPassword().equals(forgotPasswordRequest.getConfirmPassword())){
+        if (!forgotPasswordRequest.getPassword().equals(forgotPasswordRequest.getConfirmPassword())){
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_MISS_MATCH, path);
         }
 

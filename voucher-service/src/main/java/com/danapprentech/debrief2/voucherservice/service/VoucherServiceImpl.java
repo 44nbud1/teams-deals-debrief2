@@ -5,6 +5,8 @@ import com.danapprentech.debrief2.voucherservice.repository.VoucherRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -14,7 +16,8 @@ public class VoucherServiceImpl implements VoucherService
     VoucherRepository voucherRepository;
 
     @Override
-    public Page<Voucher> findByMerchantCategoryContaining(String merchantCategory, Pageable pageable) {
+    public Page<Voucher> findByMerchantCategoryContaining(String merchantCategory, Pageable pageable)
+    {
         return null;
     }
 
@@ -30,6 +33,7 @@ public class VoucherServiceImpl implements VoucherService
         return voucherRepository.findByIdVoucher(id);
     }
 
+//    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public Voucher save(Voucher voucher)
     {
@@ -46,5 +50,10 @@ public class VoucherServiceImpl implements VoucherService
     public Page<Voucher> findAll()
     {
         return (Page<Voucher>) voucherRepository.findAll();
+    }
+
+    @Override
+    public Voucher findByVoucherName(String voucherName) {
+        return voucherRepository.findByVoucherName(voucherName);
     }
 }

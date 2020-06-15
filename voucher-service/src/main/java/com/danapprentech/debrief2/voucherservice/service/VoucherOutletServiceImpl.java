@@ -14,12 +14,14 @@ public class VoucherOutletServiceImpl implements VoucherOutletService
     MerchantRepository outletRepository;
 
     @Override
-    public Optional<Merchant> findById(Long id) {
+    public Optional<Merchant> findById(Long id)
+    {
         return outletRepository.findById(id);
     }
 
     @Override
-    public Merchant save(Merchant merchant) {
+    public Merchant save(Merchant merchant)
+    {
         return outletRepository.save(merchant);
     }
 }

@@ -15,7 +15,8 @@ public class TransactionValidationTest {
     TransactionValidation transactionValidation;
 
     @Test
-    public void createOrderTest(){
+    public void createOrderTestValidation(){
+        System.out.println("Create Order Validation Test");
         JSONObject test = new JSONObject();
 
         assertFalse(transactionValidation.createOrder(test, "").getStatusCode().is2xxSuccessful());
@@ -26,7 +27,8 @@ public class TransactionValidationTest {
     }
 
     @Test
-    public void payOrderTest(){
+    public void payOrderTestValidation(){
+        System.out.println("Pay Order Validation Test");
         JSONObject test = new JSONObject();
 
         assertFalse(transactionValidation.payOrder(test, "").getStatusCode().is2xxSuccessful());
@@ -36,7 +38,8 @@ public class TransactionValidationTest {
     }
 
     @Test
-    public void payTopupTest(){
+    public void payTopupTestValidation(){
+        System.out.println("Pay Top Up Validation Test");
         JSONObject test = new JSONObject();
 
         assertFalse(transactionValidation.payTopup(test, "").getStatusCode().is2xxSuccessful());

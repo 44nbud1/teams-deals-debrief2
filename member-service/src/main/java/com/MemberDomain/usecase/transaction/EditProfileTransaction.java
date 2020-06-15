@@ -41,8 +41,13 @@ public class EditProfileTransaction {
         }
 
         if (editProfileRequest.getEmail() != null) {
-            editProfileRequest.setEmail(editProfileRequest.getEmail().toLowerCase());
-            userRepository.updateEmail(idUser, editProfileRequest.getEmail());
+            if (userRepository.doesEmailAvailable(""+editProfileRequest.getEmail().toLowerCase()) == Boolean.FALSE){
+                return ResponseFailed.wrapResponse(DealsStatus.EMAIL_EXISTS, path);
+            }
+            else{
+                editProfileRequest.setEmail(editProfileRequest.getEmail().toLowerCase());
+                userRepository.updateEmail(idUser, editProfileRequest.getEmail());
+            }
         }
 
         if (editProfileRequest.getNewPassword() != null) {

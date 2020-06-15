@@ -51,7 +51,7 @@ public class AdminValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> test(JSONObject data, String path){
+    public ResponseEntity<JSONObject> test(JSONObject data, String path){
         if (data == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_VOUCHER_NAME, path);
         }
@@ -93,7 +93,7 @@ public class AdminValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> getAllVoucher(String page, String path){
+    public ResponseEntity<JSONObject> getAllVoucher(String page, String path){
         if (page == null){
             return ResponseFailed.wrapResponse(DealsStatus.PAGE_NOT_FOUND, path);
         }
@@ -103,7 +103,7 @@ public class AdminValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> filterVoucher(String merchantCategory, String page, String path){
+    public ResponseEntity<JSONObject> filterVoucher(String merchantCategory, String page, String path){
         if (merchantCategory == null){
             return ResponseFailed.wrapResponse(DealsStatus.PAGE_NOT_FOUND, path);
         }
