@@ -97,7 +97,7 @@ public class TransactionService {
 //                "/api/user/"+idUser+"/transaction/topup");
     }
 
-    public ResponseEntity<?> transactionHistory(String idUser, String category, String filterStart, String filterEnd, Integer page, String path){
+    public ResponseEntity<?> transactionHistory(String idUser, String category, String filterStart, String filterEnd, String page, String path){
 
         ResponseEntity<?> fromOrder = order.transactionHistory(idUser, category, filterStart, filterEnd, page, path);
         System.out.println("Transaction History. Receive data from order domain :"+ fromOrder.getBody().toString());

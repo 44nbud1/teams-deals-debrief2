@@ -18,7 +18,7 @@ public enum DealsStatus {
     REQUEST_OTP("012", "We have sent an OTP to your phone number.", HttpStatus.OK),
     PHONE_NUMBER_NOT_EXISTS("013", "The phone number does not exist.", HttpStatus.NOT_FOUND),
     OTP_MATCH("015", "The OTP matches our records.", HttpStatus.OK),
-    OTP_NOT_MATCH("016", "The OTP does not match with our records.", HttpStatus.BAD_REQUEST),
+    OTP_NOT_MATCH("016", "OTP not match.", HttpStatus.BAD_REQUEST),
     OTP_EXPIRED("017", "Your OTP has expired.", HttpStatus.BAD_REQUEST),
     REQUEST_NEW_OTP("018", "Please request a new OTP!", HttpStatus.BAD_REQUEST),
     FORGOT_PASSWORD("019", "You have successfully changed your password.", HttpStatus.OK),

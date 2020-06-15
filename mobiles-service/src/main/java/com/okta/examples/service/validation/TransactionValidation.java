@@ -12,10 +12,14 @@ import java.util.regex.Pattern;
 @Service
 public class TransactionValidation {
 
-    private final String regex_va = "^[\\d]{15,16}$";
+    private final String regex_va = "^[\\d]{14,16}$";
     private final String regex_amount = "^(?=.*[\\d])(?!.*[\\D]).+$|^[\\d]+[.]{1}[\\d]+$";
 
     public ResponseEntity<?> createOrder(JSONObject data, String path){
+
+        if (data == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
 
         if (data.get("idVoucher") == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
@@ -26,6 +30,9 @@ public class TransactionValidation {
 
     public ResponseEntity<?> payOrder(JSONObject data, String path){
 
+        if (data == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
         if (data.get("idTransaction") == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
@@ -34,7 +41,9 @@ public class TransactionValidation {
     }
 
     public ResponseEntity<?> payTopup(JSONObject data, String path){
-
+        if (data == null){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
+        }
         if (data.get("virtualNumber") == null || data.get("amount") == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
@@ -49,4 +58,6 @@ public class TransactionValidation {
 
         return ResponseSuccess.wrapOk();
     }
+
+
 }

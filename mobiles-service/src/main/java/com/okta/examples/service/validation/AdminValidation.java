@@ -104,13 +104,13 @@ public class AdminValidation {
 
     public ResponseEntity<?> filterVoucher(String merchantCategory, String page, String path){
         if (merchantCategory == null){
-            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+            return ResponseFailed.wrapResponse(DealsStatus.PAGE_NOT_FOUND, path);
         }
         if (page == null){
-            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+            return ResponseFailed.wrapResponse(DealsStatus.PAGE_NOT_FOUND, path);
         }
         if (!Pattern.matches(regex_integer, page)){
-            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+            return ResponseFailed.wrapResponse(DealsStatus.PAGE_NOT_FOUND, path);
         }
 //        if (Integer.parseInt(page) < 0){
 //            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
@@ -173,11 +173,11 @@ public class AdminValidation {
         }
         if (!(""+data.get("status")).equals("false")) {
             if(!(""+data.get("status")).equals("true")){
-                return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
+                return ResponseFailed.wrapResponse(DealsStatus.STATUS_INVALID, path);
             }
         }
-        if (data.get("updateQty") != null) {
-            if (!Pattern.matches(regex_integer, ""+data.get("updateQty"))) {
+        if (data.get("quota") != null) {
+            if (!Pattern.matches(regex_integer, ""+data.get("quota"))) {
                 return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
             }
         }
@@ -185,7 +185,12 @@ public class AdminValidation {
     }
 
     private Boolean checkDate(String date){
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String regex = "^[\\d]{4}[-]{1}[\\d]{2}[-]{1}[\\d]{2}+$";
+        if(!Pattern.matches(regex, date)){
+            return Boolean.FALSE;
+        }
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        df.setLenient(false);
         try {
             df.parse(date);
             return Boolean.TRUE;

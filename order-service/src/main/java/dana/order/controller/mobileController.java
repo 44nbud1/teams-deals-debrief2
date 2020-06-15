@@ -63,7 +63,7 @@ public class mobileController {
                                                 @RequestParam(value = "category", required = false) String category,
                                                 @RequestParam(value = "filter-start-date", required = false) String startDate,
                                                 @RequestParam(value = "filter-end-date", required = false) String endDate,
-                                                @RequestParam(value = "page", required = false) Integer page){
+                                                @RequestParam(value = "page", required = false) String page){
         JSONObject json = new JSONObject();
         json.put("idUser", idUser);
         json.put("category", category);
