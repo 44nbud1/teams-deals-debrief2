@@ -43,6 +43,8 @@ public class DetailedTransactionHistory {
             throw new PaymentFailedException(DealsStatus.TRANSACTION_WRONG_USER);
         }
 
+        databaseMapper.fallingAllExpiredTransaction();
+
         JSONObject transactionDetails = historyRepository.getUserDetailedHistory(transaction.getIdTransaction());
 
         return ResponseWrapper.wrap("Your transaction history has been collected", 200, transactionDetails);

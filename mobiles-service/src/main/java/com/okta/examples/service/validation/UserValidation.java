@@ -16,6 +16,10 @@ public class UserValidation {
     private final String regex_password = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=\\S+$).{8,}$";
     private final String regex_name = "^(?=.{1,9}[a-zA-Z\\'\\-][ ])(?=.*[\\s])(?!.*[0-9])(?!.*[!@#$%^&*]).{3,20}$|^(?=.*[a-zA-Z\\'\\-])(?!.*[0-9])(?!.*[!@#$%^&*]).{3,10}$";
 
+    public boolean testMe(){
+        return true;
+    }
+
     public ResponseEntity<?> editProfile(EditProfileRequest editProfileRequest, String path){
 
         if (editProfileRequest == null){
