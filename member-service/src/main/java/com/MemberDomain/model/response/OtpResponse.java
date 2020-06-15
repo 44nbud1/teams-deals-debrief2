@@ -8,16 +8,18 @@ public class OtpResponse {
     private String idUser;
     private String otp;
     private DateTime expiredDate;
+    private int matchStatus;
 
     public OtpResponse() {
     }
 
-    public OtpResponse(String idOtp, String idUser, String otp, DateTime expiredDate) {
+    public OtpResponse(String idOtp, String idUser, String otp, DateTime expiredDate, int matchStatus) {
         super();
         this.idOtp = idOtp;
         this.idUser = idUser;
         this.otp = otp;
         this.expiredDate = expiredDate;
+        this.matchStatus = matchStatus;
     }
 
     public String toString(){
@@ -27,12 +29,13 @@ public class OtpResponse {
         sb.append("ID User = ").append(idUser).append(" - ");
         sb.append("OTP = ").append(otp).append(" - ");
         sb.append("Expired Date = ").append(expiredDate).append(" - ");
+        sb.append("Match Status = ").append(matchStatus).append(" - ");
 
         return sb.toString();
     }
 
-    public OtpResponse(String idUser, String otp, DateTime expiredDate){
-        this("", idUser, otp, expiredDate);
+    public OtpResponse(String idUser, String otp, DateTime expiredDate, int matchStatus){
+        this("", idUser, otp, expiredDate, matchStatus);
     }
 
     public void setIdOtp(String idOtp) {
@@ -51,6 +54,10 @@ public class OtpResponse {
         this.expiredDate = expiredDate;
     }
 
+    public void setMatchStatus(int matchStatus) {
+        this.matchStatus = matchStatus;
+    }
+
     public String getIdOtp() {
         return idOtp;
     }
@@ -67,4 +74,7 @@ public class OtpResponse {
         return expiredDate;
     }
 
+    public int getMatchStatus() {
+        return matchStatus;
+    }
 }

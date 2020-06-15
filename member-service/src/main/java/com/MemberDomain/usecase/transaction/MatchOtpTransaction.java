@@ -48,6 +48,8 @@ public class MatchOtpTransaction {
             return ResponseFailed.wrapResponse(DealsStatus.OTP_EXPIRED, path);
         }
 
+        userRepository.matchingOtp(idUser);
+
         return ResponseSuccess.wrapResponse(null, DealsStatus.OTP_MATCH, path);
     }
 }

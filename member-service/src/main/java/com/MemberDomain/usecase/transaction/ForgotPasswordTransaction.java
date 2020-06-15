@@ -4,6 +4,7 @@ import com.MemberDomain.adapter.status.DealsStatus;
 import com.MemberDomain.adapter.wrapper.ResponseFailed;
 import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.request.ForgotPasswordRequest;
+import com.MemberDomain.model.response.OtpResponse;
 import com.MemberDomain.model.response.ProfileResponse;
 import com.MemberDomain.usecase.port.UserRepository;
 import com.MemberDomain.usecase.validation.UserValidation;
@@ -35,8 +36,15 @@ public class ForgotPasswordTransaction {
             return ResponseFailed.wrapResponse(DealsStatus.USER_NOT_FOUND, path);
         }
 
+        OtpResponse otpResponse = userRepository.checkUserOtp(idUser);
+
+        if (otpResponse == null || otpResponse.getMatchStatus() == 0){
+            return ResponseFailed.wrapResponse(DealsStatus.REQUEST_NEW_OTP, path);
+        }
+
         forgotPasswordRequest.setNewPassword(encryptPassword(forgotPasswordRequest.getNewPassword()));
         userRepository.updatePassword(idUser, forgotPasswordRequest.getNewPassword());
+        userRepository.unmatchingOtp(idUser);
 
         return ResponseSuccess.wrapResponse(null, DealsStatus.FORGOT_PASSWORD, path);
     }
