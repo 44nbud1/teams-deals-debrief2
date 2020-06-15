@@ -1,4 +1,4 @@
-package com.example.MemberDomain;
+package com.MemberDomain;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

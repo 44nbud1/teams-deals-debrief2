@@ -38,8 +38,12 @@ public class ForgotPasswordTransaction {
 
         OtpResponse otpResponse = userRepository.checkUserOtp(idUser);
 
-        if (otpResponse == null || otpResponse.getMatchStatus() == 0){
+        if (otpResponse == null){
             return ResponseFailed.wrapResponse(DealsStatus.REQUEST_NEW_OTP, path);
+        }
+
+        if (otpResponse.getMatchStatus() == 0){
+            return ResponseFailed.wrapResponse(DealsStatus.FILL_OTP, path);
         }
 
         forgotPasswordRequest.setNewPassword(encryptPassword(forgotPasswordRequest.getNewPassword()));
