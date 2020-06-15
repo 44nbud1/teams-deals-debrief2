@@ -1,6 +1,6 @@
 package com.okta.examples.service.validation;
 
-import com.okta.examples.adapter.status.DealsStatus;
+import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.model.response.ResponseSuccess;
 import org.springframework.http.ResponseEntity;

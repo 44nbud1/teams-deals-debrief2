@@ -4,6 +4,7 @@ import dana.order.adapter.wrapper.ResponseWrapper;
 import dana.order.entity.DealsStatus;
 import dana.order.entity.TransactionHistoryModel;
 import dana.order.usecase.exception.UserException;
+import dana.order.usecase.port.DatabaseMapper;
 import dana.order.usecase.port.HistoryRepository;
 import dana.order.usecase.port.UserRepository;
 import dana.order.usecase.validate.ValidateTransactionHistory;
@@ -26,6 +27,9 @@ public class TransactionHistory {
     @Autowired
     HistoryRepository historyRepository;
 
+    @Autowired
+    DatabaseMapper databaseMapper;
+
     public JSONObject get(JSONObject json){
 
         validateTransactionHistory.check(json);
@@ -33,6 +37,8 @@ public class TransactionHistory {
         if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
             throw new UserException(DealsStatus.USER_NOT_FOUND);
         }
+
+        databaseMapper.fallingAllExpiredTransaction();
 
         JSONObject result = historyRepository.getUserHistory(json);
 

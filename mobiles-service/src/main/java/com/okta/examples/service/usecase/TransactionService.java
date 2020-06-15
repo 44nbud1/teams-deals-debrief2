@@ -1,7 +1,7 @@
 package com.okta.examples.service.usecase;
 
 import com.okta.examples.adapter.parser.OrderMessage;
-import com.okta.examples.adapter.status.DealsStatus;
+import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.adapter.parser.Parser;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.model.response.ResponseSuccess;
@@ -40,6 +40,9 @@ public class TransactionService {
         String status = ""+ jsonOrder.get("status");
 
         if (!fromOrder.getStatusCode().is2xxSuccessful()){
+            if (fromOrder.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
         }
 
@@ -64,6 +67,9 @@ public class TransactionService {
         String status = ""+ jsonOrder.get("status");
 
         if (!fromOrder.getStatusCode().is2xxSuccessful()){
+            if (fromOrder.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
         }
 
@@ -88,6 +94,9 @@ public class TransactionService {
         String status = ""+ jsonOrder.get("status");
 
         if (!fromOrder.getStatusCode().is2xxSuccessful()){
+            if (fromOrder.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
         }
 
@@ -107,6 +116,9 @@ public class TransactionService {
         String status = ""+ jsonOrder.get("status");
 
         if (!fromOrder.getStatusCode().is2xxSuccessful()){
+            if (fromOrder.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
         }
 
@@ -127,6 +139,9 @@ public class TransactionService {
         String status = ""+ jsonOrder.get("status");
 
         if (!fromOrder.getStatusCode().is2xxSuccessful()){
+            if (fromOrder.getBody().toString().toLowerCase().contains("connection refused")){
+                return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+            }
             return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
         }
 

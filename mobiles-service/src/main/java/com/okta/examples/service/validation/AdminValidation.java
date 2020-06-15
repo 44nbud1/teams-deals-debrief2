@@ -1,6 +1,6 @@
 package com.okta.examples.service.validation;
 
-import com.okta.examples.adapter.status.DealsStatus;
+import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.model.request.CreateMerchantRequest;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.model.response.ResponseSuccess;
@@ -76,6 +76,7 @@ public class AdminValidation {
         if (data.get("status") == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_STATUS, path);
         }
+        System.out.println();
         if (!Pattern.matches(regex_double, ""+data.get("discount")) ||
                 !Pattern.matches(regex_double, ""+data.get("maxDiscount")) ||
                 !Pattern.matches(regex_double, ""+data.get("voucherPrice")) ||
@@ -185,11 +186,11 @@ public class AdminValidation {
     }
 
     private Boolean checkDate(String date){
-        String regex = "^[\\d]{4}[-]{1}[\\d]{2}[-]{1}[\\d]{2}+$";
-        if(!Pattern.matches(regex, date)){
-            return Boolean.FALSE;
-        }
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+//        String regex = "^[\\d]{4}[-]{1}[\\d]{2}[-]{1}[\\d]{2}+$";
+//        if(!Pattern.matches(regex, date)){
+//            return Boolean.FALSE;
+//        }
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         df.setLenient(false);
         try {
             df.parse(date);
