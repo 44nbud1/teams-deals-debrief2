@@ -43,7 +43,7 @@
 //	@Autowired
 //    ValidationRegexImpl validation;
 //
-//    @PostMapping("/admin/{idUser}/merchant/{idMerchant}/vouchers")
+//    @PostMapping("/admin/{idUser}f/merchant/{idMerchant}/vouchers")
 //    public ResponseEntity<?> createOutlet(@PathVariable Long idMerchant,
 //                                          @PathVariable String idUser,
 //                                          @RequestBody VoucherRequest voucherRequest,

@@ -33,7 +33,7 @@ public class RestControllerVoucherUser
     @GetMapping("/filter-voucher")
     public ResponseEntity<?> filterByMerchantCategory(
             @RequestParam Optional<Integer> page,
-            @RequestParam Optional<String> merchantCategory,
+            @RequestParam String merchantCategory,
             @RequestParam(defaultValue = "merchantCategory") String sortBy,
             HttpServletRequest httpServletRequest)
     {

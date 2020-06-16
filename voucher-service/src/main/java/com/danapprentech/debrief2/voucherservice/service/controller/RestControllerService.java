@@ -42,7 +42,7 @@ public interface RestControllerService
 
     public ResponseEntity<?> filterByMerchantCategory(
                                             Optional<Integer> page,
-                                            Optional<String> merchantCategory,
+                                            String merchantCategory,
                                             String sortBy,
                                             HttpServletRequest httpServletRequest);
 
