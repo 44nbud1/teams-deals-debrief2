@@ -165,17 +165,6 @@ public class UserValidation {
                     editProfileRequest.getConfirmPassword() != null){
 
                 content = true;
-                if (!Pattern.matches(regex_password, editProfileRequest.getOldPassword())){
-                    return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
-                }
-
-                if (!Pattern.matches(regex_password, editProfileRequest.getNewPassword())){
-                    return ResponseFailed.wrapResponse(DealsStatus.NEW_PASSWORD_INVALID, path);
-                }
-
-                if (!editProfileRequest.getConfirmPassword().equals(editProfileRequest.getNewPassword())){
-                    return ResponseFailed.wrapResponse(DealsStatus.NEW_PASSWORD_MISS_MATCH, path);
-                }
 
             }else {
                 return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
@@ -184,6 +173,23 @@ public class UserValidation {
 
         if (!content){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ONE_FIELD, path);
+        }
+
+        return ResponseSuccess.wrapOk();
+    }
+
+    public ResponseEntity<?> editPassword(EditProfileRequest editProfileRequest, String path){
+
+        if (!Pattern.matches(regex_password, editProfileRequest.getOldPassword())){
+            return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
+        }
+
+        if (!Pattern.matches(regex_password, editProfileRequest.getNewPassword())){
+            return ResponseFailed.wrapResponse(DealsStatus.NEW_PASSWORD_INVALID, path);
+        }
+
+        if (!editProfileRequest.getConfirmPassword().equals(editProfileRequest.getNewPassword())){
+            return ResponseFailed.wrapResponse(DealsStatus.NEW_PASSWORD_MISS_MATCH, path);
         }
 
         return ResponseSuccess.wrapOk();

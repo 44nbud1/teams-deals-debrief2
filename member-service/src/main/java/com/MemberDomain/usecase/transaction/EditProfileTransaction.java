@@ -56,8 +56,14 @@ public class EditProfileTransaction {
                 return ResponseFailed.wrapResponse(DealsStatus.OLD_PASSWORD_NOT_MATCH, path);
             }
             else{
-                editProfileRequest.setNewPassword(encryptPassword(editProfileRequest.getNewPassword()));
-                userRepository.updatePassword(idUser, editProfileRequest.getNewPassword());
+                ResponseEntity<?> checkEditPassword = userValidation.editPassword(editProfileRequest, path);
+                if (!checkEditPassword.getStatusCode().is2xxSuccessful()){
+                    return checkEditPassword;
+                }
+                else{
+                    editProfileRequest.setNewPassword(encryptPassword(editProfileRequest.getNewPassword()));
+                    userRepository.updatePassword(idUser, editProfileRequest.getNewPassword());
+                }
             }
         }
 
