@@ -75,7 +75,7 @@ public class RestControllerServiceImpl implements RestControllerService{
 
         if (voucherRequest.getVoucherName() == null && voucherRequest.getQuota()==null && voucherRequest.getMaxDiscount() ==null)
         {
-            return new ResponseEntity<>(new MessageResponse("Your data is invalid.","057","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+            return new ResponseEntity<>(new MessageResponse("Your data is invalid.","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
                     HttpStatus.BAD_REQUEST);
         }
 
