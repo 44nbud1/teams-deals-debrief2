@@ -48,6 +48,10 @@ public class MatchOtpTransaction {
             return ResponseFailed.wrapResponse(DealsStatus.OTP_NOT_MATCH, path);
         }
 
+        if(matchingOtp.getMatchStatus() == 1){
+            return ResponseFailed.wrapResponse(DealsStatus.REQUEST_NEW_OTP, path);
+        }
+
         OtpResponse matchingOtpDate = userRepository.matchOtpDate(""+idUser, ""+userOtp);
 
         if (matchingOtpDate == null){
