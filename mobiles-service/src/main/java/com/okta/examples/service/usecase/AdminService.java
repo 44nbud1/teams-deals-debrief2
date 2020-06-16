@@ -9,7 +9,6 @@ import com.okta.examples.service.validation.AdminValidation;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +26,7 @@ public class AdminService {
 
     public ResponseEntity<?> createMerchant(String idUser, String idMerchant, JSONObject data, String path){
 
-        System.out.println("Create Merchant Validation. " +new Date());
+        System.out.println("Create Merchant Validation. " + Parser.toJsonString(data));
         ResponseEntity<?> check = validate.test(data, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
@@ -57,7 +56,7 @@ public class AdminService {
 
     public ResponseEntity<?> getAllVoucher(String page, String path){
 
-        System.out.println("Get All Voucher Validation. " +new Date());
+        System.out.println("Get All Voucher Validation. " +Parser.toJsonString(page));
         ResponseEntity<?> check = validate.getAllVoucher(page, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -86,7 +85,7 @@ public class AdminService {
 
     public ResponseEntity<?> filterVoucher(String merchantCategory, String page, String path){
 
-        System.out.println("Filter Voucher Validation. " +new Date());
+        System.out.println("Filter Voucher Validation. " +Parser.toJsonString(merchantCategory + page));
         ResponseEntity<?> check = validate.filterVoucher(merchantCategory, page, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -115,7 +114,7 @@ public class AdminService {
 
     public ResponseEntity<?> searchVoucher(String merchantName, String page, String path){
 
-        System.out.println("Search Voucher Validation. " +new Date());
+        System.out.println("Search Voucher Validation. " +Parser.toJsonString(merchantName+page));
         ResponseEntity<?> check = validate.searchVoucher(merchantName, page, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -144,7 +143,7 @@ public class AdminService {
 
     public ResponseEntity<?> sortVoucher(String name, String page, String path){
 
-        System.out.println("Sort Voucher Validation. " +new Date());
+        System.out.println("Sort Voucher Validation. " + Parser.toJsonString(name+page));
         ResponseEntity<?> check = validate.sortVoucher(name, page, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -173,7 +172,7 @@ public class AdminService {
 
     public ResponseEntity<?> voucherDetail(String idVoucher, String path){
 
-        System.out.println("Sort Voucher Validation. " +new Date());
+        System.out.println("Sort Voucher Validation. " +Parser.toJsonString(idVoucher));
         ResponseEntity<?> check = validate.voucherDetail(idVoucher, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -202,7 +201,7 @@ public class AdminService {
 
     public ResponseEntity<?> updateVoucher(String idVoucher, JSONObject data, String path){
 
-        System.out.println("Update Voucher Validation. " +new Date());
+        System.out.println("Update Voucher Validation. " +Parser.toJsonString(data));
         ResponseEntity<?> check = validate.updateVoucher(idVoucher,data,  path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;

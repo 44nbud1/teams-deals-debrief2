@@ -108,7 +108,7 @@ class OktaApplicationTests {
 		assertTrue(authenticationValidation.matchOtp(test, "/").getStatusCode().is2xxSuccessful());
 
 		test.put("otp", "aa");
-		assertEquals(DealsStatus.DATA_INVALID.getValue(), authenticationValidation.matchOtp(test, "/").getBody().get("status"));
+		assertEquals(DealsStatus.OTP_NOT_MATCH.getValue(), authenticationValidation.matchOtp(test, "/").getBody().get("status"));
 
 	}
 

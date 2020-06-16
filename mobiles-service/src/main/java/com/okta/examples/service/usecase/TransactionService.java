@@ -26,6 +26,7 @@ public class TransactionService {
 
     public ResponseEntity<?> createOrderVoucher(String idUser, JSONObject data, String path){
 
+        System.out.println("Create Order Validation. " +Parser.toJsonString(data));
         ResponseEntity<?> check = validate.createOrder(data, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -43,7 +44,7 @@ public class TransactionService {
             if (fromOrder.getBody().toString().toLowerCase().contains("connection refused")){
                 return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
             }
-            return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
+            return ResponseFailed.wrapResponseFailed(message, status, fromOrder.getStatusCode(), path);
         }
 
         JSONObject order = (JSONObject) jsonOrder.get("data");
@@ -53,6 +54,7 @@ public class TransactionService {
 
     public ResponseEntity<?> payOrderVoucher(String idUser, JSONObject data, String path){
 
+        System.out.println("Pay Order Validation. " +Parser.toJsonString(data));
         ResponseEntity<?> check = validate.payOrder(data, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -70,7 +72,7 @@ public class TransactionService {
             if (fromOrder.getBody().toString().toLowerCase().contains("connection refused")){
                 return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
             }
-            return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
+            return ResponseFailed.wrapResponseFailed(message, status, fromOrder.getStatusCode(), path);
         }
 
         return ResponseSuccess.wrapResponse(null, DealsStatus.PAYMENT_SUCCESS, path);
@@ -80,6 +82,7 @@ public class TransactionService {
 
     public ResponseEntity<?> payTopup(String idUser, JSONObject data, String path){
 
+        System.out.println("Pay TOP UP Validation. " +Parser.toJsonString(data));
         ResponseEntity<?> check = validate.payTopup(data, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -97,7 +100,7 @@ public class TransactionService {
             if (fromOrder.getBody().toString().toLowerCase().contains("connection refused")){
                 return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
             }
-            return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
+            return ResponseFailed.wrapResponseFailed(message, status, fromOrder.getStatusCode(), path);
         }
 
         return ResponseSuccess.wrapResponse(null, DealsStatus.TOPUP_SUCCESS, path);
@@ -119,7 +122,7 @@ public class TransactionService {
             if (fromOrder.getBody().toString().toLowerCase().contains("connection refused")){
                 return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
             }
-            return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
+            return ResponseFailed.wrapResponseFailed(message, status, fromOrder.getStatusCode(), path);
         }
 
         JSONObject order = (JSONObject) jsonOrder.get("data");
@@ -142,7 +145,7 @@ public class TransactionService {
             if (fromOrder.getBody().toString().toLowerCase().contains("connection refused")){
                 return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
             }
-            return ResponseFailed.wrapResponseFailed(message, orderMessage.getStatus(message), fromOrder.getStatusCode(), path);
+            return ResponseFailed.wrapResponseFailed(message, status, fromOrder.getStatusCode(), path);
         }
 
         JSONObject order = (JSONObject) jsonOrder.get("data");
