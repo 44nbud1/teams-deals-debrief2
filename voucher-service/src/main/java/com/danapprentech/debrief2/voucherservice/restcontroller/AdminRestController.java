@@ -394,7 +394,7 @@ public class AdminRestController {
         if (voucherRepository.findByIdVoucher(idVoucher) == null)
         {
             return new ResponseEntity<>(new MessageResponse("Voucher not found.","062","/api/admin/voucher-detail-voucher/"+idVoucher,new Date()),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.NOT_FOUND);
         }
 
         Voucher vouchers = voucherRepository.findByIdVoucher(idVoucher);

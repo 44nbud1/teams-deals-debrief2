@@ -73,14 +73,22 @@ public class UserRestController
         MerchantCategory merchantsCat = merchantCategoryRepository.findByMerchantCategoryContaining(
                 merchantCategory.orElse("_"));
 
+
         if (merchantsCat == null)
         {
             return new ResponseEntity<>(new MessageResponse("Please fill merchant category.","070",
                     "/api/user/filter-voucher",new Date()),
-                    HttpStatus.NOT_FOUND);
+                    HttpStatus.BAD_REQUEST);
         }
 
         String category = merchantsCat.getMerchantCategory();
+
+        if (category.equalsIgnoreCase("fnb") || category.equalsIgnoreCase("onlineTransaction"))
+        {
+            return new ResponseEntity<>(new MessageResponse("Voucher not found.","062",
+                    "/api/user/filter-voucher",new Date()),
+                    HttpStatus.BAD_REQUEST);
+        }
 
         if (category.equalsIgnoreCase("fnb"))
         {
