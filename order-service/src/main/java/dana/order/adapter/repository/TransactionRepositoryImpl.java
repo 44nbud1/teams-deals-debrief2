@@ -78,4 +78,9 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     public String getPhoneNumberFromVA(String virtualNumber){
         return (""+virtualNumber).substring(4);
     }
+
+    public Transaction setRefund(String idUser, Double amount){
+        databaseMapper.makeARefund(idUser, amount);
+        return databaseMapper.getLatestUserSuccessfulTransaction(idUser);
+    }
 }
