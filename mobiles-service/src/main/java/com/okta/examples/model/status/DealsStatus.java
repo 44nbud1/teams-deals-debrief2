@@ -75,7 +75,7 @@ public enum DealsStatus {
     WRONG_VA_TOPUP("071", "TOPUP failed! You have entered a wrong virtual number", HttpStatus.NOT_FOUND),
     TRANSACTION_WRONG_USER("072", "The transaction does not belong to this user", HttpStatus.BAD_REQUEST),
     ALREADY_FINISH_TRANSACTION("073", "There is nothing to do with an already finished transaction", HttpStatus.NOT_ACCEPTABLE),
-    HISTORY_INVALID_CATEGORY("074", "Category only consists of COMPLETED and  IN-PROGRESS content.", HttpStatus.BAD_REQUEST),
+    HISTORY_INVALID_CATEGORY("074", "Category only consists of COMPLETED and IN-PROGRESS content.", HttpStatus.BAD_REQUEST),
     HISTORY_INVALID_PAGE("075", "Page parameter uses only numbers.", HttpStatus.BAD_REQUEST),
     HISTORY_INVALID_PAGINATION("076", "A page cannot have pagination numbers less than 0.", HttpStatus.BAD_REQUEST),
     HISTORY_INVALID_DATE("077", "Please use a valid date format (YYYY-mm-dd).", HttpStatus.BAD_REQUEST),
@@ -83,7 +83,7 @@ public enum DealsStatus {
     HISTORY_INVALID_SEARCH("079", "Maximum search per history is within 7 days.", HttpStatus.BAD_REQUEST),
     INVALID_TRANSACTION_ID("080", "Transaction ID is invalid", HttpStatus.BAD_REQUEST),
     INVALID_VOUCHER_ID("081", "Voucher ID is invalid", HttpStatus.BAD_REQUEST),
-    REQUEST_TIME_OUT("082", "We cannot proccess your request for now. Please try again later", HttpStatus.INTERNAL_SERVER_ERROR);
+    REQUEST_TIME_OUT("082", "We cannot process your request for now. Please try again later", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String value;
     private final String message;
