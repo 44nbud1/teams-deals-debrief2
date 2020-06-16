@@ -58,7 +58,7 @@ public class Payment {
         }
 
         if (!transaction.getIdUser().equals(""+json.get("idUser"))){
-            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_WRONG_USER, null, ""+json.get("path"));
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_NOT_FOUND , null, ""+json.get("path"));
         }
 
         if (transaction.getIdTransactionStatus() != 4){
@@ -119,8 +119,20 @@ public class Payment {
             return ResponseWrapper.wrap(DealsStatus.BALANCE_NOT_ENOUGH, null, ""+json.get("path"));
         }
 
+        if (transaction.getIdGoods() == 2){
+            // Failed case
+            databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
+            return ResponseWrapper.wrap(DealsStatus.PAYMENT_SUCCESS, null, ""+json.get("path"));
+        }
+
         transactionRepository.setFinishATransaction(Integer.valueOf(""+json.get("idTransaction")));
         transactionBroadcaster.send(Integer.valueOf(""+json.get("idTransaction")));
+
+        if (transaction.getIdGoods() == 1){
+            // Refund case
+            Transaction newest = transactionRepository.setRefund(transaction.getIdUser(), transaction.getAmount());
+            transactionBroadcaster.send(newest.getIdTransaction());
+        }
 
         return ResponseWrapper.wrap(DealsStatus.PAYMENT_SUCCESS, null, ""+json.get("path"));
     }
