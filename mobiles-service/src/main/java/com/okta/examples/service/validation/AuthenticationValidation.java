@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 @Service
 public class AuthenticationValidation {
 
-    private final String regex_email = "^(?=.*([A-Za-z0-9]+|[A-Za-z0-9]+[.][A-Za-z0-9])[@][A-Za-z0-9.\\-_]+[.][A-Za-z]+).+$";
+    private final String regex_email = "^(?=.*([A-Za-z0-9]+|[A-Za-z0-9]+[.][A-Za-z0-9])[@][A-Za-z0-9.\\-_]+[.][A-Za-z]+).{6,74}$";
     private final String regex_password = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=\\S+$).{8,}$";
     private final String regex_telephone = "^(?!.*[^0-9+])(([\\+][6][2])|([0]){1})[8]{1}[^046]{1}[0-9]{7,9}$";
     private final String regex_name = "^(?!.*^[\\s])(?!.*[\\s]$)(?!.*[0-9!@#$%^&*])(?=.*[a-zA-Z'\\-]{3,10}[\\s]|.*[a-zA-Z'\\-]{3,10}$)(?!.*['][\\-]|.*[\\-][']|.*[\\-][\\-]|.*['][']).{3,20}$";

@@ -85,7 +85,7 @@ public class ValidateTransactionHistory {
     }
 
     public Boolean checkPage(String page){
-        String regex = "^[\\d-]+$";
+        String regex = "^[-]*[\\d]+$";
         if(!Pattern.matches(regex, page)){
             return Boolean.FALSE;
         }

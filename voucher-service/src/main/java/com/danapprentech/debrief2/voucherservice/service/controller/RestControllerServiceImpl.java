@@ -1,7 +1,8 @@
 package com.danapprentech.debrief2.voucherservice.service.controller;
 
 import com.danapprentech.debrief2.voucherservice.exception.controller.CreateVoucherValidation;
-import com.danapprentech.debrief2.voucherservice.exception.validate.NotFoundException;
+import com.danapprentech.debrief2.voucherservice.exception.NotFoundException;
+import com.danapprentech.debrief2.voucherservice.exception.controller.FilterByStatusValidation;
 import com.danapprentech.debrief2.voucherservice.exception.validate.ValidationRegexImpl;
 import com.danapprentech.debrief2.voucherservice.model.Merchant;
 import com.danapprentech.debrief2.voucherservice.model.MerchantCategory;
@@ -52,6 +53,9 @@ public class RestControllerServiceImpl implements RestControllerService{
 
     @Autowired
     UpdateExpiredVoucher updateExpiredVoucher;
+
+    @Autowired
+    FilterByStatusValidation filterByStatusValidation;
 
     @Autowired
     CreateVoucherValidation createVoucherValidation;
@@ -130,7 +134,6 @@ public class RestControllerServiceImpl implements RestControllerService{
                                             String sortBy,
                                             HttpServletRequest httpServletRequest) {
 
-
         Page<Voucher> vouchers = voucherRepository.findAll(
                 PageRequest.of(page.orElse(0), 10, Sort.Direction.ASC, sortBy));
 
@@ -152,8 +155,10 @@ public class RestControllerServiceImpl implements RestControllerService{
     public ResponseEntity<?> filterByStatus(
                                             Optional<Integer> page,
                                             String filterByStatus,
-                                            String sortBy)
+                                            String sortBy,
+                                            HttpServletRequest httpServletRequest)
     {
+
         Boolean status;
         if (filterByStatus.equalsIgnoreCase("true")) {
             status = Boolean.TRUE;
@@ -163,6 +168,7 @@ public class RestControllerServiceImpl implements RestControllerService{
             return new ResponseEntity<>(new MessageResponse("Status invalid.", "063", "/api/admin/filterByStatus-voucher", new Date()),
                     HttpStatus.BAD_REQUEST);
         }
+
 
         Page<Voucher> vouchers = voucherRepository.findByStatus(status,
                 PageRequest.of(page.orElse(0), 10, Sort.Direction.ASC, sortBy));
@@ -182,9 +188,10 @@ public class RestControllerServiceImpl implements RestControllerService{
 
     @Override
     public ResponseEntity<?> findByMerchantName(
-            Optional<Integer> page,
-            String merchantName,
-            String sortBy) {
+                                        Optional<Integer> page,
+                                        String merchantName,
+                                        String sortBy,
+                                        HttpServletRequest httpServletRequest) {
         Merchant merchants = merchantRepository.findByMerchantNameStartsWithIgnoreCase(merchantName);
 
         if (merchants == null) {
@@ -224,7 +231,7 @@ public class RestControllerServiceImpl implements RestControllerService{
     }
 
     @Override
-    public ResponseEntity<?> voucherDetail(Long idVoucher) {
+    public ResponseEntity<?> voucherDetail(Long idVoucher, HttpServletRequest httpServletRequest) {
         if (voucherRepository.findByIdVoucher(idVoucher) == null) {
             return new ResponseEntity<>(new MessageResponse("Voucher not found.", "062", "/api/admin/voucher-detail-voucher/" + idVoucher, new Date()),
                     HttpStatus.BAD_REQUEST);
@@ -258,8 +265,9 @@ public class RestControllerServiceImpl implements RestControllerService{
 
     @Override
     public ResponseEntity<?> updateVoucher(
-            Long idVoucher,
-            UpdateVoucherRequest updateVoucherRequest) {
+                                            Long idVoucher,
+                                            UpdateVoucherRequest updateVoucherRequest,
+                                            HttpServletRequest httpServletRequest) {
         Boolean status = null;
 
         if (updateVoucherRequest.getStatus().equals("true")) {
@@ -423,9 +431,10 @@ public class RestControllerServiceImpl implements RestControllerService{
 
     @Override
     public ResponseEntity<?> filterByMerchantCategory(
-            Optional<Integer> page,
-            Optional<String> merchantCategory,
-            String sortBy) {
+                                                        Optional<Integer> page,
+                                                        Optional<String> merchantCategory,
+                                                        String sortBy,
+                                                        HttpServletRequest httpServletRequest) {
 //        Page<MerchantCategory> vouchers = merchantCategoryRepository.findByMerchantCategoryContaining(merchantCategory.orElse("_"),
 //                PageRequest.of(page.orElse(0), 10, Sort.Direction.ASC, sortBy));
 
@@ -512,8 +521,9 @@ public class RestControllerServiceImpl implements RestControllerService{
 
     @Override
     public ResponseEntity<?> SortByMerchantName(
-            Optional<Integer> page,
-            Optional<String> sortBy)
+                                                    Optional<Integer> page,
+                                                    Optional<String> sortBy,
+                                                    HttpServletRequest httpServletRequest)
     {
         if (sortBy == null)
         {

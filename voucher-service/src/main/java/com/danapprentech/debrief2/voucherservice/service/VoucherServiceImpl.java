@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+//@Transactional(isolation = Isolation.SERIALIZABLE)
+@Transactional
 @Service
 public class VoucherServiceImpl implements VoucherService
 {
@@ -33,9 +35,15 @@ public class VoucherServiceImpl implements VoucherService
         return voucherRepository.findByIdVoucher(id);
     }
 
-//    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public Voucher save(Voucher voucher)
+    {
+        return voucherRepository.save(voucher);
+    }
+
+    //    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public Voucher updateVoucher(Voucher voucher)
     {
         return voucherRepository.save(voucher);
     }

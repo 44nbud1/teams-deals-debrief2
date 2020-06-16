@@ -82,6 +82,4 @@ public class Voucher implements Serializable {
 	@JsonIgnore
 	@NotNull
 	private Merchant merchant;
-
-
 }
