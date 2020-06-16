@@ -40,5 +40,4 @@ public class Merchant implements Serializable
     @JsonIgnore
     @NotNull
     private MerchantCategory merchantCategory;
-
 }
