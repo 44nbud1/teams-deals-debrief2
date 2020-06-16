@@ -13,28 +13,41 @@ public interface RestControllerService
                                            String idUser,
                                            VoucherRequest voucherRequest,
                                            HttpServletRequest httpServletRequest);
+
     public ResponseEntity<?> getAllVoucher(
                                             Optional<Integer> page,
                                             String sortBy,
                                             HttpServletRequest httpServletRequest);
+
     public ResponseEntity<?> filterByStatus(
                                             Optional<Integer> page,
                                             String filterByStatus,
-                                            String sortBy);
+                                            String sortBy,
+                                            HttpServletRequest httpServletRequest);
+
     public ResponseEntity<?> findByMerchantName(
                                             Optional<Integer> page,
                                             String merchantName,
-                                            String sortBy);
-    public ResponseEntity<?> voucherDetail(Long idVoucher);
+                                            String sortBy,
+                                            HttpServletRequest httpServletRequest);
+
+    public ResponseEntity<?> voucherDetail(
+                                            Long idVoucher,
+                                            HttpServletRequest httpServletRequest);
+
     public ResponseEntity<?> updateVoucher(
                                             Long idVoucher,
-                                            UpdateVoucherRequest updateVoucherRequest);
+                                            UpdateVoucherRequest updateVoucherRequest,
+                                            HttpServletRequest httpServletRequest);
 
     public ResponseEntity<?> filterByMerchantCategory(
                                             Optional<Integer> page,
                                             Optional<String> merchantCategory,
-                                            String sortBy);
+                                            String sortBy,
+                                            HttpServletRequest httpServletRequest);
+
     public ResponseEntity<?> SortByMerchantName(
-            Optional<Integer> page,
-            Optional<String> sortBy);
+                                            Optional<Integer> page,
+                                            Optional<String> sortBy,
+                                            HttpServletRequest httpServletRequest);
 }
