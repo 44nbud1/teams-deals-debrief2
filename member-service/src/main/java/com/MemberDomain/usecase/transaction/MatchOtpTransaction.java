@@ -37,7 +37,7 @@ public class MatchOtpTransaction {
 
         OtpResponse checkUserOtp = userRepository.checkUserOtp(idUser);
 
-        if(checkUserOtp == null){
+        if(checkUserOtp == null || checkUserOtp.getMatchStatus() == 1){
             return ResponseFailed.wrapResponse(DealsStatus.REQUEST_NEW_OTP, path);
         }
 
@@ -46,10 +46,6 @@ public class MatchOtpTransaction {
 
         if(matchingOtp == null) {
             return ResponseFailed.wrapResponse(DealsStatus.OTP_NOT_MATCH, path);
-        }
-
-        if(matchingOtp.getMatchStatus() == 1){
-            return ResponseFailed.wrapResponse(DealsStatus.REQUEST_NEW_OTP, path);
         }
 
         OtpResponse matchingOtpDate = userRepository.matchOtpDate(""+idUser, ""+userOtp);
