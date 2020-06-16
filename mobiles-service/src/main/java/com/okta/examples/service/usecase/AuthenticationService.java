@@ -118,7 +118,6 @@ public class AuthenticationService {
         //Create user
         JSONObject user = (JSONObject) jsonMember.get("data");
         String idUser = ""+user.get("idUser");
-        String idSession= request.getSession().getId()+idUser;
 
         //Check user session
         System.out.println("Check if id : "+ idUser+" already have session");
@@ -127,7 +126,7 @@ public class AuthenticationService {
             System.out.println("Session found. Destroy old session for id : "+idUser);
             sessionService.destroySession(idUser);
             request.getSession().invalidate();
-            idSession = request.getSession().getId()+idUser;
+            String idSession = request.getSession().getId()+idUser;
             System.out.println("Start new session for id : " + idUser);
 
             //Create and start session
@@ -145,6 +144,7 @@ public class AuthenticationService {
             System.out.println("Start new session for id : " + idUser);
 
             //Create and start session
+            String idSession= request.getSession().getId()+idUser;
             sessionService.startSession(idUser, idSession);
 
             //Wrap response
