@@ -8,6 +8,7 @@ import com.danapprentech.debrief2.voucherservice.rabbit.model.UpdateQtyConsumer;
 import com.danapprentech.debrief2.voucherservice.rabbit.producer.RabbitMqProducer;
 import com.danapprentech.debrief2.voucherservice.repository.VoucherRepository;
 import com.danapprentech.debrief2.voucherservice.service.VoucherServiceImpl;
+import org.hibernate.annotations.Synchronize;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,16 +33,22 @@ public class Consumer
 
     @Qualifier("shareOrderForVoucher")
     @RabbitListener(queues = "deals.queue.order.voucher")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public synchronized void receive1(TransactionConsumer updateQtyConsumer) throws InterruptedException
+//    @Transactional(isolation = Isolation.SERIALIZABLE)
+//    @Synchronize
+    public void receive1(TransactionConsumer updateQtyConsumer) throws InterruptedException
     {
-        System.out.println(updateQtyConsumer.toString());
+        if (updateQtyConsumer.getIdGoods() ==1 && updateQtyConsumer.getIdTransaction() == 3)
+        {
+            System.out.println("***********************************************************************");
+            System.out.println("Id transaction :"+updateQtyConsumer.getIdTransaction());
+        }
+
         if (updateQtyConsumer.getIdGoods() != null && updateQtyConsumer.getIdTransactionStatus() == 1)
         {
             System.out.println("-------------");
             Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
             Voucher vouchers = voucherService.findByIdVoucher(update);
-            //System.out.println(vouchers);
+            System.out.println(vouchers);
             System.out.println(vouchers.getQuota());
             System.out.println(updateQtyConsumer.getIdUser());
             System.out.println("Voucher sebelum dibeli "+vouchers.getQuota() );
@@ -68,8 +75,8 @@ public class Consumer
             voucherResponse.setStatus(voucher.getStatus());
             voucherResponse.setIdMerchant(voucher.getMerchant().getIdMerchant());
             voucherResponse.setIdVoucher(voucher.getIdVoucher());
+            voucherResponse.setIdTransaction(updateQtyConsumer.getIdTransaction());
             mqProducer.sendToRabbitVoucher(voucherResponse);
-
         }
 
         if (updateQtyConsumer.getIdGoods() != null && updateQtyConsumer.getIdTransactionStatus() == 3)
@@ -77,7 +84,7 @@ public class Consumer
             System.out.println("-------------");
             Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
             Voucher vouchers = voucherService.findByIdVoucher(update);
-            //System.out.println(vouchers);
+            System.out.println(vouchers);
             System.out.println(updateQtyConsumer.getIdUser());
             System.out.println("Voucher sebelum refund "+vouchers.getQuota() );
             vouchers.setQuota(vouchers.getQuota() + 1);
@@ -101,8 +108,12 @@ public class Consumer
             voucherResponse.setStatus(voucher.getStatus());
             voucherResponse.setIdMerchant(voucher.getMerchant().getIdMerchant());
             voucherResponse.setIdVoucher(voucher.getIdVoucher());
+            voucherResponse.setIdTransaction(updateQtyConsumer.getIdTransaction());
             mqProducer.sendToRabbitVoucher(voucherResponse);
+
         }
         System.out.println("yogi kirim ke Members");
+        System.out.println("***********************************************************************");
+
     }
 }

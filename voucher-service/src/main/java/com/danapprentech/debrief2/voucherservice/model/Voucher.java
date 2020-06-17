@@ -7,6 +7,9 @@ import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,6 +22,9 @@ import java.util.Date;
 @Entity
 @Table(name = "voucher")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+@OptimisticLocking(type = OptimisticLockType.DIRTY)
+@DynamicUpdate
 public class Voucher implements Serializable {
 	private static final long serialVersionUID = 1L;
 
