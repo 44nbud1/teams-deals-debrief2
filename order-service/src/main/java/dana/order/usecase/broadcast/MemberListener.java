@@ -7,6 +7,8 @@ import org.json.simple.JSONObject;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +26,12 @@ public class MemberListener {
     @Qualifier("shareMemberForOrder")
     @RabbitListener(queues = "deals.queue.member.order")
     public void receive(User user) {
-        System.out.println(user);
+        System.out.println("MEMBER RAW : "+user.toJsonString());
         if (userRepository.doesUserExist(user.getIdUser()) == Boolean.FALSE){
             databaseMapper.createNewUser(user);
         }else{
             databaseMapper.updateAUser(user);
         }
-        System.out.println("A new user: "+user.toJsonString());
+        System.out.println("MEMBER RESULT : "+user.toJsonString());
     }
 }

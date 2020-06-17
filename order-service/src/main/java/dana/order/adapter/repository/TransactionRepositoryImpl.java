@@ -5,6 +5,7 @@ import dana.order.entity.Transaction;
 import dana.order.entity.User;
 import dana.order.entity.Voucher;
 import dana.order.usecase.port.DatabaseMapper;
+import dana.order.usecase.port.DatabaseRepository;
 import dana.order.usecase.port.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,12 @@ import org.springframework.stereotype.Service;
 public class TransactionRepositoryImpl implements TransactionRepository {
 
     @Autowired
-    DatabaseMapper databaseMapper;
+    DatabaseRepository databaseRepository;
 
     public Boolean validateBalanceConsistency(String idUser){
 
-        Transaction transaction = databaseMapper.getLatestUserSuccessfulTransaction(idUser);
-        User user = databaseMapper.getUserById(idUser);
+        Transaction transaction = databaseRepository.getLatestUserSuccessfulTransaction(idUser);
+        User user = databaseRepository.getUserById(idUser);
 
         if (transaction != null && user.getUpdatedAt().compareTo(transaction.getUpdatedAt()) >= 0){
                 return Boolean.TRUE;
@@ -32,8 +33,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     public Boolean validateVoucherConsistency(Integer idVoucher){
 
-        Transaction transaction = databaseMapper.getLatestVoucherSuccessfulTransaction(idVoucher);
-        Voucher voucher = databaseMapper.getVoucherById(idVoucher);
+        Transaction transaction = databaseRepository.getLatestVoucherSuccessfulTransaction(idVoucher);
+        Voucher voucher = databaseRepository.getVoucherById(idVoucher);
 
         if (transaction != null && voucher.getUpdatedAt().compareTo(transaction.getUpdatedAt()) >= 0){
             return Boolean.TRUE;
@@ -47,28 +48,28 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     public Boolean checkATransactionExpiration(Integer idTransaction){
 
-        if (databaseMapper.checkATransactionExpiration(idTransaction) > 0){
+        if (databaseRepository.checkATransactionExpiration(idTransaction) > 0){
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
     }
 
     public void setFinishATransaction(Integer idTransaction){
-        databaseMapper.setFinishATransaction(idTransaction);
+        databaseRepository.setFinishATransaction(idTransaction);
     }
 
     public Boolean checkTOPUPThirdParty(String partyCode){
-        if (databaseMapper.checkThirdPartyExists(partyCode) == 0){
+        if (databaseRepository.checkThirdPartyExists(partyCode) == 0){
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
     }
 
     public void TOPUPBalance(String idUser, Double amount, String virtualNumber, String partyCode){
-        databaseMapper.TOPUP(idUser, amount);
-        Transaction transaction = databaseMapper.getLatestUserSuccessfulTransaction(idUser);
-        ThirdParty thirdParty = databaseMapper.selectThirdPartyByCode(partyCode);
-        databaseMapper.addVirtualPayment(transaction.getIdTransaction(), virtualNumber, thirdParty.getIdThirdParty());
+        databaseRepository.TOPUP(idUser, amount);
+        Transaction transaction = databaseRepository.getLatestUserSuccessfulTransaction(idUser);
+        ThirdParty thirdParty = databaseRepository.selectThirdPartyByCode(partyCode);
+        databaseRepository.addVirtualPayment(transaction.getIdTransaction(), virtualNumber, thirdParty.getIdThirdParty());
     }
 
     public String getPartyCode(String virtualNumber){
@@ -79,8 +80,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return (""+virtualNumber).substring(4);
     }
 
-    public Transaction setRefund(String idUser, Double amount){
-        databaseMapper.makeARefund(idUser, amount);
-        return databaseMapper.getLatestUserSuccessfulTransaction(idUser);
+    public Transaction setRefund(String idUser, Double amount, Integer idGoods){
+        databaseRepository.makeARefund(idUser, amount, idGoods);
+        return databaseRepository.getLatestUserSuccessfulTransaction(idUser);
     }
 }

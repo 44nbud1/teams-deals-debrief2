@@ -3,10 +3,7 @@ package dana.order.usecase.transaction;
 import dana.order.adapter.wrapper.ResponseWrapper;
 import dana.order.entity.DealsStatus;
 import dana.order.entity.Transaction;
-import dana.order.usecase.port.DatabaseMapper;
-import dana.order.usecase.port.TransactionRepository;
-import dana.order.usecase.port.UserRepository;
-import dana.order.usecase.port.VoucherRepository;
+import dana.order.usecase.port.*;
 import dana.order.usecase.validate.ValidateBuyAVoucher;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +26,7 @@ public class PlaceOrder{
     TransactionRepository transactionRepository;
 
     @Autowired
-    DatabaseMapper databaseMapper;
+    DatabaseRepository databaseRepository;
 
     public ResponseEntity<?> buyAVoucher(JSONObject json){
 
@@ -85,7 +82,7 @@ public class PlaceOrder{
 
         voucherRepository.insertNewOrder(""+json.get("idUser"), Integer.valueOf(""+json.get("idVoucher")));
 
-        Transaction transaction = databaseMapper.getLatestUserInProgressTransaction(""+json.get("idUser"));
+        Transaction transaction = databaseRepository.getLatestUserInProgressTransaction(""+json.get("idUser"));
         JSONObject result = new JSONObject();
         result.put("idTransaction", transaction.getIdTransaction());
 

@@ -8,10 +8,7 @@ import dana.order.usecase.broadcast.TransactionBroadcaster;
 import dana.order.usecase.exception.OrderFailedException;
 import dana.order.usecase.exception.PaymentFailedException;
 import dana.order.usecase.exception.UserException;
-import dana.order.usecase.port.DatabaseMapper;
-import dana.order.usecase.port.TransactionRepository;
-import dana.order.usecase.port.UserRepository;
-import dana.order.usecase.port.VoucherRepository;
+import dana.order.usecase.port.*;
 import dana.order.usecase.validate.ValidatePayAVoucher;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +29,7 @@ public class Payment {
     ValidatePayAVoucher validatePayAVoucher;
 
     @Autowired
-    DatabaseMapper databaseMapper;
+    DatabaseRepository databaseRepository;
 
     @Autowired
     TransactionRepository transactionRepository;
@@ -51,7 +48,7 @@ public class Payment {
             return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, ""+json.get("path"));
         }
 
-        Transaction transaction = databaseMapper.getTransactionById(Integer.valueOf(""+json.get("idTransaction")));
+        Transaction transaction = databaseRepository.getTransactionById(Integer.valueOf(""+json.get("idTransaction")));
 
         if (transaction == null){
             return ResponseWrapper.wrap(DealsStatus.TRANSACTION_NOT_FOUND, null, ""+json.get("path"));
@@ -66,12 +63,12 @@ public class Payment {
         }
 
         if (voucherRepository.validateExpiration(transaction.getIdGoods()) == Boolean.FALSE){
-            databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
+            databaseRepository.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
             return ResponseWrapper.wrap(DealsStatus.VOUCHER_NOT_AVAILABLE, null, ""+json.get("path"));
         }
 
         if (transactionRepository.checkATransactionExpiration(Integer.valueOf(""+json.get("idTransaction"))) == Boolean.FALSE){
-            databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
+            databaseRepository.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
             return ResponseWrapper.wrap(DealsStatus.TRANSACTION_EXPIRED, null, ""+json.get("path"));
         }
 
@@ -109,11 +106,11 @@ public class Payment {
         }
 
         if (voucherRepository.validateQuantity(transaction.getIdGoods()) == Boolean.FALSE){
-            databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
+            databaseRepository.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
             return ResponseWrapper.wrap(DealsStatus.VOUCHER_OUT_OF_STOCK, null, ""+json.get("path"));
         }
 
-        User user = databaseMapper.getUserById(""+json.get("idUser"));
+        User user = databaseRepository.getUserById(""+json.get("idUser"));
 
         if (user.getBalance() - transaction.getAmount() < 0){
             return ResponseWrapper.wrap(DealsStatus.BALANCE_NOT_ENOUGH, null, ""+json.get("path"));
@@ -121,7 +118,7 @@ public class Payment {
 
         if (transaction.getIdGoods() == 2){
             // Failed case
-            databaseMapper.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
+            databaseRepository.fallingATransaction(""+json.get("idUser"), Integer.valueOf(""+json.get("idTransaction")));
             return ResponseWrapper.wrap(DealsStatus.PAYMENT_SUCCESS, null, ""+json.get("path"));
         }
 
@@ -130,7 +127,7 @@ public class Payment {
 
         if (transaction.getIdGoods() == 1){
             // Refund case
-            Transaction newest = transactionRepository.setRefund(transaction.getIdUser(), transaction.getAmount());
+            Transaction newest = transactionRepository.setRefund(transaction.getIdUser(), transaction.getAmount(), transaction.getIdGoods());
             transactionBroadcaster.send(newest.getIdTransaction());
         }
 

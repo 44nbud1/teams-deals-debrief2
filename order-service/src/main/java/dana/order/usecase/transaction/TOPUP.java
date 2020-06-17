@@ -9,6 +9,7 @@ import dana.order.usecase.exception.OrderFailedException;
 import dana.order.usecase.exception.TOPUPFailedException;
 import dana.order.usecase.exception.UserException;
 import dana.order.usecase.port.DatabaseMapper;
+import dana.order.usecase.port.DatabaseRepository;
 import dana.order.usecase.port.TransactionRepository;
 import dana.order.usecase.port.UserRepository;
 import dana.order.usecase.validate.ValidateTOPUP;
@@ -28,7 +29,7 @@ public class TOPUP {
     TransactionRepository transactionRepository;
 
     @Autowired
-    DatabaseMapper databaseMapper;
+    DatabaseRepository databaseRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -68,7 +69,7 @@ public class TOPUP {
             return ResponseWrapper.wrap(DealsStatus.MINIMUM_TOPUP, null, ""+json.get("path"));
         }
 
-        User user = databaseMapper.getUserById(""+json.get("idUser"));
+        User user = databaseRepository.getUserById(""+json.get("idUser"));
 
         if (user.getBalance() + Double.valueOf(""+json.get("amount")) > 1000000){
             return ResponseWrapper.wrap(DealsStatus.MAXIMUM_BALANCE, null, ""+json.get("path"));
@@ -88,7 +89,7 @@ public class TOPUP {
         transactionRepository.TOPUPBalance(""+json.get("idUser"), Double.valueOf(""+json.get("amount")),
                 ""+json.get("virtualNumber"), partyCode);
 
-        Transaction transaction = databaseMapper.getLatestUserSuccessfulTransaction(""+json.get("idUser"));
+        Transaction transaction = databaseRepository.getLatestUserSuccessfulTransaction(""+json.get("idUser"));
 
         transactionBroadcaster.send(transaction.getIdTransaction());
 

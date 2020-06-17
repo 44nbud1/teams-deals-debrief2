@@ -17,8 +17,8 @@ public interface DatabaseMapper {
     final String insertNewOrder = "INSERT INTO transactions (id_user, amount, transaction_date, is_credit, id_transaction_status, " +
             "id_payment_method, id_service, id_goods) VALUES (#{idUser}, #{amount}, NOW(), 0, 4, 1, 2, #{idVoucher})";
     final String getUserExistById = "SELECT COUNT(*) AS amount FROM users WHERE id_user = #{idUser}";
-    final String getLatestUserSuccessfulTransaction = "SELECT * FROM transactions WHERE id_user = #{idUser} AND id_transaction_status = 1 " +
-            "ORDER BY updated_at DESC LIMIT 1";
+    final String getLatestUserSuccessfulTransaction = "SELECT * FROM transactions WHERE id_user = #{idUser} AND " +
+            "id_transaction_status IN (1,3) ORDER BY created_at DESC LIMIT 1";
     final String getLatestUserInProgressTransaction = "SELECT * FROM transactions WHERE id_user = #{idUser} AND id_transaction_status = 4 " +
             "ORDER BY updated_at DESC LIMIT 1";
     final String getLatestVoucherSuccessfulTransaction = "SELECT * FROM transactions WHERE id_goods = #{idVoucher} AND id_transaction_status = 1 " +
@@ -26,7 +26,7 @@ public interface DatabaseMapper {
     final String getUserById = "SELECT * FROM users WHERE id_user = #{idUser}";
     final String fallingATransaction = "UPDATE transactions SET id_transaction_status = 2 WHERE id_transaction = #{idTransaction} AND id_user = #{idUser}";
     final String makeARefund = "INSERT INTO transactions (id_user, amount, transaction_date, is_credit, id_transaction_status, " +
-            "id_payment_method, id_service) VALUES (#{idUser}, #{amount}, NOW(), 1, 3, 2, 1)";
+            "id_payment_method, id_service, id_goods) VALUES (#{idUser}, #{amount}, NOW(), 1, 3, 2, 1, #{idGoods})";
     final String fallingAllExpiredTransaction = "UPDATE transactions SET id_transaction_status = 2 WHERE id_transaction_status = 4 " +
             "AND NOW() > DATE_ADD(created_at, INTERVAL 20 MINUTE)";
     final String getTransactionById = "SELECT * FROM transactions WHERE id_transaction = #{idTransaction}";
@@ -72,7 +72,7 @@ public interface DatabaseMapper {
     final String updateAUser = "UPDATE users SET balance = #{balance}, phone_number = #{phoneNumber} WHERE id_user = #{idUser}";
 
     @Insert(makeARefund)
-    void makeARefund(@Param("idUser") String idUser, @Param("amount") Double amount);
+    void makeARefund(@Param("idUser") String idUser, @Param("amount") Double amount, @Param("idGoods") Integer idGoods);
 
     @Update(fallingAllExpiredTransaction)
     void fallingAllExpiredTransaction();
