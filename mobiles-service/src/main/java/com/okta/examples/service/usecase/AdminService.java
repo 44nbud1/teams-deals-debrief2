@@ -172,7 +172,7 @@ public class AdminService {
 
     public ResponseEntity<?> voucherDetail(String idVoucher, String path){
 
-        System.out.println("Sort Voucher Validation. " +Parser.toJsonString(idVoucher));
+        System.out.println("Voucher Detail Validation. " +Parser.toJsonString(idVoucher));
         ResponseEntity<?> check = validate.voucherDetail(idVoucher, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;

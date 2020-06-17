@@ -127,7 +127,6 @@ public class SessionValidation {
         }
 
         String session = header.substring(7);
-
         if (session.length() < 38){
             return false;
         }
@@ -148,13 +147,15 @@ public class SessionValidation {
 
         String[] split = request.getServletPath().split("/");
         if (split[2].equalsIgnoreCase("user")) {
-            if (idUser.equals("12") || idUser.equals("13")) {
+            if (idUser.equals("12") || idUser.equals("13") || idUser.equals("126")) {
                 return false;
             }
         }else if (split[2].equalsIgnoreCase("admin")){
             if (!idUser.equals("12")) {
                 if (!idUser.equals("13")) {
-                    return false;
+                    if (!idUser.equals("126")) {
+                        return false;
+                    }
                 }
             }
         }

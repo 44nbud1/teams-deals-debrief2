@@ -39,7 +39,7 @@ public class LoginTransaction {
         if (loginResponse == null){
             return ResponseFailed.wrapResponse(DealsStatus.DATA_NOT_MATCH, path);
         }
-        System.out.println(loginResponse.getPassword());
+//        System.out.println(loginResponse.getPassword());
         if (!decode(loginRequest.getPassword(), loginResponse.getPassword())){
             return ResponseFailed.wrapResponse(DealsStatus.DATA_NOT_MATCH, path);
         }
