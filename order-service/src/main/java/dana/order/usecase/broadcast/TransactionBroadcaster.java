@@ -2,6 +2,8 @@ package dana.order.usecase.broadcast;
 
 import dana.order.entity.Transaction;
 import dana.order.usecase.port.DatabaseMapper;
+import dana.order.usecase.port.DatabaseRepository;
+import dana.order.usecase.port.TransactionRepository;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +29,12 @@ public class TransactionBroadcaster {
     FanoutExchange fanoutOrderForMember;
 
     @Autowired
-    DatabaseMapper databaseMapper;
+    DatabaseRepository databaseRepository;
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void send(Integer idTransaction){
+    public synchronized void send(Integer idTransaction){
 
-        Transaction transaction = databaseMapper.getTransactionById(idTransaction);
+        Transaction transaction = databaseRepository.getTransactionById(idTransaction);
         System.out.println("SENDING TO ALL : "+transaction.toJsonString());
         rabbitTemplate.convertAndSend(fanoutOrderForVoucher.getName(), "", transaction);
         rabbitTemplate.convertAndSend(fanoutOrderForMember.getName(), "", transaction);

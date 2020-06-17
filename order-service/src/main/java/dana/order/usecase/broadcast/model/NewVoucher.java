@@ -10,6 +10,7 @@ public class NewVoucher implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long idVoucher;
     private Long idMerchant;
+    private Integer idTransaction;
     private String idUser;
     private String voucherName;
     private Double voucherPrice;
@@ -27,6 +28,14 @@ public class NewVoucher implements Serializable {
     public String toJsonString(){
         Gson gson = new Gson();
         return gson.toJson(this);
+    }
+
+    public Integer getIdTransaction() {
+        return idTransaction;
+    }
+
+    public void setIdTransaction(Integer idTransaction) {
+        this.idTransaction = idTransaction;
     }
 
     public Long getIdMerchant() {

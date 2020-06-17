@@ -21,5 +21,5 @@ public class VoucherResponse
     private Long idVoucher;
     private Long idMerchant;
     private String merchantName;
-
+    private Integer idTransaction;
 }

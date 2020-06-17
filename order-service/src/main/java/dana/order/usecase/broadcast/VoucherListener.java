@@ -1,8 +1,11 @@
 package dana.order.usecase.broadcast;
 
+import dana.order.entity.Transaction;
 import dana.order.entity.Voucher;
 import dana.order.usecase.broadcast.model.NewVoucher;
 import dana.order.usecase.port.DatabaseMapper;
+import dana.order.usecase.port.DatabaseRepository;
+import dana.order.usecase.port.TransactionRepository;
 import dana.order.usecase.port.VoucherRepository;
 import org.json.simple.JSONObject;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -21,14 +24,14 @@ import java.util.Date;
 public class VoucherListener {
 
     @Autowired
-    DatabaseMapper databaseMapper;
+    DatabaseRepository databaseRepository;
 
     @Autowired
     VoucherRepository voucherRepository;
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @RabbitListener(queues = "${spring.rabbitmq.queue.listener}",containerFactory = "createListener")
-    public void recieveMessage(NewVoucher vouchers) {
+    public synchronized void recieveMessage(NewVoucher vouchers) {
 
         System.out.println("VOUCHER RAW : " +vouchers.toJsonString());
 
@@ -44,9 +47,9 @@ public class VoucherListener {
         voucher.setExpiredDate(vouchers.getExpiredDate());
 
         if (voucherRepository.isVoucherExists(voucher.getIdVoucher()) == Boolean.FALSE){
-            databaseMapper.createNewVoucher(voucher);
+            databaseRepository.createNewVoucher(voucher);
         }else {
-            databaseMapper.updateAVoucher(voucher);
+            databaseRepository.updateAVoucher(voucher);
         }
 
         System.out.println("VOUCHER RESULT : "+vouchers.getIdVoucher());

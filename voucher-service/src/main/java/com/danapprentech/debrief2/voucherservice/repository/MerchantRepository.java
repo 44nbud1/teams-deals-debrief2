@@ -15,7 +15,6 @@ public interface MerchantRepository extends JpaRepository<Merchant, Long>
 
 //    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Merchant findByIdMerchant(Long id);
-
     Merchant findByMerchantNameStartsWithIgnoreCase(String name);
     Page<Merchant> findByMerchantNameStartsWithIgnoreCase(String name, Pageable pageable);
     Merchant findByMerchantNameContaining(String name);
