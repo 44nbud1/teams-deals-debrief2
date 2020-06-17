@@ -8,6 +8,7 @@ import com.danapprentech.debrief2.voucherservice.rabbit.model.UpdateQtyConsumer;
 import com.danapprentech.debrief2.voucherservice.rabbit.producer.RabbitMqProducer;
 import com.danapprentech.debrief2.voucherservice.repository.VoucherRepository;
 import com.danapprentech.debrief2.voucherservice.service.VoucherServiceImpl;
+import org.hibernate.annotations.Synchronize;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,9 +33,16 @@ public class Consumer
 
     @Qualifier("shareOrderForVoucher")
     @RabbitListener(queues = "deals.queue.order.voucher")
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+//    @Transactional(isolation = Isolation.SERIALIZABLE)
+//    @Synchronize
     public void receive1(TransactionConsumer updateQtyConsumer) throws InterruptedException
     {
+        if (updateQtyConsumer.getIdGoods() ==1 && updateQtyConsumer.getIdTransaction() == 3)
+        {
+            System.out.println("***********************************************************************");
+            System.out.println("Id transaction :"+updateQtyConsumer.getIdTransaction());
+        }
+
         if (updateQtyConsumer.getIdGoods() != null && updateQtyConsumer.getIdTransactionStatus() == 1)
         {
             System.out.println("-------------");
@@ -68,7 +76,6 @@ public class Consumer
             voucherResponse.setIdMerchant(voucher.getMerchant().getIdMerchant());
             voucherResponse.setIdVoucher(voucher.getIdVoucher());
             mqProducer.sendToRabbitVoucher(voucherResponse);
-
         }
 
         if (updateQtyConsumer.getIdGoods() != null && updateQtyConsumer.getIdTransactionStatus() == 3)
@@ -101,7 +108,10 @@ public class Consumer
             voucherResponse.setIdMerchant(voucher.getMerchant().getIdMerchant());
             voucherResponse.setIdVoucher(voucher.getIdVoucher());
             mqProducer.sendToRabbitVoucher(voucherResponse);
+
         }
         System.out.println("yogi kirim ke Members");
+        System.out.println("***********************************************************************");
+
     }
 }

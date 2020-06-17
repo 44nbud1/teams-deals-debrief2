@@ -49,7 +49,7 @@ public class VoucherServiceImpl implements VoucherService
         return voucherRepository.save(voucher);
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+//    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "3000")})
     @Override
