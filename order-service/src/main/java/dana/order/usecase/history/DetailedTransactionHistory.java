@@ -4,10 +4,7 @@ import dana.order.adapter.wrapper.ResponseWrapper;
 import dana.order.entity.*;
 import dana.order.usecase.exception.PaymentFailedException;
 import dana.order.usecase.exception.UserException;
-import dana.order.usecase.port.DatabaseMapper;
-import dana.order.usecase.port.HistoryRepository;
-import dana.order.usecase.port.TransactionRepository;
-import dana.order.usecase.port.UserRepository;
+import dana.order.usecase.port.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +20,7 @@ public class DetailedTransactionHistory {
     UserRepository userRepository;
 
     @Autowired
-    DatabaseMapper databaseMapper;
+    DatabaseRepository databaseRepository;
 
     @Autowired
     HistoryRepository historyRepository;
@@ -34,7 +31,7 @@ public class DetailedTransactionHistory {
             return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, ""+json.get("path"));
         }
 
-        Transaction transaction = databaseMapper.getTransactionById(Integer.valueOf(""+json.get("idTransaction")));
+        Transaction transaction = databaseRepository.getTransactionById(Integer.valueOf(""+json.get("idTransaction")));
 
         if (transaction == null){
             return ResponseWrapper.wrap(DealsStatus.TRANSACTION_NOT_FOUND, null, ""+json.get("path"));
@@ -44,7 +41,7 @@ public class DetailedTransactionHistory {
             return ResponseWrapper.wrap(DealsStatus.TRANSACTION_WRONG_USER, null, ""+json.get("path"));
         }
 
-        databaseMapper.fallingAllExpiredTransaction();
+        databaseRepository.fallingAllExpiredTransaction();
 
         JSONObject transactionDetails = historyRepository.getUserDetailedHistory(transaction.getIdTransaction());
 

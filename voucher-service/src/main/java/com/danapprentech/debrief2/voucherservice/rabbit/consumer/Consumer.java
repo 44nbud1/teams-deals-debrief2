@@ -48,6 +48,7 @@ public class Consumer
             Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
             Voucher vouchers = voucherRepository.findByIdVoucher(update);
             System.out.println(vouchers.getQuota());
+
             vouchers.setQuota(vouchers.getQuota() - 1);
             vouchers.setUpdateAt(new Date());
             System.out.println("update sukses");

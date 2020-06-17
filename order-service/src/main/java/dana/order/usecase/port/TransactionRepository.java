@@ -11,5 +11,5 @@ public interface TransactionRepository {
     Boolean checkTOPUPThirdParty(String partyCode);
     void TOPUPBalance(String idUser, Double amount, String virtualNumber, String partyCode);
     String getPhoneNumberFromVA(String virtualNumber);
-    Transaction setRefund(String idUser, Double amount);
+    Transaction setRefund(String idUser, Double amount, Integer idGoods);
 }

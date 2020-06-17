@@ -3,6 +3,7 @@ package dana.order.usecase.history;
 import dana.order.adapter.wrapper.ResponseWrapper;
 import dana.order.entity.DealsStatus;
 import dana.order.usecase.port.DatabaseMapper;
+import dana.order.usecase.port.DatabaseRepository;
 import dana.order.usecase.port.HistoryRepository;
 import dana.order.usecase.port.UserRepository;
 import dana.order.usecase.validate.ValidateTransactionHistory;
@@ -24,7 +25,7 @@ public class TransactionHistory {
     HistoryRepository historyRepository;
 
     @Autowired
-    DatabaseMapper databaseMapper;
+    DatabaseRepository databaseRepository;
 
     public ResponseEntity<?> get(JSONObject json){
 
@@ -38,7 +39,7 @@ public class TransactionHistory {
             return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, ""+json.get("path"));
         }
 
-        databaseMapper.fallingAllExpiredTransaction();
+        databaseRepository.fallingAllExpiredTransaction();
 
         JSONObject result = historyRepository.getUserHistory(json);
 

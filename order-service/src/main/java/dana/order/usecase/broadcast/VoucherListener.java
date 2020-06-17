@@ -7,6 +7,8 @@ import dana.order.usecase.port.VoucherRepository;
 import org.json.simple.JSONObject;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +30,7 @@ public class VoucherListener {
     @RabbitListener(queues = "${spring.rabbitmq.queue.listener}",containerFactory = "createListener")
     public void recieveMessage(NewVoucher vouchers) {
 
-        System.out.println(vouchers.toJsonString());
+        System.out.println("VOUCHER RAW : " +vouchers.toJsonString());
 
         Voucher voucher = new Voucher();
         voucher.setIdVoucher(Integer.valueOf(""+vouchers.getIdVoucher()));
@@ -47,7 +49,7 @@ public class VoucherListener {
             databaseMapper.updateAVoucher(voucher);
         }
 
-        System.out.println("New incoming voucher id: "+vouchers.getIdVoucher());
+        System.out.println("VOUCHER RESULT : "+vouchers.getIdVoucher());
     }
 
 }

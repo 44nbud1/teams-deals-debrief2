@@ -2,6 +2,7 @@ package dana.order.adapter.repository;
 
 import dana.order.entity.*;
 import dana.order.usecase.port.DatabaseMapper;
+import dana.order.usecase.port.DatabaseRepository;
 import dana.order.usecase.port.HistoryRepository;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import java.util.List;
 public class HistoryRepositoryImpl implements HistoryRepository {
 
     @Autowired
-    DatabaseMapper databaseMapper;
+    DatabaseRepository databaseRepository;
 
     public JSONObject getUserHistory(JSONObject json){
         JSONObject data = new JSONObject();
@@ -74,8 +75,8 @@ public class HistoryRepositoryImpl implements HistoryRepository {
         }
 
         if (json.get("startDate") == null && json.get("endDate") == null){
-            Transaction first = databaseMapper.getUserFirstTransaction(""+json.get("idUser"));
-            Transaction second = databaseMapper.getUserLastTransaction(""+json.get("idUser"));
+            Transaction first = databaseRepository.getUserFirstTransaction(""+json.get("idUser"));
+            Transaction second = databaseRepository.getUserLastTransaction(""+json.get("idUser"));
             if (first == null){
                 startDate = sdf.format(new Date());
                 endDate = sdf.format(new Date());
@@ -93,10 +94,10 @@ public class HistoryRepositoryImpl implements HistoryRepository {
             page = 0;
         }
 
-        List<TransactionHistoryModel> result = databaseMapper.selectTransactionHistory(""+json.get("idUser"),
+        List<TransactionHistoryModel> result = databaseRepository.selectTransactionHistory(""+json.get("idUser"),
                 category1, category2, category3, category4, startDate, endDate, start);
 
-        Integer totalRecords = databaseMapper.getTotalTransactionHistory(""+json.get("idUser"),
+        Integer totalRecords = databaseRepository.getTotalTransactionHistory(""+json.get("idUser"),
                 category1, category2, category3, category4, startDate, endDate);
         Integer totalPages = Math.abs(totalRecords/10)+1;
         Integer currentRecords = 0;
@@ -123,11 +124,11 @@ public class HistoryRepositoryImpl implements HistoryRepository {
 
     public JSONObject getUserDetailedHistory(Integer idTransaction){
 
-        Transaction transaction = databaseMapper.getTransactionById(idTransaction);
+        Transaction transaction = databaseRepository.getTransactionById(idTransaction);
 
-        Services services = databaseMapper.getServiceById(transaction.getIdService());
-        TransactionStatus transactionStatus = databaseMapper.getTransactionStatus(transaction.getIdTransactionStatus());
-        PaymentMethod paymentMethod = databaseMapper.getPaymentMethod(transaction.getIdPaymentMethod());
+        Services services = databaseRepository.getServiceById(transaction.getIdService());
+        TransactionStatus transactionStatus = databaseRepository.getTransactionStatus(transaction.getIdTransactionStatus());
+        PaymentMethod paymentMethod = databaseRepository.getPaymentMethod(transaction.getIdPaymentMethod());
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -146,15 +147,15 @@ public class HistoryRepositoryImpl implements HistoryRepository {
 
         if (transaction.getIdService() == 1){
             //TOPUP
-            ThirdParty thirdParty = databaseMapper.getThirdParty(transaction.getIdTransaction());
+            ThirdParty thirdParty = databaseRepository.getThirdParty(transaction.getIdTransaction());
             details.put("provider", thirdParty.getPartyName());
             transactionDetails.put("topup", details);
         }
 
         if (transaction.getIdService() == 2){
             //Voucher
-            Voucher voucher = databaseMapper.getVoucherById(transaction.getIdGoods());
-            Merchant merchant = databaseMapper.getMerchantById(voucher.getIdMerchant());
+            Voucher voucher = databaseRepository.getVoucherById(transaction.getIdGoods());
+            Merchant merchant = databaseRepository.getMerchantById(voucher.getIdMerchant());
             details = voucher.toJsonObject();
             details.put("merchantName", merchant.getMerchantName());
             details.remove("createdAt");
