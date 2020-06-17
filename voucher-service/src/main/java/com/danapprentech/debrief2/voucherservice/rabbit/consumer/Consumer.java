@@ -32,6 +32,7 @@ public class Consumer
 
     @Qualifier("shareOrderForVoucher")
     @RabbitListener(queues = "deals.queue.order.voucher")
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void receive1(TransactionConsumer updateQtyConsumer) throws InterruptedException
     {
         if (updateQtyConsumer.getIdGoods() != null && updateQtyConsumer.getIdTransactionStatus() == 1)
@@ -39,13 +40,19 @@ public class Consumer
             System.out.println("-------------");
             Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
             Voucher vouchers = voucherService.findByIdVoucher(update);
+            System.out.println(vouchers);
             System.out.println(vouchers.getQuota());
-
+            System.out.println(updateQtyConsumer.getIdUser());
+            System.out.println("Voucher sebelum dibeli "+vouchers.getQuota() );
             vouchers.setQuota(vouchers.getQuota() - 1);
+            System.out.println("Voucher sesudah dibeli "+vouchers.getQuota() );
             vouchers.setUpdateAt(new Date());
-            System.out.println("update sukses");
+
             System.out.println(vouchers.getQuota());
+            System.out.println();
             voucherService.updateVoucher(vouchers);
+            System.out.println("update sukses");
+            System.out.println("-------------");
 
             // kirim keyogi
             Voucher voucher = voucherService.findByVoucherName(vouchers.getVoucherName());
@@ -61,6 +68,7 @@ public class Consumer
             voucherResponse.setIdMerchant(voucher.getMerchant().getIdMerchant());
             voucherResponse.setIdVoucher(voucher.getIdVoucher());
             mqProducer.sendToRabbitVoucher(voucherResponse);
+
         }
 
         if (updateQtyConsumer.getIdGoods() != null && updateQtyConsumer.getIdTransactionStatus() == 3)
@@ -68,12 +76,16 @@ public class Consumer
             System.out.println("-------------");
             Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
             Voucher vouchers = voucherService.findByIdVoucher(update);
-            System.out.println(vouchers.getQuota());
+            System.out.println(vouchers);
+            System.out.println(updateQtyConsumer.getIdUser());
+            System.out.println("Voucher sebelum refund "+vouchers.getQuota() );
             vouchers.setQuota(vouchers.getQuota() + 1);
+            System.out.println("Voucher sesudah refund "+vouchers.getQuota() );
             vouchers.setUpdateAt(new Date());
-            System.out.println("update sukses");
             System.out.println(vouchers.getQuota());
             voucherService.updateVoucher(vouchers);
+            System.out.println("update sukses");
+            System.out.println("-------------");
 
             // kirim keyogi
             Voucher voucher = voucherService.findByVoucherName(vouchers.getVoucherName());
