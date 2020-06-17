@@ -36,7 +36,7 @@ public class VoucherServiceImpl implements VoucherService
     }
 
     @Override
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Lock(LockModeType.PESSIMISTIC_READ)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "3000")})
     public Voucher findByIdVoucher(Long id)
     {
@@ -50,7 +50,7 @@ public class VoucherServiceImpl implements VoucherService
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Lock(LockModeType.PESSIMISTIC_READ)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "3000")})
     @Override
     public Voucher updateVoucher(Voucher voucher)
@@ -71,7 +71,7 @@ public class VoucherServiceImpl implements VoucherService
     }
 
     @Override
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Lock(LockModeType.PESSIMISTIC_READ)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "3000")})
     public Voucher findByVoucherName(String voucherName)
     {

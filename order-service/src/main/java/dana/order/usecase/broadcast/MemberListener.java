@@ -2,6 +2,7 @@ package dana.order.usecase.broadcast;
 
 import dana.order.entity.User;
 import dana.order.usecase.port.DatabaseMapper;
+import dana.order.usecase.port.DatabaseRepository;
 import dana.order.usecase.port.UserRepository;
 import org.json.simple.JSONObject;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberListener {
 
     @Autowired
-    DatabaseMapper databaseMapper;
+    DatabaseRepository databaseRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -25,12 +26,12 @@ public class MemberListener {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @Qualifier("shareMemberForOrder")
     @RabbitListener(queues = "deals.queue.member.order")
-    public void receive(User user) {
+    public synchronized void receive(User user) {
         System.out.println("MEMBER RAW : "+user.toJsonString());
         if (userRepository.doesUserExist(user.getIdUser()) == Boolean.FALSE){
-            databaseMapper.createNewUser(user);
+            databaseRepository.createNewUser(user);
         }else{
-            databaseMapper.updateAUser(user);
+            databaseRepository.updateAUser(user);
         }
         System.out.println("MEMBER RESULT : "+user.toJsonString());
     }
