@@ -7,11 +7,14 @@ import com.danapprentech.debrief2.voucherservice.rabbit.model.TransactionConsume
 import com.danapprentech.debrief2.voucherservice.rabbit.model.UpdateQtyConsumer;
 import com.danapprentech.debrief2.voucherservice.rabbit.producer.RabbitMqProducer;
 import com.danapprentech.debrief2.voucherservice.repository.VoucherRepository;
+import com.danapprentech.debrief2.voucherservice.service.VoucherServiceImpl;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -22,21 +25,10 @@ public class Consumer
     VoucherRepository voucherRepository;
 
     @Autowired
-    RabbitMqProducer mqProducer;
+    VoucherServiceImpl voucherService;
 
-//    @RabbitListener(queues = "${spring.rabbitmq.queue.listener}",containerFactory = "createListener")
-//    public void updateQuota(Transaction updateQtyConsumer)
-//    {
-//        System.out.println("-------------");
-//        Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
-//        Voucher vouchers = voucherRepository.findByIdVoucher(update);
-//        System.out.println(vouchers.getQuota() );
-//        vouchers.setQuota(vouchers.getQuota()-1);
-//        vouchers.setUpdateAt(new Date());
-//        System.out.println("update sukses");
-//        System.out.println(vouchers.getQuota());
-//        voucherRepository.save(vouchers);
-//    }
+    @Autowired
+    RabbitMqProducer mqProducer;
 
     @Qualifier("shareOrderForVoucher")
     @RabbitListener(queues = "deals.queue.order.voucher")
@@ -46,16 +38,16 @@ public class Consumer
         {
             System.out.println("-------------");
             Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
-            Voucher vouchers = voucherRepository.findByIdVoucher(update);
+            Voucher vouchers = voucherService.findByIdVoucher(update);
             System.out.println(vouchers.getQuota());
             vouchers.setQuota(vouchers.getQuota() - 1);
             vouchers.setUpdateAt(new Date());
             System.out.println("update sukses");
             System.out.println(vouchers.getQuota());
-            voucherRepository.save(vouchers);
+            voucherService.updateVoucher(vouchers);
 
             // kirim keyogi
-            Voucher voucher = voucherRepository.findByVoucherName(vouchers.getVoucherName());
+            Voucher voucher = voucherService.findByVoucherName(vouchers.getVoucherName());
             // response
             VoucherResponse voucherResponse = new VoucherResponse();
             voucherResponse.setVoucherName(voucher.getVoucherName());
@@ -74,16 +66,16 @@ public class Consumer
         {
             System.out.println("-------------");
             Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
-            Voucher vouchers = voucherRepository.findByIdVoucher(update);
+            Voucher vouchers = voucherService.findByIdVoucher(update);
             System.out.println(vouchers.getQuota());
             vouchers.setQuota(vouchers.getQuota() + 1);
             vouchers.setUpdateAt(new Date());
             System.out.println("update sukses");
             System.out.println(vouchers.getQuota());
-            voucherRepository.save(vouchers);
+            voucherService.updateVoucher(vouchers);
 
             // kirim keyogi
-            Voucher voucher = voucherRepository.findByVoucherName(vouchers.getVoucherName());
+            Voucher voucher = voucherService.findByVoucherName(vouchers.getVoucherName());
             // response
             VoucherResponse voucherResponse = new VoucherResponse();
             voucherResponse.setVoucherName(voucher.getVoucherName());

@@ -2,12 +2,15 @@ package com.danapprentech.debrief2.voucherservice.service;
 
 import com.danapprentech.debrief2.voucherservice.model.Voucher;
 import com.danapprentech.debrief2.voucherservice.repository.VoucherRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.LockModeType;
 import java.util.Optional;
 
 //@Transactional(isolation = Isolation.SERIALIZABLE)
@@ -15,6 +18,7 @@ import java.util.Optional;
 @Service
 public class VoucherServiceImpl implements VoucherService
 {
+    @Autowired
     VoucherRepository voucherRepository;
 
     @Override
@@ -30,6 +34,7 @@ public class VoucherServiceImpl implements VoucherService
     }
 
     @Override
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public Voucher findByIdVoucher(Long id)
     {
         return voucherRepository.findByIdVoucher(id);
@@ -41,7 +46,8 @@ public class VoucherServiceImpl implements VoucherService
         return voucherRepository.save(voucher);
     }
 
-    //    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Override
     public Voucher updateVoucher(Voucher voucher)
     {
@@ -61,7 +67,9 @@ public class VoucherServiceImpl implements VoucherService
     }
 
     @Override
-    public Voucher findByVoucherName(String voucherName) {
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    public Voucher findByVoucherName(String voucherName)
+    {
         return voucherRepository.findByVoucherName(voucherName);
     }
 }
