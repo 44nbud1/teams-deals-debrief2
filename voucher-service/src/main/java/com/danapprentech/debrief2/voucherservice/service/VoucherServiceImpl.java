@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.Optional;
 
 //@Transactional(isolation = Isolation.SERIALIZABLE)
@@ -35,6 +37,7 @@ public class VoucherServiceImpl implements VoucherService
 
     @Override
     @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "3000")})
     public Voucher findByIdVoucher(Long id)
     {
         return voucherRepository.findByIdVoucher(id);
@@ -48,6 +51,7 @@ public class VoucherServiceImpl implements VoucherService
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "3000")})
     @Override
     public Voucher updateVoucher(Voucher voucher)
     {
@@ -68,6 +72,7 @@ public class VoucherServiceImpl implements VoucherService
 
     @Override
     @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "3000")})
     public Voucher findByVoucherName(String voucherName)
     {
         return voucherRepository.findByVoucherName(voucherName);
