@@ -13,8 +13,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 
-@OptimisticLocking(type = OptimisticLockType.DIRTY)
-@DynamicUpdate
+//@OptimisticLocking(type = OptimisticLockType.DIRTY)
+//@DynamicUpdate
 public class UpdateQtyConsumer implements Serializable
 {
     private Long idVoucher;

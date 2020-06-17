@@ -23,8 +23,8 @@ import java.util.Date;
 @Table(name = "voucher")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
-@OptimisticLocking(type = OptimisticLockType.DIRTY)
-@DynamicUpdate
+//@OptimisticLocking(type = OptimisticLockType.DIRTY)
+//@DynamicUpdate
 public class Voucher implements Serializable {
 	private static final long serialVersionUID = 1L;
 

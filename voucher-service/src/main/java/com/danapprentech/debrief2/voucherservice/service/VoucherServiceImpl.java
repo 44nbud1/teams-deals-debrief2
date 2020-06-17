@@ -2,12 +2,15 @@ package com.danapprentech.debrief2.voucherservice.service;
 
 import com.danapprentech.debrief2.voucherservice.model.Voucher;
 import com.danapprentech.debrief2.voucherservice.repository.VoucherRepository;
+import org.hibernate.exception.LockAcquisitionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +43,21 @@ public class VoucherServiceImpl implements VoucherService
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "3000")})
     public Voucher findByIdVoucher(Long id)
     {
-        return voucherRepository.findByIdVoucher(id);
+        Boolean go = Boolean.TRUE;
+        Voucher vouchers = null;
+        while (go == Boolean.TRUE) {
+            try {
+                go = Boolean.FALSE;
+                vouchers = voucherRepository.findByIdVoucher(id);
+            } catch (CannotAcquireLockException e) {
+                System.out.println("Lock Exception Happens!!!");
+                go = Boolean.TRUE;
+            } catch (UnexpectedRollbackException e2){
+                System.out.println("Rollback Exception Happens!!!");
+                go = Boolean.TRUE;
+            }
+        }
+        return vouchers;
     }
 
     @Override
@@ -55,7 +72,21 @@ public class VoucherServiceImpl implements VoucherService
     @Override
     public Voucher updateVoucher(Voucher voucher)
     {
-        return voucherRepository.save(voucher);
+        Boolean go = Boolean.TRUE;
+        Voucher vouchers = null;
+        while (go == Boolean.TRUE) {
+            try {
+                go = Boolean.FALSE;
+                vouchers = voucherRepository.save(voucher);
+            } catch (CannotAcquireLockException e) {
+                System.out.println("Lock Exception Happens!!!");
+                go = Boolean.TRUE;
+            } catch (UnexpectedRollbackException e2){
+                System.out.println("Rollback Exception Happens!!!");
+                go = Boolean.TRUE;
+            }
+        }
+        return vouchers;
     }
 
     @Override
@@ -75,6 +106,20 @@ public class VoucherServiceImpl implements VoucherService
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "3000")})
     public Voucher findByVoucherName(String voucherName)
     {
-        return voucherRepository.findByVoucherName(voucherName);
+        Boolean go = Boolean.TRUE;
+        Voucher vouchers = null;
+        while (go == Boolean.TRUE) {
+            try {
+                go = Boolean.FALSE;
+                vouchers = voucherRepository.findByVoucherName(voucherName);
+            } catch (CannotAcquireLockException e) {
+                System.out.println("Lock Exception Happens!!!");
+                go = Boolean.TRUE;
+            } catch (UnexpectedRollbackException e2){
+                System.out.println("Rollback Exception Happens!!!");
+                go = Boolean.TRUE;
+            }
+        }
+        return vouchers;
     }
 }

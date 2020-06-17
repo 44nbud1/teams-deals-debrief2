@@ -125,6 +125,12 @@ public class Payment {
         transactionRepository.setFinishATransaction(Integer.valueOf(""+json.get("idTransaction")));
         transactionBroadcaster.send(Integer.valueOf(""+json.get("idTransaction")));
 
+        if (transaction.getIdGoods() == 1){
+            // Refund case
+            Transaction newest = transactionRepository.setRefund(transaction.getIdUser(), transaction.getAmount(), transaction.getIdGoods());
+            transactionBroadcaster.send(newest.getIdTransaction());
+        }
+
         return ResponseWrapper.wrap(DealsStatus.PAYMENT_SUCCESS, null, ""+json.get("path"));
     }
 }

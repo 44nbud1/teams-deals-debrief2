@@ -33,9 +33,8 @@ public class Consumer
 
     @Qualifier("shareOrderForVoucher")
     @RabbitListener(queues = "deals.queue.order.voucher")
-//    @Transactional(isolation = Isolation.SERIALIZABLE)
-//    @Synchronize
-    public void receive1(TransactionConsumer updateQtyConsumer) throws InterruptedException
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void receive1(TransactionConsumer updateQtyConsumer)
     {
         if (updateQtyConsumer.getIdGoods() ==1 && updateQtyConsumer.getIdTransaction() == 3)
         {
@@ -48,7 +47,6 @@ public class Consumer
             System.out.println("-------------");
             Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
             Voucher vouchers = voucherService.findByIdVoucher(update);
-            System.out.println(vouchers);
             System.out.println(vouchers.getQuota());
             System.out.println(updateQtyConsumer.getIdUser());
             System.out.println("Voucher sebelum dibeli "+vouchers.getQuota() );
@@ -84,7 +82,6 @@ public class Consumer
             System.out.println("-------------");
             Long update = Long.valueOf(updateQtyConsumer.getIdGoods());
             Voucher vouchers = voucherService.findByIdVoucher(update);
-            System.out.println(vouchers);
             System.out.println(updateQtyConsumer.getIdUser());
             System.out.println("Voucher sebelum refund "+vouchers.getQuota() );
             vouchers.setQuota(vouchers.getQuota() + 1);

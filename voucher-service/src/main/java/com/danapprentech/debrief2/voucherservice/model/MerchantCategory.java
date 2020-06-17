@@ -20,8 +20,8 @@ import java.util.List;
 @Entity
 @Table(name = "merchant_category")
 
-@OptimisticLocking(type = OptimisticLockType.DIRTY)
-@DynamicUpdate
+//@OptimisticLocking(type = OptimisticLockType.DIRTY)
+//@DynamicUpdate
 public class MerchantCategory implements Serializable
 {
     @Id

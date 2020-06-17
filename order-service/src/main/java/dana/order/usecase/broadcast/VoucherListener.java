@@ -29,12 +29,6 @@ public class VoucherListener {
     @Autowired
     VoucherRepository voucherRepository;
 
-    @Autowired
-    TransactionRepository transactionRepository;
-
-    @Autowired
-    TransactionBroadcaster transactionBroadcaster;
-
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @RabbitListener(queues = "${spring.rabbitmq.queue.listener}",containerFactory = "createListener")
     public synchronized void recieveMessage(NewVoucher vouchers) {
@@ -59,13 +53,6 @@ public class VoucherListener {
         }
 
         System.out.println("VOUCHER RESULT : "+vouchers.getIdVoucher());
-
-        if (vouchers.getIdVoucher() == 1){
-            // Refund case
-            Transaction latest = databaseRepository.getTransactionById(vouchers.getIdTransaction());
-            Transaction newest = transactionRepository.setRefund(latest.getIdUser(), latest.getAmount(), latest.getIdGoods());
-            transactionBroadcaster.send(newest.getIdTransaction());
-        }
     }
 
 }

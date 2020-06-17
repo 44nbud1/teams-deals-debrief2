@@ -3,6 +3,7 @@ package dana.order.usecase.broadcast;
 import dana.order.entity.Transaction;
 import dana.order.usecase.port.DatabaseMapper;
 import dana.order.usecase.port.DatabaseRepository;
+import dana.order.usecase.port.TransactionRepository;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
