@@ -190,6 +190,10 @@ public class AuthenticationService {
         JSONObject user = (JSONObject) jsonMember.get("data");
         String idUser = ""+user.get("idUser");
 
+        if (sessionService.checkSession(idUser) != null){
+            return ResponseFailed.wrapResponse(DealsStatus.ALREADY_LOGIN, path);
+        }
+
         //Wrap response
         return ResponseSuccess.wrapResponse(user, DealsStatus.REQUEST_OTP, path);
     }
