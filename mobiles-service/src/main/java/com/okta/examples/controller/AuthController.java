@@ -32,7 +32,7 @@ public class AuthController {
 
     @PostMapping(value = "/api/auth/login")
     public ResponseEntity<?> login(@RequestBody(required = false) LoginRequest loginRequest, HttpServletRequest request) {
-        return authentication.login(loginRequest, request.getServletPath());
+        return authentication.login(loginRequest, request.getServletPath(), request);
     }
 
     @PostMapping(value ="/api/auth/request-otp")

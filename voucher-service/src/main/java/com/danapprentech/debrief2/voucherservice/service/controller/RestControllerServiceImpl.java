@@ -17,6 +17,7 @@ import com.danapprentech.debrief2.voucherservice.repository.MerchantRepository;
 import com.danapprentech.debrief2.voucherservice.repository.VoucherRepository;
 import com.danapprentech.debrief2.voucherservice.scheduler.UpdateExpiredVoucher;
 import com.danapprentech.debrief2.voucherservice.service.VoucherOutletServiceImpl;
+import com.danapprentech.debrief2.voucherservice.service.VoucherServiceImpl;
 import org.json.simple.JSONArray;
 import org.quartz.*;
 import org.slf4j.Logger;
@@ -26,6 +27,8 @@ import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -41,6 +44,8 @@ public class RestControllerServiceImpl implements RestControllerService{
     @Autowired
     MerchantRepository merchantRepository;
 
+    @Autowired
+    VoucherServiceImpl voucherService;
 
     @Autowired
     MerchantCategoryRepository merchantCategoryRepository;
@@ -71,11 +76,27 @@ public class RestControllerServiceImpl implements RestControllerService{
                                            VoucherRequest voucherRequest,
                                            HttpServletRequest httpServletRequest)
     {
+        System.out.println(voucherRequest.getVoucherName());
+
+        if (voucherRequest.getVoucherName() == null && voucherRequest.getQuota()==null && voucherRequest.getMaxDiscount() ==null)
+        {
+            return new ResponseEntity<>(new MessageResponse("Your data is invalid.","043","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+                    HttpStatus.BAD_REQUEST);
+        }
+
         ResponseEntity<?> checkValid = createVoucherValidation.createVoucher(idMerchant, idUser,
                 voucherRequest, httpServletRequest);
+
+
         if (!checkValid.getStatusCode().is2xxSuccessful())
         {
             return checkValid;
+        }
+
+        if (voucherRequest.getExpiredDate() == null)
+        {
+            return new ResponseEntity<>(new MessageResponse("Please fill form expired date.","057","/api/admin/"+idUser+"/merchant/"+idMerchant+"/vouchers",new Date()),
+                    HttpStatus.BAD_REQUEST);
         }
 
         updateExpiredVoucher.setTimeSchedule(voucherRequest);
@@ -96,7 +117,6 @@ public class RestControllerServiceImpl implements RestControllerService{
                     vouchers.setUpdateAt(new Date());
                     vouchers.setMerchant(merchant);
                     voucherRepository.save(vouchers);
-                    System.out.println(voucherRequest.getVoucherName());
 
                     Voucher voucher = voucherRepository.findByVoucherName(voucherRequest.getVoucherName());
 
@@ -197,7 +217,7 @@ public class RestControllerServiceImpl implements RestControllerService{
         if (merchants == null) {
             return new ResponseEntity<>(new MessageResponse("Voucher not found.", "062",
                     "/api/admin/findByMerchantName-voucher", new Date()),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.NOT_FOUND);
         }
 
         List<Voucher> vouc = merchants.getVouchers();
@@ -234,7 +254,7 @@ public class RestControllerServiceImpl implements RestControllerService{
     public ResponseEntity<?> voucherDetail(Long idVoucher, HttpServletRequest httpServletRequest) {
         if (voucherRepository.findByIdVoucher(idVoucher) == null) {
             return new ResponseEntity<>(new MessageResponse("Voucher not found.", "062", "/api/admin/voucher-detail-voucher/" + idVoucher, new Date()),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.NOT_FOUND);
         }
 
         Voucher vouchers = voucherRepository.findByIdVoucher(idVoucher);
@@ -279,11 +299,11 @@ public class RestControllerServiceImpl implements RestControllerService{
                     "/api/admin/update-status-voucher/{idVoucher}/restock", new Date()));
         }
 
-        Voucher vouchers = voucherRepository.findByIdVoucher(idVoucher);
+        Voucher vouchers = voucherService.findByIdVoucher(idVoucher);
 
         if (vouchers == null) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Voucher not found.", "062",
-                    "/admin/update-status-voucher/{idVoucher}/restock", new Date()));
+            return new ResponseEntity<>(new MessageResponse("Voucher not found.", "062",
+                    "/admin/update-status-voucher/{idVoucher}/restock", new Date()),HttpStatus.NOT_FOUND);
         }
 
         if (updateVoucherRequest.getStatus() == null) {
@@ -295,8 +315,8 @@ public class RestControllerServiceImpl implements RestControllerService{
         if (status == true && updateVoucherRequest.getQuota() == null) {
 
             if (vouchers == null) {
-                return ResponseEntity.badRequest().body(new MessageResponse("Voucher not found.", "062",
-                        "/admin/update-status-voucher/{idVoucher}/restock", new Date()));
+                return new ResponseEntity<>(new MessageResponse("Voucher not found.", "062",
+                        "/admin/update-status-voucher/{idVoucher}/restock", new Date()),HttpStatus.NOT_FOUND);
             }
 
             if (status == false) {
@@ -311,7 +331,7 @@ public class RestControllerServiceImpl implements RestControllerService{
             vouchers.setStatus(Boolean.TRUE);
             vouchers.setQuota(vouchers.getQuota());
             vouchers.setUpdateAt(new Date());
-            voucherRepository.save(vouchers);
+            voucherService.updateVoucher(vouchers);
 
             // kirim keyogi
             Voucher voucher = voucherRepository.findByVoucherName(vouchers.getVoucherName());
@@ -348,8 +368,8 @@ public class RestControllerServiceImpl implements RestControllerService{
             }
 
             if (vouchers == null) {
-                return ResponseEntity.badRequest().body(new MessageResponse("Voucher not found.", "062",
-                        "/admin/update-status-voucher/{idVoucher}/restock", new Date()));
+                return new ResponseEntity<>(new MessageResponse("Voucher not found.", "062",
+                        "/admin/update-status-voucher/{idVoucher}/restock", new Date()),HttpStatus.NOT_FOUND);
             }
 
             if (status == false) {
@@ -360,7 +380,7 @@ public class RestControllerServiceImpl implements RestControllerService{
             vouchers.setStatus(Boolean.TRUE);
             vouchers.setQuota(vouchers.getQuota() + updateVoucherRequest.getQuota());
             vouchers.setUpdateAt(new Date());
-            voucherRepository.save(vouchers);
+            voucherService.updateVoucher(vouchers);
 
             // kirim keyogi
             Voucher voucher = voucherRepository.findByVoucherName(vouchers.getVoucherName());
@@ -393,10 +413,10 @@ public class RestControllerServiceImpl implements RestControllerService{
 
             vouchers.setStatus(Boolean.FALSE);
             vouchers.setUpdateAt(new Date());
-            voucherRepository.save(vouchers);
+            voucherService.updateVoucher(vouchers);
 
             // kirim keyogi
-            Voucher voucher = voucherRepository.findByVoucherName(vouchers.getVoucherName());
+            Voucher voucher = voucherService.findByVoucherName(vouchers.getVoucherName());
             // response
             VoucherResponse voucherResponse = new VoucherResponse();
             voucherResponse.setVoucherName(voucher.getVoucherName());
@@ -415,13 +435,6 @@ public class RestControllerServiceImpl implements RestControllerService{
                     "/admin/update-status-voucher/{idVoucher}/restock", new Date()));
         }
 
-//        if (status == false && vouchers.getQuota() != null)
-//        {
-//            return ResponseEntity.badRequest().body(new MessageResponse("We cannot update the voucher stock due " +
-//                    "to inactive voucher status.","045",
-//                    "/admin/update-status-voucher/{idVoucher}/restock",new Date()));
-//        }
-
         else {
             return ResponseEntity.badRequest().body(new MessageResponse("Status invalid.", "063",
                     "/admin/update-status-voucher/{idVoucher}/restock", new Date()));
@@ -432,18 +445,26 @@ public class RestControllerServiceImpl implements RestControllerService{
     @Override
     public ResponseEntity<?> filterByMerchantCategory(
                                                         Optional<Integer> page,
-                                                        Optional<String> merchantCategory,
+                                                        String merchantCategory,
                                                         String sortBy,
                                                         HttpServletRequest httpServletRequest) {
-//        Page<MerchantCategory> vouchers = merchantCategoryRepository.findByMerchantCategoryContaining(merchantCategory.orElse("_"),
-//                PageRequest.of(page.orElse(0), 10, Sort.Direction.ASC, sortBy));
 
-        MerchantCategory merchantsCat = merchantCategoryRepository.findByMerchantCategoryContaining(
-                merchantCategory.orElse("_"));
+        System.out.println(merchantCategory);
 
-        if (merchantsCat == null) {
+        if (merchantCategory.isEmpty() || merchantCategory.equalsIgnoreCase("null")) {
             return new ResponseEntity<>(new MessageResponse("Please fill merchant category.", "070",
                     "/api/user/filter-voucher", new Date()),
+                    HttpStatus.NOT_FOUND);
+        }
+
+        MerchantCategory merchantsCat = merchantCategoryRepository.findByMerchantCategoryContaining(
+                merchantCategory);
+
+
+        if (merchantsCat == null)
+        {
+            return new ResponseEntity<>(new MessageResponse("Voucher not found.","062",
+                    "/api/user/filter-voucher",new Date()),
                     HttpStatus.NOT_FOUND);
         }
 
@@ -536,7 +557,7 @@ public class RestControllerServiceImpl implements RestControllerService{
         {
             return new ResponseEntity<>(new MessageResponse("Voucher not found.","062",
                     "/api/user/sort-voucher",new Date()),
-                    HttpStatus.BAD_REQUEST);
+                    HttpStatus.NOT_FOUND);
         }
 
         Page<Voucher> merchants = voucherRepository.findAll(

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Service
 public class AdminValidationTest {
 
     @Autowired
@@ -121,6 +122,7 @@ public class AdminValidationTest {
         assertFalse(adminValidation.filterVoucher(merchantCategory, page, "/").getStatusCode().is2xxSuccessful());
 
         page = "0";
+        merchantCategory = "fnb";
         assertTrue(adminValidation.filterVoucher(merchantCategory, page, "/").getStatusCode().is2xxSuccessful());
 
         page = "a";

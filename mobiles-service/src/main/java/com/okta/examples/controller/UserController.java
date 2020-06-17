@@ -152,7 +152,7 @@ public class UserController {
         if (!sessionValidation.request(idUser, request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
-        return userService.logout(idUser, request.getServletPath());
+        return userService.logout(idUser, request.getServletPath(), request);
     }
 
 }

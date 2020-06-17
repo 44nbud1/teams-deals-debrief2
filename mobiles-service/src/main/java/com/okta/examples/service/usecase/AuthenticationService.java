@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 @Service
@@ -34,7 +34,7 @@ public class AuthenticationService {
     public ResponseEntity<?> register(RegisterRequest registerRequest, String path) {
 
         //Register validation
-        System.out.println("Register Validation. " +new Date());
+        System.out.println("Register Validation. " + Parser.toJsonString(registerRequest));
         ResponseEntity<?> check = validate.register(registerRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
@@ -84,10 +84,10 @@ public class AuthenticationService {
         return passwordEncoder.encode(password);
     }
 
-    public ResponseEntity<?> login(LoginRequest loginRequest, String path){
+    public ResponseEntity<?> login(LoginRequest loginRequest, String path, HttpServletRequest request){
 
         //Login validation
-        System.out.println("Login Validation. " +new Date());
+        System.out.println("Login Validation. " +Parser.toJsonString(loginRequest));
         ResponseEntity<?> check = validate.login(loginRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
@@ -118,7 +118,6 @@ public class AuthenticationService {
         //Create user
         JSONObject user = (JSONObject) jsonMember.get("data");
         String idUser = ""+user.get("idUser");
-        String idSession= UUID.randomUUID().toString()+idUser;
 
         //Check user session
         System.out.println("Check if id : "+ idUser+" already have session");
@@ -126,6 +125,8 @@ public class AuthenticationService {
 
             System.out.println("Session found. Destroy old session for id : "+idUser);
             sessionService.destroySession(idUser);
+            request.getSession().invalidate();
+            String idSession = request.getSession().getId()+idUser;
             System.out.println("Start new session for id : " + idUser);
 
             //Create and start session
@@ -143,6 +144,7 @@ public class AuthenticationService {
             System.out.println("Start new session for id : " + idUser);
 
             //Create and start session
+            String idSession= request.getSession().getId()+idUser;
             sessionService.startSession(idUser, idSession);
 
             //Wrap response
@@ -157,6 +159,7 @@ public class AuthenticationService {
     public ResponseEntity<?> requestOtp(JSONObject data, String path){
 
         //Request otp validation
+        System.out.println("Request Otp Validation. " +Parser.toJsonString(data));
         ResponseEntity<?> check = validate.requestOtp(data, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
@@ -187,6 +190,10 @@ public class AuthenticationService {
         JSONObject user = (JSONObject) jsonMember.get("data");
         String idUser = ""+user.get("idUser");
 
+        if (sessionService.checkSession(idUser) != null){
+            return ResponseFailed.wrapResponse(DealsStatus.ALREADY_LOGIN, path);
+        }
+
         //Wrap response
         return ResponseSuccess.wrapResponse(user, DealsStatus.REQUEST_OTP, path);
     }
@@ -194,12 +201,16 @@ public class AuthenticationService {
     public ResponseEntity<?> matchOtp(String idUser, JSONObject data, String path){
 
         // Match otp validation
+        System.out.println("Match Otp Validation. " +Parser.toJsonString(data));
         ResponseEntity<?> check = validate.matchOtp(data, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
 
+        if (sessionService.checkSession(idUser) != null){
+            return ResponseFailed.wrapResponse(DealsStatus.ALREADY_LOGIN, path);
+        }
         //Match otp validation in member domain
         System.out.println("Match OTP. Send data to member domain : "+ Parser.toJsonString(data));
         ResponseEntity<?> fromMember = member.matchOtp(idUser, data);
@@ -226,10 +237,14 @@ public class AuthenticationService {
     public ResponseEntity<?> forgotPassword(String idUser, ForgotPasswordRequest forgotPasswordRequest, String path){
 
         //Forgot password validation
+        System.out.println("Forgot Password Validation. " +Parser.toJsonString(forgotPasswordRequest));
         ResponseEntity<?> check = validate.forgotPassword(forgotPasswordRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
+        }
+        if (sessionService.checkSession(idUser) != null){
+            return ResponseFailed.wrapResponse(DealsStatus.ALREADY_LOGIN, path);
         }
         JSONObject data = new JSONObject();
         data.put("password", forgotPasswordRequest.getPassword());

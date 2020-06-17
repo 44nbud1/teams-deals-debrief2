@@ -22,7 +22,6 @@ public interface VoucherRepository extends JpaRepository<Voucher, Long>
     Page<Voucher> findByStatus(Boolean status, Pageable pageable);
     Page<Voucher> findByVoucherNameContainingIgnoreCase(String voucherName, Pageable pageable);
 
-//    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Voucher findByVoucherName(String voucherName);
 
 //    Voucher findByIdVoucherForUpdate(Long id);
