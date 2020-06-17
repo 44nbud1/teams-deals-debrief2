@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RegisterTransaction {
@@ -25,7 +27,8 @@ public class RegisterTransaction {
     @Autowired
     MemberBroadcaster memberBroadcaster;
 
-    public ResponseEntity<?> createAccount(RegisterRequest registerRequest, String path){
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = InternalError.class)
+    public ResponseEntity<?> createAccount(RegisterRequest registerRequest, String path) {
 
         ResponseEntity<?> check = userValidation.register(registerRequest, path);
 
@@ -47,7 +50,16 @@ public class RegisterTransaction {
 
         registerRequest.setEmail(registerRequest.getEmail().toLowerCase());
         registerRequest.setPassword(encryptPassword(registerRequest.getPassword()));
+
+//        try {
+//            userRepository.insertNewUser(registerRequest);
+//            userRepository.insertNewUserBalance("asik seger banget");
+//        } catch (InternalError e) {
+//            return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+//        }
+
         userRepository.insertNewUser(registerRequest);
+        userRepository.insertNewUserBalance(registerRequest.getIdUser());
 
         UserDataResponse userDataResponse = userRepository.getUserData(registerRequest.getIdUser());
         memberBroadcaster.send(registerRequest.getIdUser());

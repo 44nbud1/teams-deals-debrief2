@@ -40,7 +40,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void insertNewUser(RegisterRequest registerRequest) {
         userMapper.registerUser(registerRequest);
-        balanceMapper.registerBalance(registerRequest.getIdUser());
+    }
+
+    @Override
+    public void insertNewUserBalance(String idUser) {
+        balanceMapper.registerBalance(idUser);
     }
 
     @Override

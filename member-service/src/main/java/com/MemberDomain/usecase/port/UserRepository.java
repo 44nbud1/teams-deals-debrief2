@@ -7,6 +7,7 @@ public interface UserRepository {
     Boolean doesEmailAvailable(String email);
     Boolean doesPhoneNumberAvailable(String phoneNumber);
     void insertNewUser(RegisterRequest registerRequest);
+    void insertNewUserBalance(String idUser);
     LoginResponse getUserLoginData(String phoneNumber);
     ProfileResponse getUserProfile(String idUser);
     UserDataResponse getUserData(String idUser);
