@@ -1,10 +1,7 @@
 package dana.order.usecase.validate;
 
 import dana.order.entity.DealsStatus;
-import dana.order.usecase.exception.OrderFailedException;
-import dana.order.usecase.exception.PaymentFailedException;
 import org.json.simple.JSONObject;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;

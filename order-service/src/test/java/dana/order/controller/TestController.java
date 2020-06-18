@@ -43,12 +43,97 @@ public class TestController {
 
         mockMvc.perform(get("/api/user/{idUser}/transaction", 9)
                 .contentType("application/json")
-                //.param("sendWelcomeMail", "true")
                 .content(objectMapper.writeValueAsString(json)))
                 .andExpect(status().isOk());
 
+        mockMvc.perform(get("/api/user/{idUser}/transaction", 9)
+                .contentType("application/json")
+                .param("category", "NOTME")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(get("/api/user/{idUser}/transaction", 9)
+                .contentType("application/json")
+                .param("category", "IN-PROGRESS")
+                .param("filter-start-date", "2020-05-12")
+                .param("filter-end-date", "2020-05-15")
+                .param("page", "0")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/user/{idUser}/transaction", 9)
+                .contentType("application/json")
+                .param("category", "IN-PROGRESS")
+                .param("filter-start-date", "2020-05-12df")
+                .param("filter-end-date", "2020-05-15")
+                .param("page", "-2")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(get("/api/user/{idUser}/transaction", 9)
+                .contentType("application/json")
+                .param("category", "IN-PROGRESS")
+                .param("filter-start-date", "2020-05-20")
+                .param("filter-end-date", "2020-05-15")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isBadRequest());
+
     }
 
+    @Test
+    void integratedTestDetailedTransactionHistory() throws Exception{
 
+        JSONObject json = new JSONObject();
+
+        mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, 1)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, -2)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, 11)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void integratedTestPlaceOrder() throws Exception{
+        JSONObject json = new JSONObject();
+        json.put("idVoucher", 0);
+
+        mockMvc.perform(post("/api/user/{idUser}/transaction/voucher", 9)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(post("/api/user/{idUser}/transaction/voucher", -2)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void integratedTestPayOrder() throws Exception{
+
+        JSONObject json = new JSONObject();
+        json.put("idTransaction", 1);
+
+        mockMvc.perform(put("/api/user/{idUser}/transaction/voucher", 9)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isNotAcceptable());
+
+    }
+
+    @Test
+    void integratedTestTOPUP() throws Exception{
+
+    }
 
 }

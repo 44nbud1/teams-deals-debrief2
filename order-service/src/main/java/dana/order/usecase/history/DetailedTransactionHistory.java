@@ -2,16 +2,11 @@ package dana.order.usecase.history;
 
 import dana.order.adapter.wrapper.ResponseWrapper;
 import dana.order.entity.*;
-import dana.order.usecase.exception.PaymentFailedException;
-import dana.order.usecase.exception.UserException;
 import dana.order.usecase.port.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
 
 @Service
 public class DetailedTransactionHistory {
@@ -38,7 +33,7 @@ public class DetailedTransactionHistory {
         }
 
         if (!transaction.getIdUser().equals(""+json.get("idUser"))){
-            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_WRONG_USER, null, ""+json.get("path"));
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_NOT_FOUND, null, ""+json.get("path"));
         }
 
         databaseRepository.fallingAllExpiredTransaction();
