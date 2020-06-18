@@ -20,11 +20,6 @@ public interface UserMapper {
     final String emailCheck = "SELECT * FROM tbl_users WHERE email = #{email}";
     final String phoneCheck = "SELECT * FROM tbl_users WHERE phoneNumber = #{phoneNumber}";
 
-    final String getAll = "SELECT tu.idUser, tu.name, tu.email, tu.phoneNumber, tb.balance, tu.idRole, tr.roleName\n" +
-            "FROM tbl_users AS tu, tbl_balances AS tb, tbl_roles AS tr\n" +
-            "WHERE tu.idUser = tb.idUser AND tu.idRole = tr.idRole\n" +
-            "ORDER BY tu.created_at ASC";
-
     final String getUserLoginData = "SELECT * from tbl_users WHERE phoneNumber = #{phoneNumber}";
 
     final String getUserData = "SELECT tu.idUser, tu.name, tu.email, tu.phoneNumber, tb.balance, tu.idRole, tr.roleName\n" +
@@ -42,7 +37,7 @@ public interface UserMapper {
 
     @Insert(registerUser)
     @Options(useGeneratedKeys = true, keyProperty = "idUser")
-    void registerUser(RegisterRequest register);
+    void registerUser(RegisterRequest registerRequest);
 
     @Select(emailCheck)
     UserDataResponse emailCheck(String email);
@@ -88,14 +83,4 @@ public interface UserMapper {
 
     @Update(changeEmail)
     void changeEmail(String idUser, String email);
-
-    @Select(getAll)
-    @Results(value = {
-            @Result(property = "idUser", column = "idUser"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "email", column = "name"),
-            @Result(property = "phoneNumber", column = "phoneNumber"),
-            @Result(property = "idRole", column = "idRole")
-    })
-    List<UserDataResponse> getAll();
 }
