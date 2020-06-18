@@ -48,6 +48,7 @@ public class ForgotPasswordTransaction {
 
         forgotPasswordRequest.setNewPassword(encryptPassword(forgotPasswordRequest.getNewPassword()));
         userRepository.updatePassword(idUser, forgotPasswordRequest.getNewPassword());
+        userRepository.deleteOtp(idUser);
 
         return ResponseSuccess.wrapResponse(null, DealsStatus.FORGOT_PASSWORD, path);
     }

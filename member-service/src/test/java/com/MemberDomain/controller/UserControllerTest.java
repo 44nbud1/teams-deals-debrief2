@@ -34,90 +34,89 @@ public class UserControllerTest {
         assertThat(userController).isNotNull();
     }
 
-    //@Test
-//    void RegisterIntegratedTest() throws Exception{
-//
-//        RegisterRequest registerRequest = new RegisterRequest();
-//
-//        //successfully created user
-//        registerRequest.setName("Aldie Adrian");
-//        registerRequest.setEmail("aldie@gmail.com");
-//        registerRequest.setPhoneNumber("+6281287878787");
-//        registerRequest.setPassword("H0lmesHere!");
-//        registerRequest.setConfirmPassword("H0lmesHere!");
-//        mockMvc.perform(post("/api/auth/register")
-//                .contentType("application/json")
-//                .content(objectMapper.writeValueAsString(registerRequest)))
-//                .andExpect(status().isCreated());
-//
-//        //invalid name
-//        registerRequest.setName("aldieadrian17");
-//        mockMvc.perform(post("/api/auth/register")
-//                .contentType("application/json")
-//                .content(objectMapper.writeValueAsString(registerRequest)))
-//                .andExpect(status().isBadRequest());
-//
-//        //invalid email
-//        registerRequest.setName("Aldie Adrian");
-//        registerRequest.setEmail("aldieadriangmail.com");
-//        mockMvc.perform(post("/api/auth/register")
-//                .contentType("application/json")
-//                .content(objectMapper.writeValueAsString(registerRequest)))
-//                .andExpect(status().isBadRequest());
-//
-//        //invalid phone number
-//        registerRequest.setName("Aldie Adrian");
-//        registerRequest.setEmail("aldie@gmail.com");
-//        registerRequest.setPhoneNumber("+6280287878787");
-//        mockMvc.perform(post("/api/auth/register")
-//                .contentType("application/json")
-//                .content(objectMapper.writeValueAsString(registerRequest)))
-//                .andExpect(status().isBadRequest());
-//
-//        //invalid password
-//        registerRequest.setName("Aldie Adrian");
-//        registerRequest.setEmail("aldie@gmail.com");
-//        registerRequest.setPhoneNumber("+6281287878788");
-//        registerRequest.setPassword("P@ssword");
-//        registerRequest.setConfirmPassword("P@ssword");
-//        mockMvc.perform(post("/api/auth/register")
-//                .contentType("application/json")
-//                .content(objectMapper.writeValueAsString(registerRequest)))
-//                .andExpect(status().isBadRequest());
-//
-//        //miss match password
-//        registerRequest.setName("Aldie Adrian");
-//        registerRequest.setEmail("aldie@gmail.com");
-//        registerRequest.setPhoneNumber("+6281287878788");
-//        registerRequest.setPassword("H0lmesHere!");
-//        registerRequest.setConfirmPassword("P@ssword");
-//        mockMvc.perform(post("/api/auth/register")
-//                .contentType("application/json")
-//                .content(objectMapper.writeValueAsString(registerRequest)))
-//                .andExpect(status().isBadRequest());
-//
-//        //email already exist
-//        registerRequest.setName("Aldie Adrian");
-//        registerRequest.setEmail("aldie@gmail.com");
-//        registerRequest.setPhoneNumber("+6281287878788");
-//        registerRequest.setPassword("H0lmesHere!");
-//        registerRequest.setConfirmPassword("H0lmesHere!");
-//        mockMvc.perform(post("/api/auth/register")
-//                .contentType("application/json")
-//                .content(objectMapper.writeValueAsString(registerRequest)))
-//                .andExpect(status().isBadRequest());
-//
-//        //phone number already exist
-//        registerRequest.setName("Aldie Adrian");
-//        registerRequest.setEmail("sherlock@gmail.com");
-//        registerRequest.setPhoneNumber("+6281287878787");
-//        registerRequest.setPassword("H0lmesHere!");
-//        registerRequest.setConfirmPassword("H0lmesHere!");
-//        mockMvc.perform(post("/api/auth/register")
-//                .contentType("application/json")
-//                .content(objectMapper.writeValueAsString(registerRequest)))
-//                .andExpect(status().isBadRequest());
-//    }
+    @Test
+    void RegisterIntegratedTest() throws Exception{
+        RegisterRequest registerRequest = new RegisterRequest();
+
+        //successfully created user
+        registerRequest.setName("Aldie Adrian");
+        registerRequest.setEmail("aldie@gmail.com");
+        registerRequest.setPhoneNumber("+6281287878787");
+        registerRequest.setPassword("H0lmesHere!");
+        registerRequest.setConfirmPassword("H0lmesHere!");
+        mockMvc.perform(post("/api/auth/register")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(status().isCreated());
+
+        //invalid name
+        registerRequest.setName("aldieadrian17");
+        mockMvc.perform(post("/api/auth/register")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(status().isBadRequest());
+
+        //invalid email
+        registerRequest.setName("Aldie Adrian");
+        registerRequest.setEmail("aldieadriangmail.com");
+        mockMvc.perform(post("/api/auth/register")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(status().isBadRequest());
+
+        //invalid phone number
+        registerRequest.setName("Aldie Adrian");
+        registerRequest.setEmail("aldie@gmail.com");
+        registerRequest.setPhoneNumber("+6280287878787");
+        mockMvc.perform(post("/api/auth/register")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(status().isBadRequest());
+
+        //invalid password
+        registerRequest.setName("Aldie Adrian");
+        registerRequest.setEmail("aldie@gmail.com");
+        registerRequest.setPhoneNumber("+6281287878788");
+        registerRequest.setPassword("P@ssword");
+        registerRequest.setConfirmPassword("P@ssword");
+        mockMvc.perform(post("/api/auth/register")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(status().isBadRequest());
+
+        //miss match password
+        registerRequest.setName("Aldie Adrian");
+        registerRequest.setEmail("aldie@gmail.com");
+        registerRequest.setPhoneNumber("+6281287878788");
+        registerRequest.setPassword("H0lmesHere!");
+        registerRequest.setConfirmPassword("P@ssword");
+        mockMvc.perform(post("/api/auth/register")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(status().isBadRequest());
+
+        //email already exist
+        registerRequest.setName("Aldie Adrian");
+        registerRequest.setEmail("aldie@gmail.com");
+        registerRequest.setPhoneNumber("+6281287878788");
+        registerRequest.setPassword("H0lmesHere!");
+        registerRequest.setConfirmPassword("H0lmesHere!");
+        mockMvc.perform(post("/api/auth/register")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(status().isBadRequest());
+
+        //phone number already exist
+        registerRequest.setName("Aldie Adrian");
+        registerRequest.setEmail("sherlock@gmail.com");
+        registerRequest.setPhoneNumber("+6281287878787");
+        registerRequest.setPassword("H0lmesHere!");
+        registerRequest.setConfirmPassword("H0lmesHere!");
+        mockMvc.perform(post("/api/auth/register")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     void LoginIntegratedTest() throws Exception{

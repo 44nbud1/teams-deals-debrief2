@@ -23,6 +23,8 @@ public interface OtpMapper {
 
     final String unmatchingOTP = "UPDATE tbl_otps SET matchStatus = '0' WHERE idUser = #{idUser}";
 
+    final String deleteOtp = "DELETE FROM tbl_otps WHERE idUser = #{idUser}";
+
     @Insert(createOTP)
     void createOTP(String idUser);
 
@@ -43,5 +45,8 @@ public interface OtpMapper {
 
     @Update(unmatchingOTP)
     void unmatchingOTP (String idUser);
+
+    @Delete(deleteOtp)
+    void deleteOtp (String idUser);
 
 }

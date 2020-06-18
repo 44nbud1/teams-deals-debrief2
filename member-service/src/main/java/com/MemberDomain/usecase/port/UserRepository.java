@@ -15,6 +15,7 @@ public interface UserRepository {
     OtpResponse checkUserOtp(String idUser);
     void createOtp(String idUser);
     void updateOtp(String idUser);
+    void deleteOtp(String idUser);
     OtpResponse matchOtp(String idUser, String otp);
     OtpResponse matchOtpDate(String idUser, String otp);
     void matchingOtp(String idUser);

@@ -51,6 +51,7 @@ public class MatchOtpTransaction {
         OtpResponse matchingOtpDate = userRepository.matchOtpDate(""+idUser, ""+userOtp);
 
         if (matchingOtpDate == null){
+            userRepository.deleteOtp(idUser);
             return ResponseFailed.wrapResponse(DealsStatus.OTP_EXPIRED, path);
         }
 
