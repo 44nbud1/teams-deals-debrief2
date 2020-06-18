@@ -40,7 +40,6 @@ public class TestValidateBuyAVoucher {
 
         json = reproduceVoucherInput();
         assertEquals("083", validateBuyAVoucher.check(json).getValue());
-
     }
 
     private JSONObject reproduceVoucherInput(){

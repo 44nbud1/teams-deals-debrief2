@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
+
 @Service
 public class RegisterTransaction {
 
@@ -51,15 +53,15 @@ public class RegisterTransaction {
         registerRequest.setEmail(registerRequest.getEmail().toLowerCase());
         registerRequest.setPassword(encryptPassword(registerRequest.getPassword()));
 
-//        try {
-//            userRepository.insertNewUser(registerRequest);
-//            userRepository.insertNewUserBalance("asik seger banget");
-//        } catch (InternalError e) {
-//            return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
-//        }
+        try {
+            userRepository.insertNewUser(registerRequest);
+            userRepository.insertNewUserBalance(registerRequest.getIdUser());
+        } catch (InternalError e) {
+            return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
+        }
 
-        userRepository.insertNewUser(registerRequest);
-        userRepository.insertNewUserBalance(registerRequest.getIdUser());
+//        userRepository.insertNewUser(registerRequest);
+//        userRepository.insertNewUserBalance(registerRequest.getIdUser());
 
         UserDataResponse userDataResponse = userRepository.getUserData(registerRequest.getIdUser());
         memberBroadcaster.send(registerRequest.getIdUser());

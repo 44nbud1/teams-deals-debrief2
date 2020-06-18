@@ -40,8 +40,9 @@ public class ResponseSuccess {
         return new ResponseEntity<>(json, dealsStatus.getStatus());
     }
 
-    public static ResponseEntity<?> wrapOk(){
-        return new ResponseEntity<>("ok", HttpStatus.OK);
+    public static ResponseEntity<JSONObject> wrapOk(){
+        System.out.println("Validation Success");
+        return new ResponseEntity<>(new JSONObject(), HttpStatus.OK);
     }
 
 }

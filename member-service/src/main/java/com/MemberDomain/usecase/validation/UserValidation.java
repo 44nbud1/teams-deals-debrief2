@@ -21,7 +21,7 @@ public class UserValidation {
     private final String regex_name = "^(?!.*^[\\s])(?!.*[\\s]$)(?!.*[0-9!@#$%^&*])(?=.*[a-zA-Z'\\-]{3,10}[\\s]|.*^[a-zA-Z'\\-]{3,10}$)(?!.*['][\\-]|.*[\\-][']|.*[\\-][\\-]|.*['][']).{3,20}$";
     private final String regex_otp = "[0-9]{4}";
 
-    public ResponseEntity<?> register(RegisterRequest registerRequest, String path) {
+    public ResponseEntity<JSONObject> register(RegisterRequest registerRequest, String path) {
 
         if (registerRequest == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
@@ -57,7 +57,7 @@ public class UserValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> login(LoginRequest loginRequest, String path){
+    public ResponseEntity<JSONObject> login(LoginRequest loginRequest, String path){
 
         if (loginRequest == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
@@ -80,7 +80,7 @@ public class UserValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> requestOtp(OtpRequest otpRequest, String path){
+    public ResponseEntity<JSONObject> requestOtp(OtpRequest otpRequest, String path){
 
         if (otpRequest == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
@@ -101,7 +101,7 @@ public class UserValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> matchOtp(MatchOtpRequest matchOtpRequest, String path){
+    public ResponseEntity<JSONObject> matchOtp(MatchOtpRequest matchOtpRequest, String path){
 
         if (matchOtpRequest == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
@@ -112,13 +112,13 @@ public class UserValidation {
         }
 
         if(!Pattern.matches(regex_otp, ""+matchOtpRequest.getOtp())){
-            return ResponseFailed.wrapResponse(DealsStatus.OTP_NOT_MATCH, path);
+            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
         }
 
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> forgotPassword(ForgotPasswordRequest forgotPasswordRequest, String path){
+    public ResponseEntity<JSONObject> forgotPassword(ForgotPasswordRequest forgotPasswordRequest, String path){
 
         if (forgotPasswordRequest == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
@@ -139,7 +139,7 @@ public class UserValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> editProfile(EditProfileRequest editProfileRequest, String path){
+    public ResponseEntity<JSONObject> editProfile(EditProfileRequest editProfileRequest, String path){
 
         boolean content = false;
 
@@ -178,7 +178,7 @@ public class UserValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> editPassword(EditProfileRequest editProfileRequest, String path){
+    public ResponseEntity<JSONObject> editPassword(EditProfileRequest editProfileRequest, String path){
 
         if (!Pattern.matches(regex_password, editProfileRequest.getOldPassword())){
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
