@@ -21,9 +21,9 @@ public class VoucherService {
     @Autowired
     VoucherValidation validate;
 
-    public ResponseEntity<?> getAllVoucher(String page, String path){
+    public ResponseEntity<JSONObject> getAllVoucher(String page, String path){
 
-        ResponseEntity<?> check = validate.getAllVoucher(page, path);
+        ResponseEntity<JSONObject> check = validate.getAllVoucher(page, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
@@ -50,9 +50,9 @@ public class VoucherService {
 //                "/api/user/show-all-voucher");
     }
 
-    public ResponseEntity<?> filterVoucher(String merchantCategory, String page, String path){
+    public ResponseEntity<JSONObject> filterVoucher(String merchantCategory, String page, String path){
 
-        ResponseEntity<?> check = validate.filterVoucher(merchantCategory, page, path);
+        ResponseEntity<JSONObject> check = validate.filterVoucher(merchantCategory, page, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
@@ -76,9 +76,9 @@ public class VoucherService {
         return ResponseSuccess.wrapResponse(voucher, DealsStatus.VOUCHER_COLLECTED, path);
     }
 
-    public ResponseEntity<?> searchVoucher(String merchantName, String page, String path){
+    public ResponseEntity<JSONObject> searchVoucher(String merchantName, String page, String path){
 
-        ResponseEntity<?> check = validate.searchVoucher(merchantName, page, path);
+        ResponseEntity<JSONObject> check = validate.searchVoucher(merchantName, page, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
@@ -102,9 +102,9 @@ public class VoucherService {
         return ResponseSuccess.wrapResponse(voucher, DealsStatus.VOUCHER_COLLECTED, path);
     }
 
-    public ResponseEntity<?> sortVoucher(String name, String page, String path){
+    public ResponseEntity<JSONObject> sortVoucher(String name, String page, String path){
 
-        ResponseEntity<?> check = validate.sortVoucher(name, page, path);
+        ResponseEntity<JSONObject> check = validate.sortVoucher(name, page, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }

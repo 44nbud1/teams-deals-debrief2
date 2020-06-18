@@ -1,6 +1,5 @@
 package com.okta.examples.validation;
 
-import com.okta.examples.model.request.CreateMerchantRequest;
 import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.service.validation.AdminValidation;
 import org.json.simple.JSONObject;

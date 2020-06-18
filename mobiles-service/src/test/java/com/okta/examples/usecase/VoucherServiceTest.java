@@ -1,12 +1,12 @@
 package com.okta.examples.usecase;
 
+import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.service.usecase.VoucherService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class VoucherServiceTest {
@@ -22,6 +22,10 @@ public class VoucherServiceTest {
 
         page = "10";
         assertTrue(voucherService.getAllVoucher(page, path).getStatusCode().is2xxSuccessful());
+
+        page = "aa";
+        assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), voucherService.getAllVoucher(page, "").getBody().get("status"));
+
     }
 
     @Test
@@ -34,15 +38,25 @@ public class VoucherServiceTest {
 
         page = "10";
         assertFalse(voucherService.filterVoucher(merchantCategory, page, path).getStatusCode().is2xxSuccessful());
+
+        page = "aa";
+        assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), voucherService.filterVoucher(merchantCategory, page, "").getBody().get("status"));
+
     }
 
     @Test
     public void sortVoucherTest(){
         System.out.println("Sort Voucher Test");
         String path = "/api/user/sort-voucher";
-        String name = "fnb";
+        String name = "voucherPrice";
         String page = "0";
+        assertTrue(voucherService.sortVoucher(name, page, path).getStatusCode().is2xxSuccessful());
+
+        name = "wee";
         assertFalse(voucherService.sortVoucher(name, page, path).getStatusCode().is2xxSuccessful());
+
+        page = "aa";
+        assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), voucherService.sortVoucher(name, page, "").getBody().get("status"));
 
     }
 
@@ -53,5 +67,11 @@ public class VoucherServiceTest {
         String merchantName = "k";
         String page = "0";
         assertTrue(voucherService.searchVoucher(merchantName, page, path).getStatusCode().is2xxSuccessful());
+
+        merchantName = "d";
+        assertEquals(DealsStatus.VOUCHER_NOT_FOUND.getValue(), voucherService.searchVoucher(merchantName, page, path).getBody().get("status"));
+
+        page = "a";
+        assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), voucherService.searchVoucher(merchantName, page, path).getBody().get("status"));
     }
 }

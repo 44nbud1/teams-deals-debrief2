@@ -87,10 +87,10 @@ public class AuthenticationService {
         return ResponseSuccess.wrapResponse(result, DealsStatus.REGISTRATION_SUCCESS, path);
     }
 
-    private String encryptPassword(String password){
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password);
-    }
+//    private String encryptPassword(String password){
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        return passwordEncoder.encode(password);
+//    }
 
     public ResponseEntity<JSONObject> login(LoginRequest loginRequest, String path, String request){
 

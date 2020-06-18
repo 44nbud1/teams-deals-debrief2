@@ -73,6 +73,22 @@ public class TestController {
                 .content(objectMapper.writeValueAsString(json)))
                 .andExpect(status().isOk());
 
+        headers.set("Authorization", "Bearer yJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MTA3NjlkNi01Y2Q4LTQ3MmYtOGU3OS0yMmVjMTY3YjNlYWExMSIsImV4cCI6MTU5MzA2OTY2MywiaWF0IjoxNTkyNDU0NzgzfQ.FggRkWOTI2Ijrq06Bkm_RZStz6KlZFrfI7aLZqmO2wgFo4QodEIytwbsGT6Di8McEK3vnIK29T5Fsu06qj3Yng");
+        mockMvc.perform(get("/api/user/{idUser}", 11)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MTA3NjlkNi01Y2Q4LTQ3MmYtOGU3OS0yMmVjMTY3YjNlYWExMSIsImV4cCI6MTU5MzA2OTY2MywiaWF0IjoxNTkyNDU0NzgzfQ.FggRkWOTI2Ijrq06Bkm_RZStz6KlZFrfI7aLZqmO2wgFo4QodEIytwbsGT6Di8McEK3vnIK29T5Fsu06qj3Yn");
+        mockMvc.perform(get("/api/user/{idUser}", 11)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
     }
 
     @Test
@@ -88,6 +104,14 @@ public class TestController {
                 //.param("sendWelcomeMail", "true")
                 .content(objectMapper.writeValueAsString(json)))
                 .andExpect(status().isOk());
+
+        headers.set("Authorization", "Bearer ");
+        mockMvc.perform(put("/api/user/{idUser}", 11)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
 
     }
 
