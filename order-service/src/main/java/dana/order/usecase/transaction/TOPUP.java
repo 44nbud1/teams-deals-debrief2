@@ -5,17 +5,12 @@ import dana.order.entity.DealsStatus;
 import dana.order.entity.Transaction;
 import dana.order.entity.User;
 import dana.order.usecase.broadcast.TransactionBroadcaster;
-import dana.order.usecase.exception.OrderFailedException;
-import dana.order.usecase.exception.TOPUPFailedException;
-import dana.order.usecase.exception.UserException;
-import dana.order.usecase.port.DatabaseMapper;
 import dana.order.usecase.port.DatabaseRepository;
 import dana.order.usecase.port.TransactionRepository;
 import dana.order.usecase.port.UserRepository;
 import dana.order.usecase.validate.ValidateTOPUP;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
