@@ -34,60 +34,51 @@ public class TOPUP {
 
     public ResponseEntity<?> execute(JSONObject json){
 
+        String idUser = ""+json.get("idUser");
+        String virtualNumber = ""+json.get("virtualNumber");
+        Double amount = Double.valueOf(""+json.get("amount"));
+        String path = ""+json.get("path");
+
         DealsStatus validation = validateTOPUP.check(json);
         if (!validation.getStatus().is2xxSuccessful()){
-            return ResponseWrapper.wrap(validation, null, ""+json.get("path"));
+            return ResponseWrapper.wrap(validation, null, path);
         }
 
-        if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, ""+json.get("path"));
+        if (userRepository.doesUserExist(idUser) == Boolean.FALSE){
+            return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, path);
         }
 
-        Boolean consistency = Boolean.FALSE;
-        Integer counter = 0;
-        while (consistency == Boolean.FALSE && counter < 3){
-            if (transactionRepository.validateBalanceConsistency(""+json.get("idUser")) == Boolean.FALSE){
-                try{
-                    Thread.sleep(1000);
-                }catch (InterruptedException e){e.printStackTrace();}
-            }else {
-                consistency = Boolean.TRUE;
-            }
-            counter += 1;
+        if (transactionRepository.validateBalanceConsistency(idUser) == Boolean.FALSE){
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CANT_PROCESS, null, path);
         }
 
-        if (consistency == Boolean.FALSE){
-            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CANT_PROCESS, null, ""+json.get("path"));
+        if (amount < 10000){
+            return ResponseWrapper.wrap(DealsStatus.MINIMUM_TOPUP, null, path);
         }
 
-        if (Double.valueOf(""+json.get("amount")) < 10000){
-            return ResponseWrapper.wrap(DealsStatus.MINIMUM_TOPUP, null, ""+json.get("path"));
+        User user = databaseRepository.getUserById(idUser);
+
+        if (user.getBalance() + amount > 1000000){
+            return ResponseWrapper.wrap(DealsStatus.MAXIMUM_BALANCE, null, path);
         }
 
-        User user = databaseRepository.getUserById(""+json.get("idUser"));
+        String partyCode = transactionRepository.getPartyCode(virtualNumber);
+        String phoneNumber = transactionRepository.getPhoneNumberFromVA(virtualNumber);
 
-        if (user.getBalance() + Double.valueOf(""+json.get("amount")) > 1000000){
-            return ResponseWrapper.wrap(DealsStatus.MAXIMUM_BALANCE, null, ""+json.get("path"));
-        }
-
-        String partyCode = transactionRepository.getPartyCode(""+json.get("virtualNumber"));
-        String phoneNumber = transactionRepository.getPhoneNumberFromVA(""+json.get("virtualNumber"));
-
-        if (userRepository.doesPhoneNumberCorrect(""+json.get("idUser"), phoneNumber) == Boolean.FALSE){
-            return ResponseWrapper.wrap(DealsStatus.VIRTUAL_ACCOUNT_INVALID, null, ""+json.get("path"));
+        if (userRepository.doesPhoneNumberCorrect(idUser, phoneNumber) == Boolean.FALSE){
+            return ResponseWrapper.wrap(DealsStatus.VIRTUAL_ACCOUNT_INVALID, null, path);
         }
 
         if (transactionRepository.checkTOPUPThirdParty(partyCode) == Boolean.FALSE){
-            return ResponseWrapper.wrap(DealsStatus.MERCHANT_NOT_AVAILABLE, null, ""+json.get("path"));
+            return ResponseWrapper.wrap(DealsStatus.MERCHANT_NOT_AVAILABLE, null, path);
         }
 
-        transactionRepository.TOPUPBalance(""+json.get("idUser"), Double.valueOf(""+json.get("amount")),
-                ""+json.get("virtualNumber"), partyCode);
+        transactionRepository.TOPUPBalance(idUser, amount, virtualNumber, partyCode);
 
-        Transaction transaction = databaseRepository.getLatestUserSuccessfulTransaction(""+json.get("idUser"));
+        Transaction transaction = databaseRepository.getLatestUserSuccessfulTransaction(idUser);
 
         transactionBroadcaster.send(transaction.getIdTransaction());
 
-        return ResponseWrapper.wrap(DealsStatus.TOPUP_SUCCESS, null, ""+json.get("path"));
+        return ResponseWrapper.wrap(DealsStatus.TOPUP_SUCCESS, null, path);
     }
 }

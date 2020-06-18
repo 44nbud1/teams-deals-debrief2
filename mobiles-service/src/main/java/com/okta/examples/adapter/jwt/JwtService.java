@@ -5,14 +5,13 @@
 //import org.springframework.security.authentication.BadCredentialsException;
 //import org.springframework.security.authentication.DisabledException;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-//import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.stereotype.Service;
 //
 //@Service
 //public class JwtService {
 //
-//    @Autowired
-//    JwtTokenUtil jwtTokenUtil;
+////    @Autowired
+////    JwtTokenUtil jwtTokenUtil;
 //
 //    @Autowired
 //    private AuthenticationManager authenticationManager;
@@ -21,17 +20,17 @@
 //    private JwtUserDetailsService userDetailsService;
 //
 //
-//    public String generateToken(String tokenDetail, String id){
-//        //auth(tokenDetail, password);
-//        UserDetails userDetails = userDetailsService.loadUserById(tokenDetail, id);
-//        return jwtTokenUtil.generateToken(userDetails);
-//    }
-//
-//    public String authRegis(String tokenDetail, String id){
-//        //auth(tokenDetail, password);
-//        UserDetails userDetails = userDetailsService.loadUserById(tokenDetail, id);
-//        return jwtTokenUtil.generateToken(userDetails);
-//    }
+////    public String generateToken(String tokenDetail, String id){
+////        //auth(tokenDetail, password);
+////        UserDetails userDetails = userDetailsService.loadUserById(tokenDetail, id);
+////        return jwtTokenUtil.generateToken(userDetails);
+////    }
+////
+////    public String authRegis(String tokenDetail, String id){
+////        //auth(tokenDetail, password);
+////        UserDetails userDetails = userDetailsService.loadUserById(tokenDetail, id);
+////        return jwtTokenUtil.generateToken(userDetails);
+////    }
 //
 //    private void auth(String username, String password){
 //        try {

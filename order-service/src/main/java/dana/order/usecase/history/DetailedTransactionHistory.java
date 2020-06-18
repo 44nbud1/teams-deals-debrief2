@@ -22,24 +22,28 @@ public class DetailedTransactionHistory {
 
     public ResponseEntity<?> get(JSONObject json){
 
-        if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, ""+json.get("path"));
+        String idUser = ""+json.get("idUser");
+        Integer idTransaction = Integer.valueOf(""+json.get("idTransaction"));
+        String path = ""+json.get("path");
+
+        if (userRepository.doesUserExist(idUser) == Boolean.FALSE){
+            return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, path);
         }
 
-        Transaction transaction = databaseRepository.getTransactionById(Integer.valueOf(""+json.get("idTransaction")));
+        Transaction transaction = databaseRepository.getTransactionById(idTransaction);
 
         if (transaction == null){
-            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_NOT_FOUND, null, ""+json.get("path"));
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_NOT_FOUND, null, path);
         }
 
-        if (!transaction.getIdUser().equals(""+json.get("idUser"))){
-            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_NOT_FOUND, null, ""+json.get("path"));
+        if (!transaction.getIdUser().equals(idUser)){
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_NOT_FOUND, null, path);
         }
 
         databaseRepository.fallingAllExpiredTransaction();
 
         JSONObject transactionDetails = historyRepository.getUserDetailedHistory(transaction.getIdTransaction());
 
-        return ResponseWrapper.wrap(DealsStatus.TRANSACTION_HISTORY_COLLECTED, transactionDetails, ""+json.get("path"));
+        return ResponseWrapper.wrap(DealsStatus.TRANSACTION_HISTORY_COLLECTED, transactionDetails, path);
     }
 }

@@ -27,7 +27,7 @@ public class MemberDomain {
     private final String api = "http://localhost:8080";
 
     public ResponseEntity<?> register(RegisterRequest registerRequest, String path){
-       return template.post(api+path, registerRequest);
+       return template.post(api+"/api/auth/register", registerRequest);
     }
 
     public ResponseEntity<?> login(LoginRequest loginRequest){
@@ -54,8 +54,8 @@ public class MemberDomain {
         return template.put(api+"/api/user/"+idUser, editProfileRequest);
     }
 
-    public ResponseEntity<?> logout(String idUser){
-        return template.post(api+"/api/user/"+idUser+"/logout", null);
-    }
+//    public ResponseEntity<?> logout(String idUser){
+//        return template.post(api+"/api/user/"+idUser+"/logout", null);
+//    }
 
 }

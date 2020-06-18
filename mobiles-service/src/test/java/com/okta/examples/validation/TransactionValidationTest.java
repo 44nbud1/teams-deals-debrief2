@@ -17,6 +17,7 @@ public class TransactionValidationTest {
     @Test
     public void createOrderTestValidation(){
         System.out.println("Create Order Validation Test");
+        assertFalse(transactionValidation.createOrder(null, "").getStatusCode().is2xxSuccessful());
         JSONObject test = new JSONObject();
 
         assertFalse(transactionValidation.createOrder(test, "").getStatusCode().is2xxSuccessful());
@@ -29,6 +30,8 @@ public class TransactionValidationTest {
     @Test
     public void payOrderTestValidation(){
         System.out.println("Pay Order Validation Test");
+
+        assertFalse(transactionValidation.payOrder(null, "").getStatusCode().is2xxSuccessful());
         JSONObject test = new JSONObject();
 
         assertFalse(transactionValidation.payOrder(test, "").getStatusCode().is2xxSuccessful());
@@ -40,6 +43,8 @@ public class TransactionValidationTest {
     @Test
     public void payTopupTestValidation(){
         System.out.println("Pay Top Up Validation Test");
+
+        assertFalse(transactionValidation.payTopup(null, "").getStatusCode().is2xxSuccessful());
         JSONObject test = new JSONObject();
 
         assertFalse(transactionValidation.payTopup(test, "").getStatusCode().is2xxSuccessful());
@@ -56,4 +61,5 @@ public class TransactionValidationTest {
         assertEquals(DealsStatus.AMOUNT_INVALID.getValue(), transactionValidation.payTopup(test, "/").getBody().get("status"));
 
     }
+
 }

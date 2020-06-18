@@ -1,12 +1,47 @@
 package com.okta.examples.controller;
 
+import org.json.simple.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 //import com.okta.examples.service.usecase.Authenticate;
 
 @Controller
 public class DummyController {
 
+    @GetMapping(value = "/test")
+    public ResponseEntity<?> test(HttpServletRequest request){
+//        System.out.println(request.getSession().getId());
+//        System.out.println(request.getHeader("Cookie"));
+        JSONObject jsonObject = new JSONObject();
+        request.getSession().setAttribute("sessionId", UUID.randomUUID().toString());
+        return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/set")
+    public ResponseEntity<?> tests(HttpServletRequest request){
+//        System.out.println(request.getSession().getId());
+//        System.out.println(request.getHeader("Cookie"));
+        JSONObject jsonObject = new JSONObject();
+        System.out.println(request.getSession().getAttribute("sessionId"));
+        return new ResponseEntity<>(request.getSession().getAttribute("sessionId"), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/sot")
+    public ResponseEntity<?> sut(HttpServletRequest request){
+//        System.out.println(request.getSession().getId());
+//        System.out.println(request.getHeader("Cookie"));
+        JSONObject jsonObject = new JSONObject();
+        request.getSession().invalidate();
+        return new ResponseEntity<>(request.getSession().getAttribute("sessionId"), HttpStatus.OK);
+    }
 //    @Autowired
 //    Authenticate auth;
 //

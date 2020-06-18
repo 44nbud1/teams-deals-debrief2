@@ -35,7 +35,7 @@ public enum DealsStatus {
     BALANCE_NOT_ENOUGH("029", "Your balance is not enough.", HttpStatus.PAYMENT_REQUIRED),
     TRANSACTION_EXPIRED("031", "This transaction has expired.", HttpStatus.NOT_ACCEPTABLE),
     TRANSACTION_NOT_FOUND("032","Transaction is not found.", HttpStatus.NOT_FOUND),
-    TOPUP_SUCCESS("033", "Your TOPUP is successfull.", HttpStatus.CREATED),
+    TOPUP_SUCCESS("033", "Your TOPUP is successful.", HttpStatus.CREATED),
     MAXIMUM_BALANCE("034", "Top-up failed! You have reached your maximum balance.", HttpStatus.FORBIDDEN),
     MINIMUM_TOPUP("035", "Minimum top-up amount is Rp 10.000,00.",HttpStatus.FORBIDDEN),
     MERCHANT_NOT_AVAILABLE("036", "The merchant is currently not available for balance top-up.", HttpStatus.NOT_ACCEPTABLE),

@@ -34,9 +34,31 @@ public class Template {
         try {
             //result= restTemplate.postForEntity(api, data, JSONObject.class);
             HttpHeaders headers = new HttpHeaders();
-            headers.setBearerAuth("test");
             HttpEntity entity = new HttpEntity(data, headers);
             result = restTemplate.exchange(api, HttpMethod.POST, entity, JSONObject.class);
+        }
+        catch (HttpClientErrorException e){
+            result = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+        }
+        catch (HttpServerErrorException e){
+            result = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+        }
+        catch (RestClientException e){
+            result = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return result;
+    }
+
+    public ResponseEntity<?> poest(String api, String data){
+        ResponseEntity<?> result = null;
+        System.out.println(api);
+        try {
+            //result= restTemplate.postForEntity(api, data, JSONObject.class);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Cookie", data);
+            HttpEntity entity = new HttpEntity(headers);
+            result = restTemplate.exchange(api, HttpMethod.GET, entity, JSONObject.class);
         }
         catch (HttpClientErrorException e){
             result = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());

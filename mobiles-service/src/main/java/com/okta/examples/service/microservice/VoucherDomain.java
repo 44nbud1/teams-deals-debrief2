@@ -19,9 +19,6 @@ public class VoucherDomain {
 
     private final String api = "http://localhost:8081/api";
     private final String apis = "http://localhost:8081";
-    public ResponseEntity<?> getVoucher(){
-        return template.get(api+"/admin/filterByStatus-voucher?filterByStatus=false");
-    }
 
     public ResponseEntity<?> getAllVoucher(String page, String path){
         return template.get(api+"/user/show-all-voucher" +

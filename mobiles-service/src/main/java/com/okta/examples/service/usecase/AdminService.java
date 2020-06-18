@@ -170,10 +170,10 @@ public class AdminService {
 //                "/api/admin/findByMerchantName-voucher");
     }
 
-    public ResponseEntity<?> voucherDetail(String idVoucher, String path){
+    public ResponseEntity<JSONObject> voucherDetail(String idVoucher, String path){
 
         System.out.println("Voucher Detail Validation. " +Parser.toJsonString(idVoucher));
-        ResponseEntity<?> check = validate.voucherDetail(idVoucher, path);
+        ResponseEntity<JSONObject> check = validate.voucherDetail(idVoucher, path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
@@ -199,10 +199,10 @@ public class AdminService {
 //                "/api/admin/findByMerchantName-voucher");
     }
 
-    public ResponseEntity<?> updateVoucher(String idVoucher, JSONObject data, String path){
+    public ResponseEntity<JSONObject> updateVoucher(String idVoucher, JSONObject data, String path){
 
         System.out.println("Update Voucher Validation. " +Parser.toJsonString(data));
-        ResponseEntity<?> check = validate.updateVoucher(idVoucher,data,  path);
+        ResponseEntity<JSONObject> check = validate.updateVoucher(idVoucher,data,  path);
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
