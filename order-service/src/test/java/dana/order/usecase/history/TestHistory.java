@@ -1,4 +1,4 @@
-package dana.order;
+package dana.order.usecase.history;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,14 +7,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class OrderApplicationTests {
+public class TestHistory {
 
     @Autowired
-    OrderApplication orderApplication;
+    TransactionHistory transactionHistory;
 
     @Test
     public void contextLoads() throws Exception {
-        assertThat(orderApplication).isNotNull();
+        assertThat(transactionHistory).isNotNull();
     }
-
 }
