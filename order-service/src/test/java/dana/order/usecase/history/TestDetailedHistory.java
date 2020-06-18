@@ -38,5 +38,4 @@ public class TestDetailedHistory {
 
         return json;
     }
-
 }

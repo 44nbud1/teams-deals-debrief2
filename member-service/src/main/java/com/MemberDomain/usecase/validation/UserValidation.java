@@ -4,9 +4,7 @@ import com.MemberDomain.adapter.status.DealsStatus;
 import com.MemberDomain.adapter.wrapper.ResponseFailed;
 import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.request.*;
-import com.MemberDomain.usecase.exception.*;
 import org.json.simple.JSONObject;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
