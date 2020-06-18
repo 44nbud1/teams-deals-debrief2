@@ -29,20 +29,23 @@ public class TransactionHistory {
 
     public ResponseEntity<?> get(JSONObject json){
 
+        String idUser = ""+json.get("idUser");
+        String path = ""+json.get("path");
+
         DealsStatus validation = validateTransactionHistory.check(json);
 
         if (!validation.getStatus().is2xxSuccessful()){
-            return ResponseWrapper.wrap(validation, null, ""+json.get("path"));
+            return ResponseWrapper.wrap(validation, null, path);
         }
 
-        if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, ""+json.get("path"));
+        if (userRepository.doesUserExist(idUser) == Boolean.FALSE){
+            return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, path);
         }
 
         databaseRepository.fallingAllExpiredTransaction();
 
         JSONObject result = historyRepository.getUserHistory(json);
 
-        return ResponseWrapper.wrap(DealsStatus.TRANSACTION_HISTORY_COLLECTED, result, ""+json.get("path"));
+        return ResponseWrapper.wrap(DealsStatus.TRANSACTION_HISTORY_COLLECTED, result, path);
     }
 }

@@ -30,62 +30,42 @@ public class PlaceOrder{
 
     public ResponseEntity<?> buyAVoucher(JSONObject json){
 
+        String idUser = ""+json.get("idUser");
+        Integer idVoucher = Integer.valueOf(""+json.get("idVoucher"));
+        String path = ""+json.get("path");
+
         DealsStatus validation = validateBuyAVoucher.check(json);
         if (!validation.getStatus().is2xxSuccessful()){
-            return ResponseWrapper.wrap(validation, null, ""+json.get("path"));
+            return ResponseWrapper.wrap(validation, null, path);
         }
 
-        if (userRepository.doesUserExist(""+json.get("idUser")) == Boolean.FALSE){
-            return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, ""+json.get("path"));
+        if (userRepository.doesUserExist(idUser) == Boolean.FALSE){
+            return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, path);
         }
 
-        if (voucherRepository.validateExpiration(Integer.valueOf(""+json.get("idVoucher"))) == Boolean.FALSE){
-            return ResponseWrapper.wrap(DealsStatus.VOUCHER_NOT_AVAILABLE, null, ""+json.get("path"));
+        if (voucherRepository.validateExpiration(idVoucher) == Boolean.FALSE){
+            return ResponseWrapper.wrap(DealsStatus.VOUCHER_NOT_AVAILABLE, null, path);
         }
 
-        Boolean consistency = Boolean.FALSE;
-        Integer counter = 0;
-        while (consistency == Boolean.FALSE && counter < 3){
-            if (transactionRepository.validateBalanceConsistency(""+json.get("idUser")) == Boolean.FALSE){
-                try{
-                    Thread.sleep(1000);
-                }catch (InterruptedException e){e.printStackTrace();}
-            }else {
-                consistency = Boolean.TRUE;
-            }
-            counter += 1;
+        if (transactionRepository.validateBalanceConsistency(idUser) == Boolean.FALSE){
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CANT_PROCESS, null, path);
         }
 
-        if (consistency == Boolean.FALSE){
-            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CANT_PROCESS, null, ""+json.get("path"));
+        if (transactionRepository.validateVoucherConsistency(idVoucher) == Boolean.FALSE){
+            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CANT_PROCESS, null, path);
         }
 
-        consistency = Boolean.FALSE; counter = 0;
-        while (consistency == Boolean.FALSE && counter < 3){
-            if (transactionRepository.validateVoucherConsistency(Integer.valueOf(""+json.get("idVoucher"))) == Boolean.FALSE){
-                try{
-                    Thread.sleep(1000);
-                }catch (InterruptedException e){e.printStackTrace();}
-            }else{
-                consistency = Boolean.TRUE;
-            }
-            counter += 1;
+        if (voucherRepository.validateQuantity(idVoucher) == Boolean.FALSE){
+            return ResponseWrapper.wrap(DealsStatus.VOUCHER_OUT_OF_STOCK, null, path);
         }
 
-        if (consistency == Boolean.FALSE){
-            return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CANT_PROCESS, null, ""+json.get("path"));
-        }
+        voucherRepository.insertNewOrder(idUser, idVoucher);
 
-        if (voucherRepository.validateQuantity(Integer.valueOf(""+json.get("idVoucher"))) == Boolean.FALSE){
-            return ResponseWrapper.wrap(DealsStatus.VOUCHER_OUT_OF_STOCK, null, ""+json.get("path"));
-        }
+        Transaction transaction = databaseRepository.getLatestUserInProgressTransaction(idUser);
 
-        voucherRepository.insertNewOrder(""+json.get("idUser"), Integer.valueOf(""+json.get("idVoucher")));
-
-        Transaction transaction = databaseRepository.getLatestUserInProgressTransaction(""+json.get("idUser"));
         JSONObject result = new JSONObject();
         result.put("idTransaction", transaction.getIdTransaction());
 
-        return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CREATED, result, ""+json.get("path"));
+        return ResponseWrapper.wrap(DealsStatus.TRANSACTION_CREATED, result, path);
     }
 }

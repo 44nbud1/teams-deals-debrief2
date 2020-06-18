@@ -21,14 +21,24 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         Transaction transaction = databaseRepository.getLatestUserSuccessfulTransaction(idUser);
         User user = databaseRepository.getUserById(idUser);
 
-        if (transaction != null && user.getUpdatedAt().compareTo(transaction.getUpdatedAt()) >= 0){
-                return Boolean.TRUE;
-        }else if(transaction == null){
-            return Boolean.TRUE;
-        }else {
-            return Boolean.FALSE;
+        Boolean consistency = Boolean.FALSE;
+        Integer counter = 0;
+
+        while (consistency == Boolean.FALSE && counter < 3){
+            if (transaction != null && user.getUpdatedAt().compareTo(transaction.getUpdatedAt()) >= 0){
+                consistency = Boolean.TRUE;
+            }else if(transaction == null){
+                consistency = Boolean.TRUE;
+            }else {
+                consistency = Boolean.FALSE;
+                try{
+                    Thread.sleep(1000);
+                }catch (InterruptedException e){e.printStackTrace();}
+            }
+            counter += 1;
         }
 
+        return consistency;
     }
 
     public Boolean validateVoucherConsistency(Integer idVoucher){
@@ -36,14 +46,24 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         Transaction transaction = databaseRepository.getLatestVoucherSuccessfulTransaction(idVoucher);
         Voucher voucher = databaseRepository.getVoucherById(idVoucher);
 
-        if (transaction != null && voucher.getUpdatedAt().compareTo(transaction.getUpdatedAt()) >= 0){
-            return Boolean.TRUE;
-        }else if(transaction == null){
-            return Boolean.TRUE;
-        }else{
-            return Boolean.FALSE;
+        Boolean consistency = Boolean.FALSE;
+        Integer counter = 0;
+
+        while (consistency == Boolean.FALSE && counter < 3){
+            if (transaction != null && voucher.getUpdatedAt().compareTo(transaction.getUpdatedAt()) >= 0){
+                consistency = Boolean.TRUE;
+            }else if(transaction == null){
+                consistency = Boolean.TRUE;
+            }else{
+                consistency = Boolean.FALSE;
+                try{
+                    Thread.sleep(1000);
+                }catch (InterruptedException e){e.printStackTrace();}
+            }
+            counter += 1;
         }
 
+        return consistency;
     }
 
     public Boolean checkATransactionExpiration(Integer idTransaction){
