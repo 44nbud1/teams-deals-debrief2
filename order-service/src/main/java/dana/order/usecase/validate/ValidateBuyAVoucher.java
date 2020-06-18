@@ -14,7 +14,7 @@ public class ValidateBuyAVoucher {
         }
 
         if(idVoucherCheck(""+json.get("idVoucher")) == Boolean.FALSE){
-            return DealsStatus.INVALID_VOUCHER_ID;
+            return DealsStatus.VOUCHER_NOT_AVAILABLE;
         }
 
         return DealsStatus.OK;
