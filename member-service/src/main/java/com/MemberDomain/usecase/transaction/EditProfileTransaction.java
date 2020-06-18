@@ -36,20 +36,6 @@ public class EditProfileTransaction {
             return ResponseFailed.wrapResponse(DealsStatus.USER_NOT_FOUND, path);
         }
 
-        if (editProfileRequest.getName() != null) {
-            userRepository.updateName(idUser, editProfileRequest.getName());
-        }
-
-        if (editProfileRequest.getEmail() != null) {
-            if (userRepository.doesEmailAvailable(""+editProfileRequest.getEmail().toLowerCase()) == Boolean.FALSE){
-                return ResponseFailed.wrapResponse(DealsStatus.EMAIL_EXISTS, path);
-            }
-            else{
-                editProfileRequest.setEmail(editProfileRequest.getEmail().toLowerCase());
-                userRepository.updateEmail(idUser, editProfileRequest.getEmail());
-            }
-        }
-
         if (editProfileRequest.getNewPassword() != null) {
             PasswordResponse passwordResponse = userRepository.getUserPassword(idUser);
             if (!decode(editProfileRequest.getOldPassword(), passwordResponse.getPassword())) {
@@ -64,6 +50,20 @@ public class EditProfileTransaction {
                     editProfileRequest.setNewPassword(encryptPassword(editProfileRequest.getNewPassword()));
                     userRepository.updatePassword(idUser, editProfileRequest.getNewPassword());
                 }
+            }
+        }
+
+        if (editProfileRequest.getName() != null) {
+            userRepository.updateName(idUser, editProfileRequest.getName());
+        }
+
+        if (editProfileRequest.getEmail() != null) {
+            if (userRepository.doesEmailAvailable(""+editProfileRequest.getEmail().toLowerCase()) == Boolean.FALSE){
+                return ResponseFailed.wrapResponse(DealsStatus.EMAIL_EXISTS, path);
+            }
+            else{
+                editProfileRequest.setEmail(editProfileRequest.getEmail().toLowerCase());
+                userRepository.updateEmail(idUser, editProfileRequest.getEmail());
             }
         }
 
