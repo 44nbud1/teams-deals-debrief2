@@ -18,6 +18,8 @@ public class UserValidationTest {
     @Test
     public void editProfileTestValidation(){
         System.out.println("Edit Profile Validation Test");
+        assertFalse(userValidation.editProfile(null, "").getStatusCode().is2xxSuccessful());
+
         EditProfileRequest editProfileRequest = new EditProfileRequest();
 
         assertFalse(userValidation.editProfile(editProfileRequest, "").getStatusCode().is2xxSuccessful());
@@ -34,6 +36,10 @@ public class UserValidationTest {
         assertEquals(DealsStatus.EMAIL_INVALID.getValue(), userValidation.editProfile(editProfileRequest, "/").getBody().get("status"));
 
         editProfileRequest.setName(null);editProfileRequest.setEmail(null);
+
+        editProfileRequest.setOldPassword("P@ssw0rd");
+        editProfileRequest.setNewPassword("P@ssw0rd");
+        assertEquals(DealsStatus.FILL_ALL_FORMS.getValue(), userValidation.editProfile(editProfileRequest, "/").getBody().get("status"));
 
         editProfileRequest.setOldPassword("P@ssw0rd");
         editProfileRequest.setNewPassword("P@ssw0rd");

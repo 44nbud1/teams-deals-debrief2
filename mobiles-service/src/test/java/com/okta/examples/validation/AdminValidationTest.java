@@ -21,6 +21,8 @@ public class AdminValidationTest {
     @Test
     public void createMerchantValidationTest(){
         System.out.println("Create Merchant Validation Test");
+        assertFalse(adminValidation.test(null, "/").getStatusCode().is2xxSuccessful());
+
         JSONObject test = new JSONObject();
 
         assertFalse(adminValidation.test(test, "/").getStatusCode().is2xxSuccessful());
@@ -117,7 +119,7 @@ public class AdminValidationTest {
 
     @Test
     public void filterVoucherValidationTest(){
-        System.out.println("Get All Voucher Admin Validation Test");
+        System.out.println("Filter Voucher Admin Validation Test");
         String page = null; String merchantCategory = null;
         assertFalse(adminValidation.filterVoucher(merchantCategory, page, "/").getStatusCode().is2xxSuccessful());
 
@@ -132,4 +134,65 @@ public class AdminValidationTest {
         assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), adminValidation.filterVoucher(merchantCategory, page, "/").getBody().get("status"));
 
     }
+
+    @Test
+    public void sortVoucherValidationTest(){
+        System.out.println("Sort Voucher Admin Validation Test");
+        String page = null; String name = null;
+        assertFalse(adminValidation.sortVoucher(name, page, "/").getStatusCode().is2xxSuccessful());
+
+        page = "0";
+        name = "true";
+        assertTrue(adminValidation.sortVoucher(name, page, "/").getStatusCode().is2xxSuccessful());
+
+        page = "a";
+        assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), adminValidation.sortVoucher(name, page, "/").getBody().get("status"));
+
+        page = "-1";
+        assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), adminValidation.sortVoucher(name, page, "/").getBody().get("status"));
+
+    }
+
+    @Test
+    public void searchVoucherValidationTest(){
+        System.out.println("Search Voucher Admin Validation Test");
+        String page = null; String merchantName = null;
+        assertFalse(adminValidation.searchVoucher(merchantName, page, "/").getStatusCode().is2xxSuccessful());
+
+        page = "0";
+        merchantName = "k";
+        assertTrue(adminValidation.searchVoucher(merchantName, page, "/").getStatusCode().is2xxSuccessful());
+
+        page = "a";
+        assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), adminValidation.searchVoucher(merchantName, page, "/").getBody().get("status"));
+
+        page = "-1";
+        assertEquals(DealsStatus.PAGE_NOT_FOUND.getValue(), adminValidation.searchVoucher(merchantName, page, "/").getBody().get("status"));
+
+    }
+
+    @Test
+    public void UpdateVoucherValidationTest(){
+        System.out.println("Update Voucher Admin Validation Test");
+        String idVoucher = null;
+        assertFalse(adminValidation.updateVoucher(idVoucher, null, "/").getStatusCode().is2xxSuccessful());
+
+        idVoucher = "1";
+        assertFalse(adminValidation.updateVoucher(idVoucher, null, "/").getStatusCode().is2xxSuccessful());
+
+        JSONObject test = new JSONObject();
+        test.put("status", "true");
+        test.put("quota", "5");
+        assertTrue(adminValidation.updateVoucher(idVoucher, test, "/").getStatusCode().is2xxSuccessful());
+
+
+        test.put("status", "aa");
+        assertEquals(DealsStatus.STATUS_INVALID.getValue(), adminValidation.updateVoucher(idVoucher, test, "/").getBody().get("status"));
+
+        test.put("status", "true");
+        test.put("quota", "aa");
+        assertEquals(DealsStatus.DATA_INVALID.getValue(), adminValidation.updateVoucher(idVoucher, test, "/").getBody().get("status"));
+
+    }
+
 }
