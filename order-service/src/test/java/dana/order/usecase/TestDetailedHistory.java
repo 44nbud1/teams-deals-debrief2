@@ -25,7 +25,7 @@ public class TestDetailedHistory {
         JSONObject json = reproduceDetailedHistory();
         assertEquals(true, detailedTransactionHistory.get(json).getStatusCode().is2xxSuccessful());
 
-        json.put("idTransaction", 11);
+        json.put("idTransaction", 13);
         assertEquals(true, detailedTransactionHistory.get(json).getStatusCode().is4xxClientError());
 
         json.put("idUser", 0);

@@ -97,7 +97,7 @@ public class TestController {
                 .contentType("application/json"))
                 .andExpect(status().isNotFound());
 
-        mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, 11)
+        mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, 13)
                 .contentType("application/json"))
                 .andExpect(status().isNotFound());
 
@@ -148,14 +148,14 @@ public class TestController {
     @Test
     void refund() throws Exception{
         integratedPlaceOrderWithRefund();
-        //integratedPlaceOrderWithRefund();
+        integratedPlaceOrderWithRefund();
     }
 
     void integratedPlaceOrderWithRefund() throws Exception{
         JSONObject voucher = new JSONObject();
         voucher.put("idVoucher", 1);
 
-        MvcResult result = mockMvc.perform(post("/api/user/{idUser}/transaction/voucher", 9)
+        MvcResult result = mockMvc.perform(post("/api/user/{idUser}/transaction/voucher", 18)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(voucher)))
                 .andExpect(status().isCreated())
@@ -167,7 +167,7 @@ public class TestController {
 
         JSONObject transaction = (JSONObject) parser.parse(""+response.get("data"));
 
-        mockMvc.perform(put("/api/user/{idUser}/transaction/voucher", 9)
+        mockMvc.perform(put("/api/user/{idUser}/transaction/voucher", 18)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(transaction)))
                 .andExpect(status().isOk());

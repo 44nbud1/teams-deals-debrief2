@@ -1,6 +1,7 @@
 package dana.order;
 
 import dana.order.entity.DealsStatus;
+import dana.order.entity.TransactionHistoryModel;
 import dana.order.usecase.exception.OrderFailedException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
