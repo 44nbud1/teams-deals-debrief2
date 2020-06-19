@@ -73,9 +73,9 @@ public class TOPUP {
             return ResponseWrapper.wrap(DealsStatus.MERCHANT_NOT_AVAILABLE, null, path);
         }
 
-        transactionRepository.TOPUPBalance(idUser, amount, virtualNumber, partyCode);
+        Integer idTransaction = transactionRepository.TOPUPBalance(idUser, amount, virtualNumber, partyCode);
 
-        Transaction transaction = databaseRepository.getLatestUserSuccessfulTransaction(idUser);
+        Transaction transaction = databaseRepository.getTransactionById(idTransaction);
 
         transactionBroadcaster.send(transaction.getIdTransaction());
 

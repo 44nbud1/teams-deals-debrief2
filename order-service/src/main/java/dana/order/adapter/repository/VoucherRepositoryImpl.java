@@ -27,9 +27,11 @@ public class VoucherRepositoryImpl implements VoucherRepository {
         return Boolean.TRUE;
     }
 
-    public void insertNewOrder(String idUser, Integer idVoucher){
+    public Integer insertNewOrder(String idUser, Integer idVoucher){
         Voucher voucher = databaseRepository.getVoucherById(idVoucher);
-        databaseRepository.insertNewOrder(idUser, voucher.getVoucherPrice(), idVoucher);
+        Integer idTransaction = databaseRepository.getMaxTransactionID() + 1;
+        databaseRepository.insertNewOrder(idTransaction, idUser, voucher.getVoucherPrice(), idVoucher);
+        return idTransaction;
     }
 
     public Boolean isVoucherExists(Integer idVoucher){

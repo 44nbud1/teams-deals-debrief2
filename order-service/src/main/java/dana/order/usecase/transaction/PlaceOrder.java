@@ -59,9 +59,9 @@ public class PlaceOrder{
             return ResponseWrapper.wrap(DealsStatus.VOUCHER_OUT_OF_STOCK, null, path);
         }
 
-        voucherRepository.insertNewOrder(idUser, idVoucher);
+        Integer idTransaction = voucherRepository.insertNewOrder(idUser, idVoucher);
 
-        Transaction transaction = databaseRepository.getLatestUserInProgressTransaction(idUser);
+        Transaction transaction = databaseRepository.getTransactionById(idTransaction);
 
         JSONObject result = new JSONObject();
         result.put("idTransaction", transaction.getIdTransaction());

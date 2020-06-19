@@ -7,6 +7,7 @@ import dana.order.entity.Voucher;
 import dana.order.usecase.port.DatabaseMapper;
 import dana.order.usecase.port.DatabaseRepository;
 import dana.order.usecase.port.TransactionRepository;
+import dana.order.usecase.port.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -85,11 +86,17 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return Boolean.TRUE;
     }
 
-    public void TOPUPBalance(String idUser, Double amount, String virtualNumber, String partyCode){
-        databaseRepository.TOPUP(idUser, amount);
-        Transaction transaction = databaseRepository.getLatestUserSuccessfulTransaction(idUser);
+    public Integer TOPUPBalance(String idUser, Double amount, String virtualNumber, String partyCode){
+
+        Integer idTransaction = databaseRepository.getMaxTransactionID() + 1;
+
+        databaseRepository.TOPUP(idTransaction, idUser, amount);
+
+        Transaction transaction = databaseRepository.getTransactionById(idTransaction);
         ThirdParty thirdParty = databaseRepository.selectThirdPartyByCode(partyCode);
         databaseRepository.addVirtualPayment(transaction.getIdTransaction(), virtualNumber, thirdParty.getIdThirdParty());
+
+        return idTransaction;
     }
 
     public String getPartyCode(String virtualNumber){
@@ -101,8 +108,15 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     public Transaction setRefund(String idUser, Double amount, Integer idGoods){
+
         Integer idTransaction = databaseRepository.getMaxTransactionID() + 1;
+        ThirdParty thirdParty = databaseRepository.selectThirdPartyByCode("1234");
+        String virtualNumber = "0"+databaseRepository.getUserById(idUser).getPhoneNumber().substring(3);
+
         databaseRepository.makeARefund(idTransaction, idUser, amount, idGoods);
+        databaseRepository.addVirtualPayment(idTransaction, virtualNumber, thirdParty.getIdThirdParty());
+
         return databaseRepository.getTransactionById(idTransaction);
+
     }
 }

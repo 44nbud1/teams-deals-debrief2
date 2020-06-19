@@ -14,8 +14,8 @@ public interface DatabaseMapper {
     final String getVoucherById = "SELECT * FROM vouchers WHERE id_voucher = #{idVoucher}";
     final String getUserVoucherInUse = "SELECT COUNT(*) AS amount FROM transactions WHERE id_user = #{idUser} AND id_goods = #{idVoucher} " +
             "AND id_transaction_status IN (1,4)";
-    final String insertNewOrder = "INSERT INTO transactions (id_user, amount, transaction_date, is_credit, id_transaction_status, " +
-            "id_payment_method, id_service, id_goods) VALUES (#{idUser}, #{amount}, NOW(), 0, 4, 1, 2, #{idVoucher})";
+    final String insertNewOrder = "INSERT INTO transactions (id_transaction, id_user, amount, transaction_date, is_credit, id_transaction_status, " +
+            "id_payment_method, id_service, id_goods) VALUES (#{idTransaction}, #{idUser}, #{amount}, NOW(), 0, 4, 1, 2, #{idVoucher})";
     final String getUserExistById = "SELECT COUNT(*) AS amount FROM users WHERE id_user = #{idUser}";
     final String getLatestUserSuccessfulTransaction = "SELECT * FROM transactions WHERE id_user = #{idUser} AND " +
             "id_transaction_status IN (1,3) ORDER BY created_at DESC LIMIT 1";
@@ -31,11 +31,11 @@ public interface DatabaseMapper {
             "AND NOW() > DATE_ADD(created_at, INTERVAL 20 MINUTE)";
     final String getTransactionById = "SELECT * FROM transactions WHERE id_transaction = #{idTransaction}";
     final String checkATransactionExpiration = "SELECT COUNT(*) AS amount FROM transactions WHERE id_transaction = #{idTransaction} AND id_transaction_status = 4 " +
-            "AND NOW() > DATE_ADD(created_at, INTERVAL 20 MINUTE)";
+            "AND NOW() > DATE_ADD(created_at, INTERVAL 1 MINUTE)";
     final String setFinishATransaction = "UPDATE transactions SET id_transaction_status = 1 WHERE id_transaction = #{idTransaction}";
     final String checkThirdPartyExists = "SELECT COUNT(*) AS amount FROM third_parties WHERE party_code = ${partyCode}";
-    final String TOPUP = "INSERT INTO transactions (id_user, amount, transaction_date, is_credit, id_transaction_status, " +
-            "id_payment_method, id_service) VALUES (#{idUser}, #{amount}, NOW(), 1, 1, 2, 1)";
+    final String TOPUP = "INSERT INTO transactions (id_transaction, id_user, amount, transaction_date, is_credit, id_transaction_status, " +
+            "id_payment_method, id_service) VALUES (#{idTransaction}, #{idUser}, #{amount}, NOW(), 1, 1, 2, 1)";
     final String addVirtualPayment = "INSERT INTO virtual_payments (id_transaction, virtual_number, id_third_party) VALUES " +
             "(#{idTransaction}, #{virtualNumber}, #{idThirdParty})";
     final String selectThirdPartyByCode = "SELECT * FROM third_parties WHERE party_code = #{partyCode}";
@@ -223,7 +223,7 @@ public interface DatabaseMapper {
                            @Param("idThirdParty") Integer idThirdParty);
 
     @Insert(TOPUP)
-    void TOPUP(@Param("idUser") String idUser, @Param("amount") Double amount);
+    void TOPUP(@Param("idTransaction") Integer idTransaction, @Param("idUser") String idUser, @Param("amount") Double amount);
 
     @Select(checkThirdPartyExists)
     @Results(value = {
@@ -346,7 +346,7 @@ public interface DatabaseMapper {
     Integer getUserVoucherInUse(@Param("idUser") String idUser, @Param("idVoucher") Integer idVoucher);
 
     @Insert(insertNewOrder)
-    void insertNewOrder(@Param("idUser") String idUser, @Param("amount") Double amount, @Param("idVoucher") Integer idVoucher);
+    void insertNewOrder(@Param("idTransaction") Integer idTransaction, @Param("idUser") String idUser, @Param("amount") Double amount, @Param("idVoucher") Integer idVoucher);
 
     @Select(getUserExistById)
     @Results(value = {

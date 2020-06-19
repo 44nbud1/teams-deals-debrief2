@@ -163,9 +163,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         databaseMapper.addVirtualPayment(idTransaction, virtualNumber, idThirdParty);
     }
 
-    public void TOPUP(String idUser, Double amount){
+    public void TOPUP(Integer idTransaction, String idUser, Double amount){
         //INSERT
-        databaseMapper.TOPUP(idUser, amount);
+        databaseMapper.TOPUP(idTransaction, idUser, amount);
     }
 
     public Integer checkThirdPartyExists(String partyCode){
@@ -246,9 +246,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         return databaseMapper.getUserVoucherInUse(idUser, idVoucher);
     }
 
-    public void insertNewOrder(String idUser, Double amount, Integer idVoucher){
+    public void insertNewOrder(Integer idTransaction, String idUser, Double amount, Integer idVoucher){
         //INSERT
-        databaseMapper.insertNewOrder(idUser, amount, idVoucher);
+        databaseMapper.insertNewOrder(idTransaction, idUser, amount, idVoucher);
     }
 
     public Integer getUserExistById(String idUser){
