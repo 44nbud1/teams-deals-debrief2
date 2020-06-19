@@ -88,6 +88,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public void deleteOtp(String idUser) {
+        otpMapper.deleteOtp(idUser);
+    }
+
+    @Override
     public OtpResponse matchOtp(String idUser, String otp) {
         OtpResponse otpResponse = otpMapper.matchOTP(idUser, otp);
         return otpResponse;

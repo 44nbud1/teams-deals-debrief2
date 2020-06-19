@@ -17,10 +17,6 @@ public class UserValidation {
     private final String regex_password = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=\\S+$).{8,16}$";
     private final String regex_name = "^(?!.*^[\\s])(?!.*[\\s]$)(?!.*[0-9!@#$%^&*])(?=.*[a-zA-Z'\\-]{3,10}[\\s]|.*^[a-zA-Z'\\-]{3,10}$)(?!.*['][\\-]|.*[\\-][']|.*[\\-][\\-]|.*['][']).{3,20}$";
 
-    public boolean testMe(){
-        return true;
-    }
-
     public ResponseEntity<JSONObject> editProfile(EditProfileRequest editProfileRequest, String path){
 
         if (editProfileRequest == null){

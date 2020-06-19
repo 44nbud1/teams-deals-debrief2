@@ -1,7 +1,6 @@
 package com.okta.examples.service.validation;
 
 import com.okta.examples.model.status.DealsStatus;
-import com.okta.examples.model.request.CreateMerchantRequest;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.model.response.ResponseSuccess;
 import org.json.simple.JSONObject;
@@ -18,42 +17,10 @@ public class AdminValidation {
     private final String regex_integer = "^[\\d]+$";
     private final String regex_double = "^(?=.*[\\d])(?!.*[\\D]).+$|^[\\d]+[.]{1}[\\d]+$";
 
-    public ResponseEntity<?> createMerchant(CreateMerchantRequest createMerchantRequest, String path){
-
-//        if (createMerchantRequest.getVoucherName() == null || createMerchantRequest.getVoucherPrice() == null ||
-//            createMerchantRequest.getDiscount() == null || createMerchantRequest.getMaxDiscount() == null ||
-//            createMerchantRequest.getQuota()== null || createMerchantRequest.getExpiredDate() == null ||
-//            createMerchantRequest.getStatus() == null){
-//            return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
-//        }
-
-        if (createMerchantRequest.getVoucherName() == null){
-            return ResponseFailed.wrapResponse(DealsStatus.FILL_VOUCHER_NAME, path);
-        }
-        if (createMerchantRequest.getVoucherPrice() == null){
-            return ResponseFailed.wrapResponse(DealsStatus.FILL_VOUCHER_PRICE, path);
-        }
-        if (createMerchantRequest.getDiscount() == null){
-            return ResponseFailed.wrapResponse(DealsStatus.FILL_DISCOUNT, path);
-        }
-        if (createMerchantRequest.getMaxDiscount() == null){
-            return ResponseFailed.wrapResponse(DealsStatus.FILL_MAX_DISCOUNT, path);
-        }
-        if (createMerchantRequest.getQuota() == null){
-            return ResponseFailed.wrapResponse(DealsStatus.FILL_QUOTA, path);
-        }
-        if (createMerchantRequest.getExpiredDate() == null){
-            return ResponseFailed.wrapResponse(DealsStatus.FILL_EXPIRED_DATE, path);
-        }
-        if (createMerchantRequest.getStatus() == null){
-            return ResponseFailed.wrapResponse(DealsStatus.FILL_STATUS, path);
-        }
-        return ResponseSuccess.wrapOk();
-    }
 
     public ResponseEntity<JSONObject> test(JSONObject data, String path){
         if (data == null){
-            return ResponseFailed.wrapResponse(DealsStatus.FILL_VOUCHER_NAME, path);
+            return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
         }
         if (data.get("voucherName") == null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_VOUCHER_NAME, path);
@@ -119,7 +86,7 @@ public class AdminValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> searchVoucher(String merchantName, String page, String path){
+    public ResponseEntity<JSONObject> searchVoucher(String merchantName, String page, String path){
         if (merchantName == null){
             return ResponseFailed.wrapResponse(DealsStatus.PAGE_NOT_FOUND, path);
         }
@@ -135,7 +102,7 @@ public class AdminValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> sortVoucher(String name, String page, String path){
+    public ResponseEntity<JSONObject> sortVoucher(String name, String page, String path){
         if (name == null){
             return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);
         }
@@ -151,7 +118,7 @@ public class AdminValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> voucherDetail(String idVoucher, String path){
+    public ResponseEntity<JSONObject> voucherDetail(String idVoucher, String path){
         if (idVoucher == null){
             return ResponseFailed.wrapResponse(DealsStatus.VOUCHER_NOT_FOUND, path);
         }
@@ -161,7 +128,7 @@ public class AdminValidation {
         return ResponseSuccess.wrapOk();
     }
 
-    public ResponseEntity<?> updateVoucher(String idVoucher, JSONObject data, String path){
+    public ResponseEntity<JSONObject> updateVoucher(String idVoucher, JSONObject data, String path){
 
         if (idVoucher == null){
             return ResponseFailed.wrapResponse(DealsStatus.DATA_INVALID, path);

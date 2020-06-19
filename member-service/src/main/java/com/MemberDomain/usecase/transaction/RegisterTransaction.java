@@ -8,14 +8,13 @@ import com.MemberDomain.model.response.UserDataResponse;
 import com.MemberDomain.usecase.broadcast.MemberBroadcaster;
 import com.MemberDomain.usecase.port.UserRepository;
 import com.MemberDomain.usecase.validation.UserValidation;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.SQLException;
 
 @Service
 public class RegisterTransaction {
@@ -30,9 +29,9 @@ public class RegisterTransaction {
     MemberBroadcaster memberBroadcaster;
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = InternalError.class)
-    public ResponseEntity<?> createAccount(RegisterRequest registerRequest, String path) {
+    public ResponseEntity<JSONObject> createAccount(RegisterRequest registerRequest, String path) {
 
-        ResponseEntity<?> check = userValidation.register(registerRequest, path);
+        ResponseEntity<JSONObject> check = userValidation.register(registerRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;

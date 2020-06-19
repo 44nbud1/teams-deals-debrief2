@@ -1,5 +1,7 @@
 package com.okta.examples.service.usecase;
 
+import com.okta.examples.adapter.jwt.JwtTokenUtil;
+import com.okta.examples.adapter.jwt.JwtUserDetailsService;
 import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.adapter.parser.Parser;
 import com.okta.examples.model.response.ResponseFailed;
@@ -31,11 +33,17 @@ public class AuthenticationService {
     @Autowired
     AuthenticationValidation validate;
 
-    public ResponseEntity<?> register(RegisterRequest registerRequest, String path) {
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    JwtUserDetailsService jwtUserDetailsService;
+
+    public ResponseEntity<JSONObject> register(RegisterRequest registerRequest, String path) {
 
         //Register validation
         System.out.println("Register Validation. " + Parser.toJsonString(registerRequest));
-        ResponseEntity<?> check = validate.register(registerRequest, path);
+        ResponseEntity<JSONObject> check = validate.register(registerRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -79,16 +87,16 @@ public class AuthenticationService {
         return ResponseSuccess.wrapResponse(result, DealsStatus.REGISTRATION_SUCCESS, path);
     }
 
-    private String encryptPassword(String password){
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password);
-    }
+//    private String encryptPassword(String password){
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        return passwordEncoder.encode(password);
+//    }
 
-    public ResponseEntity<?> login(LoginRequest loginRequest, String path, HttpServletRequest request){
+    public ResponseEntity<JSONObject> login(LoginRequest loginRequest, String path, String request){
 
         //Login validation
         System.out.println("Login Validation. " +Parser.toJsonString(loginRequest));
-        ResponseEntity<?> check = validate.login(loginRequest, path);
+        ResponseEntity<JSONObject> check = validate.login(loginRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -118,19 +126,19 @@ public class AuthenticationService {
         //Create user
         JSONObject user = (JSONObject) jsonMember.get("data");
         String idUser = ""+user.get("idUser");
-
+        String idSession= UUID.randomUUID().toString()+idUser;
         //Check user session
         System.out.println("Check if id : "+ idUser+" already have session");
         if(sessionService.checkSession(idUser) != null){
 
             System.out.println("Session found. Destroy old session for id : "+idUser);
             sessionService.destroySession(idUser);
-            request.getSession().invalidate();
-            String idSession = request.getSession().getId()+idUser;
+//            request.getSession().invalidate();
             System.out.println("Start new session for id : " + idUser);
 
             //Create and start session
             sessionService.startSession(idUser, idSession);
+            idSession = jwtTokenUtil.generateToken(jwtUserDetailsService.loadUserByUsername(idSession));
 
             //Wrap response
             JSONObject result = new JSONObject();
@@ -144,8 +152,8 @@ public class AuthenticationService {
             System.out.println("Start new session for id : " + idUser);
 
             //Create and start session
-            String idSession= request.getSession().getId()+idUser;
             sessionService.startSession(idUser, idSession);
+            idSession = jwtTokenUtil.generateToken(jwtUserDetailsService.loadUserByUsername(idSession));
 
             //Wrap response
             JSONObject result = new JSONObject();
@@ -156,11 +164,11 @@ public class AuthenticationService {
         }
     }
 
-    public ResponseEntity<?> requestOtp(JSONObject data, String path){
+    public ResponseEntity<JSONObject> requestOtp(JSONObject data, String path){
 
         //Request otp validation
         System.out.println("Request Otp Validation. " +Parser.toJsonString(data));
-        ResponseEntity<?> check = validate.requestOtp(data, path);
+        ResponseEntity<JSONObject> check = validate.requestOtp(data, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -198,11 +206,11 @@ public class AuthenticationService {
         return ResponseSuccess.wrapResponse(user, DealsStatus.REQUEST_OTP, path);
     }
 
-    public ResponseEntity<?> matchOtp(String idUser, JSONObject data, String path){
+    public ResponseEntity<JSONObject> matchOtp(String idUser, JSONObject data, String path){
 
         // Match otp validation
         System.out.println("Match Otp Validation. " +Parser.toJsonString(data));
-        ResponseEntity<?> check = validate.matchOtp(data, path);
+        ResponseEntity<JSONObject> check = validate.matchOtp(data, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -234,11 +242,11 @@ public class AuthenticationService {
 //                "/api/auth/"+idUser+"/match-otp");
     }
 
-    public ResponseEntity<?> forgotPassword(String idUser, ForgotPasswordRequest forgotPasswordRequest, String path){
+    public ResponseEntity<JSONObject> forgotPassword(String idUser, ForgotPasswordRequest forgotPasswordRequest, String path){
 
         //Forgot password validation
         System.out.println("Forgot Password Validation. " +Parser.toJsonString(forgotPasswordRequest));
-        ResponseEntity<?> check = validate.forgotPassword(forgotPasswordRequest, path);
+        ResponseEntity<JSONObject> check = validate.forgotPassword(forgotPasswordRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -246,6 +254,7 @@ public class AuthenticationService {
         if (sessionService.checkSession(idUser) != null){
             return ResponseFailed.wrapResponse(DealsStatus.ALREADY_LOGIN, path);
         }
+
         JSONObject data = new JSONObject();
         data.put("password", forgotPasswordRequest.getPassword());
         data.put("newPassword", forgotPasswordRequest.getPassword());
@@ -276,7 +285,7 @@ public class AuthenticationService {
             return ResponseFailed.wrapResponseFailed( "You are not authorized",
                                                     "201", HttpStatus.UNAUTHORIZED, path);
         }
-        return ResponseSuccess.wrapResponseSuccess(path, "Success", 100, HttpStatus.OK, "/sda");
+        return ResponseSuccess.wrapOk();
     }
 
 }

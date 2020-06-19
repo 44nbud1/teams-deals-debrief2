@@ -32,7 +32,6 @@ public class AdminController {
         if (!sessionValidation.requestId(request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
-        data.put("idUser", idUser);
         return adminService.createMerchant(idUser, idMerchant, data, request.getServletPath());
     }
 
