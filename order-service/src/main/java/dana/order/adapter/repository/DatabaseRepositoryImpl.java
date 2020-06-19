@@ -15,9 +15,27 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
     @Autowired
     DatabaseMapper databaseMapper;
 
-    public void makeARefund(String idUser, Double amount, Integer idGoods){
+    public Integer getMaxTransactionID(){
+        return databaseMapper.getMaxTransactionID();
+    }
+
+    public void updateAVoucherWithDelta(Voucher voucher){
+        //UPDATE
+        Boolean retry = Boolean.TRUE;
+        while (retry == Boolean.TRUE){
+            try {
+                databaseMapper.updateAVoucherWithDelta(voucher);
+                retry = Boolean.FALSE;
+            }catch (DeadlockLoserDataAccessException e){
+                e.printStackTrace();
+                retry = Boolean.TRUE;
+            }
+        }
+    }
+
+    public void makeARefund(Integer idTransaction, String idUser, Double amount, Integer idGoods){
         //INSERT
-        databaseMapper.makeARefund(idUser, amount, idGoods);
+        databaseMapper.makeARefund(idTransaction, idUser, amount, idGoods);
     }
 
     public void fallingAllExpiredTransaction(){

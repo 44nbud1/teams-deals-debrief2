@@ -12,6 +12,7 @@ import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -32,7 +33,7 @@ public class TransactionBroadcaster {
     DatabaseRepository databaseRepository;
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public synchronized void send(Integer idTransaction){
+    public void send(Integer idTransaction){
 
         Transaction transaction = databaseRepository.getTransactionById(idTransaction);
         System.out.println("SENDING TO ALL : "+transaction.toJsonString());

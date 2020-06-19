@@ -101,7 +101,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     public Transaction setRefund(String idUser, Double amount, Integer idGoods){
-        databaseRepository.makeARefund(idUser, amount, idGoods);
-        return databaseRepository.getLatestUserSuccessfulTransaction(idUser);
+        Integer idTransaction = databaseRepository.getMaxTransactionID() + 1;
+        databaseRepository.makeARefund(idTransaction, idUser, amount, idGoods);
+        return databaseRepository.getTransactionById(idTransaction);
     }
 }

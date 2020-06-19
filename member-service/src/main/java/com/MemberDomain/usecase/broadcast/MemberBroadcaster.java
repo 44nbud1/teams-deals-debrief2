@@ -25,9 +25,10 @@ public class MemberBroadcaster {
     @Autowired
     UserMapper userMapper;
 
-    public void send(String idUser){
+    public void send(String idUser, Double deltaAmount){
         UserDataResponse userDataResponse = userMapper.getUserData(idUser);
         System.out.println(userDataResponse.toString());
+        userDataResponse.setBalance(deltaAmount);
         rabbitTemplate.convertAndSend(fanoutMemberForOrder.getName(), "", userDataResponse);
         rabbitTemplate.convertAndSend(fanoutMemberForVoucher.getName(), "", userDataResponse);
     }

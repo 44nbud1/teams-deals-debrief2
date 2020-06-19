@@ -64,7 +64,7 @@ public class RegisterTransaction {
 //        userRepository.insertNewUserBalance(registerRequest.getIdUser());
 
         UserDataResponse userDataResponse = userRepository.getUserData(registerRequest.getIdUser());
-        memberBroadcaster.send(registerRequest.getIdUser());
+        memberBroadcaster.send(registerRequest.getIdUser(), Double.valueOf(0));
 
         return ResponseSuccess.wrapResponse(userDataResponse, DealsStatus.REGISTRATION_SUCCESS, path);
     }

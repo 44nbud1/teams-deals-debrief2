@@ -2,6 +2,7 @@ package dana.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -90,6 +92,11 @@ public class TestController {
                 .content(objectMapper.writeValueAsString(json)))
                 .andExpect(status().isOk());
 
+        mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, 2)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isOk());
+
         mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, -2)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(json)))
@@ -134,6 +141,43 @@ public class TestController {
     @Test
     void integratedTestTOPUP() throws Exception{
 
+        JSONObject json = new JSONObject();
+        json.put("virtualNumber", "9130081222371122");
+        json.put("amount", 50000);
+
+        mockMvc.perform(post("/api/user/{idUser}/transaction/topup", 9)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isNotAcceptable());
+    }
+
+    @Test
+    void refund() throws Exception{
+        integratedPlaceOrderWithRefund();
+        //integratedPlaceOrderWithRefund();
+    }
+
+    void integratedPlaceOrderWithRefund() throws Exception{
+        JSONObject voucher = new JSONObject();
+        voucher.put("idVoucher", 1);
+
+        MvcResult result = mockMvc.perform(post("/api/user/{idUser}/transaction/voucher", 9)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(voucher)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        JSONParser parser = new JSONParser();
+
+        JSONObject response = (JSONObject) parser.parse(result.getResponse().getContentAsString());
+
+        JSONObject transaction = (JSONObject) parser.parse(""+response.get("data"));
+
+        mockMvc.perform(put("/api/user/{idUser}/transaction/voucher", 9)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(transaction)))
+                .andExpect(status().isOk());
+        Thread.sleep(3000);
     }
 
 }
