@@ -2,8 +2,6 @@ package com.MemberDomain.usecase.transaction;
 
 import com.MemberDomain.adapter.status.DealsStatus;
 import com.MemberDomain.model.request.RegisterRequest;
-import org.json.simple.JSONObject;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,24 +17,25 @@ public class RegisterTransactionTest {
     @Test
     public void registerTest() {
         System.out.println("Registration Test");
-        assertFalse(registerTransaction.createAccount(null, "/api/auth/register").getStatusCode().is2xxSuccessful());
+        String path = "/api/auth/register";
+        assertFalse(registerTransaction.createAccount(null, path).getStatusCode().is2xxSuccessful());
 
         RegisterRequest registerRequest = new RegisterRequest();
 
-        assertFalse(registerTransaction.createAccount(registerRequest, "/api/auth/register").getStatusCode().is2xxSuccessful());
+        assertFalse(registerTransaction.createAccount(registerRequest, path).getStatusCode().is2xxSuccessful());
 
         registerRequest.setName("Aldie Adrian");
-        registerRequest.setEmail("aldie@gmail.com");
-        registerRequest.setPhoneNumber("+6281287878787");
+        registerRequest.setEmail("aldieadrian@gmail.com");
+        registerRequest.setPhoneNumber("082118941234");
         registerRequest.setPassword("H0lmesHere!");
         registerRequest.setConfirmPassword("H0lmesHere!");
-        assertTrue(registerTransaction.createAccount(registerRequest, "/api/auth/register").getStatusCode().is2xxSuccessful());
+        //assertTrue(registerTransaction.createAccount(registerRequest, path).getStatusCode().is2xxSuccessful());
 
         registerRequest.setPassword("H0lmesHere!");
         registerRequest.setConfirmPassword("H0lmesHere!");
-        assertEquals(DealsStatus.EMAIL_EXISTS.getValue(), registerTransaction.createAccount(registerRequest, "/api/auth/register").getBody().get("status"));
+        assertEquals(DealsStatus.EMAIL_EXISTS.getValue(), registerTransaction.createAccount(registerRequest, path).getBody().get("status"));
 
         registerRequest.setEmail("aldie17@gmail.com");
-        assertEquals(DealsStatus.PHONE_NUMBER_EXISTS.getValue(), registerTransaction.createAccount(registerRequest, "/api/auth/register").getBody().get("status"));
+        assertEquals(DealsStatus.PHONE_NUMBER_EXISTS.getValue(), registerTransaction.createAccount(registerRequest, path).getBody().get("status"));
     }
 }

@@ -8,6 +8,7 @@ import com.MemberDomain.model.response.LoginResponse;
 import com.MemberDomain.model.response.UserDataResponse;
 import com.MemberDomain.usecase.port.UserRepository;
 import com.MemberDomain.usecase.validation.UserValidation;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,9 +23,9 @@ public class LoginTransaction {
     @Autowired
     UserRepository userRepository;
 
-    public ResponseEntity<?> login(LoginRequest loginRequest, String path){
+    public ResponseEntity<JSONObject> login(LoginRequest loginRequest, String path){
 
-        ResponseEntity<?> check = userValidation.login(loginRequest, path);
+        ResponseEntity<JSONObject> check = userValidation.login(loginRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;

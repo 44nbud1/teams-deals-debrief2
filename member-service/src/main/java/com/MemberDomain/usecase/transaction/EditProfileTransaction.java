@@ -8,6 +8,7 @@ import com.MemberDomain.model.response.PasswordResponse;
 import com.MemberDomain.model.response.ProfileResponse;
 import com.MemberDomain.usecase.port.UserRepository;
 import com.MemberDomain.usecase.validation.UserValidation;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,9 +23,9 @@ public class EditProfileTransaction {
     @Autowired
     UserRepository userRepository;
 
-    public ResponseEntity<?> editProfile(String idUser, EditProfileRequest editProfileRequest, String path){
+    public ResponseEntity<JSONObject> editProfile(String idUser, EditProfileRequest editProfileRequest, String path){
 
-        ResponseEntity<?> check = userValidation.editProfile(editProfileRequest, path);
+        ResponseEntity<JSONObject> check = userValidation.editProfile(editProfileRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -42,7 +43,7 @@ public class EditProfileTransaction {
                 return ResponseFailed.wrapResponse(DealsStatus.OLD_PASSWORD_NOT_MATCH, path);
             }
             else{
-                ResponseEntity<?> checkEditPassword = userValidation.editPassword(editProfileRequest, path);
+                ResponseEntity<JSONObject> checkEditPassword = userValidation.editPassword(editProfileRequest, path);
                 if (!checkEditPassword.getStatusCode().is2xxSuccessful()){
                     return checkEditPassword;
                 }
