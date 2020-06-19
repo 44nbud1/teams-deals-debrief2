@@ -5,6 +5,7 @@ import com.MemberDomain.adapter.wrapper.ResponseFailed;
 import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.response.ProfileResponse;
 import com.MemberDomain.usecase.port.UserRepository;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class GetProfileTransaction {
     @Autowired
     UserRepository userRepository;
 
-    public ResponseEntity<?> getProfile(String idUser, String path){
+    public ResponseEntity<JSONObject> getProfile(String idUser, String path){
 
         ProfileResponse profileResponse = userRepository.getUserProfile(idUser);
 

@@ -26,13 +26,13 @@ public class SessionService {
 
     public Integer checkSessionExpired(String idUser, String idSession){ return repository.checkSessionExpired(idUser, idSession);}
 
-    public Integer checkSessionExpiredWithoutId(String idSession){ return repository.checkSessionExpiredWithoutId(idSession);}
-
-    public Integer checkSessionWithoutId(String idSession){ return repository.checkSessionWithoutId(idSession);}
-
-    public void destroySessionWithoutId(String idSession){ repository.destroySessionWithoutId(idSession);}
-
-    public String getIdUserSession(String idSession){ return repository.getIdUserSession(idSession);}
+//    public Integer checkSessionExpiredWithoutId(String idSession){ return repository.checkSessionExpiredWithoutId(idSession);}
+//
+//    public Integer checkSessionWithoutId(String idSession){ return repository.checkSessionWithoutId(idSession);}
+//
+//    public void destroySessionWithoutId(String idSession){ repository.destroySessionWithoutId(idSession);}
+//
+//    public String getIdUserSession(String idSession){ return repository.getIdUserSession(idSession);}
 
     private String encryptPassword(String password){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

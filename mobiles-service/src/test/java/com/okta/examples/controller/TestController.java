@@ -115,8 +115,50 @@ public class TestController {
 
     }
 
+    @Test
+    void userTransactionHistory() throws Exception{
+
+        JSONObject json = new JSONObject();
+        json.put("name", "kevin");
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MTA3NjlkNi01Y2Q4LTQ3MmYtOGU3OS0yMmVjMTY3YjNlYWExMSIsImV4cCI6MTU5MzA2OTY2MywiaWF0IjoxNTkyNDU0NzgzfQ.FggRkWOTI2Ijrq06Bkm_RZStz6KlZFrfI7aLZqmO2wgFo4QodEIytwbsGT6Di8McEK3vnIK29T5Fsu06qj3Yng");
+        mockMvc.perform(get("/api/user/{idUser}/transaction", 11)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isOk());
+
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MTA3NjlkNi01Y2Q4LTQ3MmYtOGU3OS0yMmVjMTY3YjNlYWExMSIsImV4cCI6MTU5MzA2OTY2MywiaWF0IjoxNTkyNDU0NzgzfQ.FggRkWOTI2Ijrq06Bkm_RZStz6KlZFrfI7aLZqmO2wgFo4QodEIytwbsGT6Di8McEK3vnIK29T5Fsu06qj3Yng");
+        mockMvc.perform(put("/api/user/{idUser}/transaction/12", 12)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void userTransactionDetail() throws Exception{
+
+        JSONObject json = new JSONObject();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MTA3NjlkNi01Y2Q4LTQ3MmYtOGU3OS0yMmVjMTY3YjNlYWExMSIsImV4cCI6MTU5MzA2OTY2MywiaWF0IjoxNTkyNDU0NzgzfQ.FggRkWOTI2Ijrq06Bkm_RZStz6KlZFrfI7aLZqmO2wgFo4QodEIytwbsGT6Di8McEK3vnIK29T5Fsu06qj3Yng");
+        mockMvc.perform(put("/api/user/{idUser}/transaction/12", 11)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MTA3NjlkNi01Y2Q4LTQ3MmYtOGU3OS0yMmVjMTY3YjNlYWExMSIsImV4cCI6MTU5MzA2OTY2MywiaWF0IjoxNTkyNDU0NzgzfQ.FggRkWOTI2Ijrq06Bkm_RZStz6KlZFrfI7aLZqmO2wgFo4QodEIytwbsGT6Di8McEK3vnIK29T5Fsu06qj3Yng");
+        mockMvc.perform(put("/api/user/{idUser}/transaction/12", 12)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
 
 
-
-
+    }
 }

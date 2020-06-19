@@ -136,6 +136,7 @@ public class TransactionService {
         JSONObject jsonOrder = Parser.parseJSON(fromOrder.getBody().toString());
         String message = ""+ jsonOrder.get("message");
         String status = ""+ jsonOrder.get("status");
+//        path = "/api/user/"+idUser+"/transaction/"+idTransaction;
 
         if (!fromOrder.getStatusCode().is2xxSuccessful()){
             if (fromOrder.getBody().toString().toLowerCase().contains("connection refused")){

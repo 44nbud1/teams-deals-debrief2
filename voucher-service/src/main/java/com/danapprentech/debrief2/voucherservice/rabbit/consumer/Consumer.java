@@ -36,11 +36,6 @@ public class Consumer
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void receive1(TransactionConsumer updateQtyConsumer)
     {
-        if (updateQtyConsumer.getIdGoods() ==1 && updateQtyConsumer.getIdTransaction() == 3)
-        {
-            System.out.println("***********************************************************************");
-            System.out.println("Id transaction :"+updateQtyConsumer.getIdTransaction());
-        }
 
         if (updateQtyConsumer.getIdGoods() != null && updateQtyConsumer.getIdTransactionStatus() == 1)
         {
@@ -109,6 +104,12 @@ public class Consumer
             mqProducer.sendToRabbitVoucher(voucherResponse);
 
         }
+//        if (updateQtyConsumer.getIdGoods() ==1 && updateQtyConsumer.getIdTransaction() == 3)
+//        {
+//            System.out.println("***********************************************************************");
+//            System.out.println("Id transaction :"+updateQtyConsumer.getIdTransaction());
+//        }
+
         System.out.println("yogi kirim ke Members");
         System.out.println("***********************************************************************");
 

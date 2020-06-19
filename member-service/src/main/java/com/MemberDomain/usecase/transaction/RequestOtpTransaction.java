@@ -22,9 +22,9 @@ public class RequestOtpTransaction {
     @Autowired
     UserRepository userRepository;
 
-    public ResponseEntity<?> requestOtp(OtpRequest otpRequest, String path){
+    public ResponseEntity<JSONObject> requestOtp(OtpRequest otpRequest, String path){
 
-        ResponseEntity<?> check = userValidation.requestOtp(otpRequest, path);
+        ResponseEntity<JSONObject> check = userValidation.requestOtp(otpRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
