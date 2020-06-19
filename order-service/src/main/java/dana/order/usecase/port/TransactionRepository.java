@@ -9,7 +9,7 @@ public interface TransactionRepository {
     void setFinishATransaction(Integer idTransaction);
     String getPartyCode(String virtualNumber);
     Boolean checkTOPUPThirdParty(String partyCode);
-    void TOPUPBalance(String idUser, Double amount, String virtualNumber, String partyCode);
+    Integer TOPUPBalance(String idUser, Double amount, String virtualNumber, String partyCode);
     String getPhoneNumberFromVA(String virtualNumber);
     Transaction setRefund(String idUser, Double amount, Integer idGoods);
 }

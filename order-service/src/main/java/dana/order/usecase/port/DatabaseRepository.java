@@ -59,7 +59,7 @@ public interface DatabaseRepository {
 
     void addVirtualPayment(Integer idTransaction, String virtualNumber, Integer idThirdParty);
 
-    void TOPUP(String idUser, Double amount);
+    void TOPUP(Integer idTransaction, String idUser, Double amount);
 
     Integer checkThirdPartyExists(String partyCode);
 
@@ -85,7 +85,7 @@ public interface DatabaseRepository {
 
     Integer getUserVoucherInUse(String idUser, Integer idVoucher);
 
-    void insertNewOrder(String idUser, Double amount, Integer idVoucher);
+    void insertNewOrder(Integer idTransaction, String idUser, Double amount, Integer idVoucher);
 
     Integer getUserExistById(String idUser);
 }

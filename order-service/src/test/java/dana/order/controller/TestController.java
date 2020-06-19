@@ -85,26 +85,20 @@ public class TestController {
     @Test
     void integratedTestDetailedTransactionHistory() throws Exception{
 
-        JSONObject json = new JSONObject();
-
         mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, 1)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(json)))
+                .contentType("application/json"))
                 .andExpect(status().isOk());
 
         mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, 2)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(json)))
+                .contentType("application/json"))
                 .andExpect(status().isOk());
 
         mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, -2)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(json)))
+                .contentType("application/json"))
                 .andExpect(status().isNotFound());
 
         mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, 11)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(json)))
+                .contentType("application/json"))
                 .andExpect(status().isNotFound());
 
     }
