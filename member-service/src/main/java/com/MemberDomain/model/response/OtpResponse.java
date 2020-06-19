@@ -13,30 +13,30 @@ public class OtpResponse {
     public OtpResponse() {
     }
 
-    public OtpResponse(String idOtp, String idUser, String otp, DateTime expiredDate, int matchStatus) {
-        super();
-        this.idOtp = idOtp;
-        this.idUser = idUser;
-        this.otp = otp;
-        this.expiredDate = expiredDate;
-        this.matchStatus = matchStatus;
-    }
-
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("ID OTP = ").append(idOtp).append(" - ");
-        sb.append("ID User = ").append(idUser).append(" - ");
-        sb.append("OTP = ").append(otp).append(" - ");
-        sb.append("Expired Date = ").append(expiredDate).append(" - ");
-        sb.append("Match Status = ").append(matchStatus).append(" - ");
-
-        return sb.toString();
-    }
-
-    public OtpResponse(String idUser, String otp, DateTime expiredDate, int matchStatus){
-        this("", idUser, otp, expiredDate, matchStatus);
-    }
+//    public OtpResponse(String idOtp, String idUser, String otp, DateTime expiredDate, int matchStatus) {
+//        super();
+//        this.idOtp = idOtp;
+//        this.idUser = idUser;
+//        this.otp = otp;
+//        this.expiredDate = expiredDate;
+//        this.matchStatus = matchStatus;
+//    }
+//
+//    public String toString(){
+//        StringBuilder sb = new StringBuilder();
+//
+//        sb.append("ID OTP = ").append(idOtp).append(" - ");
+//        sb.append("ID User = ").append(idUser).append(" - ");
+//        sb.append("OTP = ").append(otp).append(" - ");
+//        sb.append("Expired Date = ").append(expiredDate).append(" - ");
+//        sb.append("Match Status = ").append(matchStatus).append(" - ");
+//
+//        return sb.toString();
+//    }
+//
+//    public OtpResponse(String idUser, String otp, DateTime expiredDate, int matchStatus){
+//        this("", idUser, otp, expiredDate, matchStatus);
+//    }
 
     public void setIdOtp(String idOtp) {
         this.idOtp = idOtp;

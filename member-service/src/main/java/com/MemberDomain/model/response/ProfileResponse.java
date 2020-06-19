@@ -10,28 +10,28 @@ public class ProfileResponse {
     public ProfileResponse() {
     }
 
-    public ProfileResponse(String idUser, String name, String email, String phoneNumber) {
-        super();
-        this.idUser = idUser;
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("ID User = ").append(idUser).append(" - ");
-        sb.append("User Name = ").append(name).append(" - ");
-        sb.append("User Email = ").append(email).append(" - ");
-        sb.append("User Phone Number = ").append(phoneNumber).append(" - ");
-
-        return sb.toString();
-    }
-
-    public ProfileResponse(String name, String email, String phoneNumber){
-        this("", name, email, phoneNumber);
-    }
+//    public ProfileResponse(String idUser, String name, String email, String phoneNumber) {
+//        super();
+//        this.idUser = idUser;
+//        this.name = name;
+//        this.email = email;
+//        this.phoneNumber = phoneNumber;
+//    }
+//
+//    public String toString(){
+//        StringBuilder sb = new StringBuilder();
+//
+//        sb.append("ID User = ").append(idUser).append(" - ");
+//        sb.append("User Name = ").append(name).append(" - ");
+//        sb.append("User Email = ").append(email).append(" - ");
+//        sb.append("User Phone Number = ").append(phoneNumber).append(" - ");
+//
+//        return sb.toString();
+//    }
+//
+//    public ProfileResponse(String name, String email, String phoneNumber){
+//        this("", name, email, phoneNumber);
+//    }
 
     public void setIdUser(String idUser) {
         this.idUser = idUser;

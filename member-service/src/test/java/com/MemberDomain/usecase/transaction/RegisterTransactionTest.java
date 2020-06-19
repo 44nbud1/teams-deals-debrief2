@@ -25,7 +25,7 @@ public class RegisterTransactionTest {
         assertFalse(registerTransaction.createAccount(registerRequest, path).getStatusCode().is2xxSuccessful());
 
         registerRequest.setName("Aldie Adrian");
-        registerRequest.setEmail("aldieadrian@gmail.com");
+        registerRequest.setEmail("aldie@gmail.com");
         registerRequest.setPhoneNumber("082118941234");
         registerRequest.setPassword("H0lmesHere!");
         registerRequest.setConfirmPassword("H0lmesHere!");
