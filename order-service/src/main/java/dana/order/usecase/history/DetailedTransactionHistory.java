@@ -44,6 +44,6 @@ public class DetailedTransactionHistory {
 
         JSONObject transactionDetails = historyRepository.getUserDetailedHistory(transaction.getIdTransaction());
 
-        return ResponseWrapper.wrap(DealsStatus.TRANSACTION_HISTORY_COLLECTED, transactionDetails, path);
+        return ResponseWrapper.wrap(DealsStatus.DETAILED_HISTORY_COLLECTED, transactionDetails, path);
     }
 }
