@@ -6,7 +6,11 @@ import java.util.List;
 
 public interface DatabaseRepository {
 
-    void makeARefund(String idUser, Double amount, Integer idGoods);
+    Integer getMaxTransactionID();
+
+    void updateAVoucherWithDelta(Voucher voucher);
+
+    void makeARefund(Integer idTransaction, String idUser, Double amount, Integer idGoods);
 
     void fallingAllExpiredTransaction();
 

@@ -25,8 +25,8 @@ public interface DatabaseMapper {
             "ORDER BY updated_at DESC LIMIT 1";
     final String getUserById = "SELECT * FROM users WHERE id_user = #{idUser}";
     final String fallingATransaction = "UPDATE transactions SET id_transaction_status = 2 WHERE id_transaction = #{idTransaction} AND id_user = #{idUser}";
-    final String makeARefund = "INSERT INTO transactions (id_user, amount, transaction_date, is_credit, id_transaction_status, " +
-            "id_payment_method, id_service, id_goods) VALUES (#{idUser}, #{amount}, NOW(), 1, 3, 2, 1, #{idGoods})";
+    final String makeARefund = "INSERT INTO transactions (id_transaction, id_user, amount, transaction_date, is_credit, id_transaction_status, " +
+            "id_payment_method, id_service, id_goods) VALUES (#{idTransaction}, #{idUser}, #{amount}, NOW(), 1, 3, 2, 1, #{idGoods})";
     final String fallingAllExpiredTransaction = "UPDATE transactions SET id_transaction_status = 2 WHERE id_transaction_status = 4 " +
             "AND NOW() > DATE_ADD(created_at, INTERVAL 20 MINUTE)";
     final String getTransactionById = "SELECT * FROM transactions WHERE id_transaction = #{idTransaction}";
@@ -69,10 +69,24 @@ public interface DatabaseMapper {
             "voucher_quantity = #{voucherQuantity}, is_active = #{isActive}, expired_date = #{expiredDate} WHERE id_voucher = #{idVoucher}";
     final String checkVoucherExists = "SELECT COUNT(*) AS amount FROM vouchers WHERE id_voucher = #{idVoucher}";
     final String createNewUser = "INSERT INTO users (id_user, balance, phone_number) VALUES (#{idUser}, #{balance}, #{phoneNumber})";
-    final String updateAUser = "UPDATE users SET balance = #{balance}, phone_number = #{phoneNumber} WHERE id_user = #{idUser}";
+    final String updateAUser = "UPDATE users SET balance = balance + #{balance}, phone_number = #{phoneNumber} WHERE id_user = #{idUser}";
+    final String updateAVoucherWithDelta = "UPDATE vouchers SET id_merchant = #{idMerchant}, voucher_name = #{voucherName}, " +
+            "voucher_price = #{voucherPrice}, max_discount_price = #{maxDiscountPrice}, discount = #{discount}, " +
+            "voucher_quantity = voucher_quantity + #{voucherQuantity}, is_active = #{isActive}, expired_date = #{expiredDate} WHERE id_voucher = #{idVoucher}";
+    final String getMaxTransactionID = "SELECT MAX(id_transaction) AS id_transaction FROM transactions";
+
+    @Select(getMaxTransactionID)
+    @Results(value = {
+            @Result(column = "id_transaction")
+    })
+    Integer getMaxTransactionID();
+
+    @Update(updateAVoucherWithDelta)
+    void updateAVoucherWithDelta(Voucher voucher);
 
     @Insert(makeARefund)
-    void makeARefund(@Param("idUser") String idUser, @Param("amount") Double amount, @Param("idGoods") Integer idGoods);
+    void makeARefund(@Param("idTransaction") Integer idTransaction, @Param("idUser") String idUser,
+                     @Param("amount") Double amount, @Param("idGoods") Integer idGoods);
 
     @Update(fallingAllExpiredTransaction)
     void fallingAllExpiredTransaction();

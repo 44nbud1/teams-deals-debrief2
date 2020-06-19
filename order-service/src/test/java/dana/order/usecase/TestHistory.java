@@ -1,5 +1,6 @@
-package dana.order.usecase.history;
+package dana.order.usecase;
 
+import dana.order.usecase.history.TransactionHistory;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

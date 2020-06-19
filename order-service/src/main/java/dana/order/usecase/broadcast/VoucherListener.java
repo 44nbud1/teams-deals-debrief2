@@ -14,6 +14,7 @@ import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
@@ -31,7 +32,7 @@ public class VoucherListener {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @RabbitListener(queues = "${spring.rabbitmq.queue.listener}",containerFactory = "createListener")
-    public synchronized void recieveMessage(NewVoucher vouchers) {
+    public void recieveMessage(NewVoucher vouchers) {
 
         System.out.println("VOUCHER RAW : " +vouchers.toJsonString());
 
@@ -49,7 +50,17 @@ public class VoucherListener {
         if (voucherRepository.isVoucherExists(voucher.getIdVoucher()) == Boolean.FALSE){
             databaseRepository.createNewVoucher(voucher);
         }else {
-            databaseRepository.updateAVoucher(voucher);
+            if (vouchers.getIdTransaction() == null){
+                databaseRepository.updateAVoucher(voucher);
+            }else{
+                if (databaseRepository.getTransactionById(vouchers.getIdTransaction()).getIdTransactionStatus() == 1){
+                    // reduction by one
+                    voucher.setVoucherQuantity(-1);
+                }else {
+                    voucher.setVoucherQuantity(1);
+                }
+                databaseRepository.updateAVoucherWithDelta(voucher);
+            }
         }
 
         System.out.println("VOUCHER RESULT : "+vouchers.getIdVoucher());

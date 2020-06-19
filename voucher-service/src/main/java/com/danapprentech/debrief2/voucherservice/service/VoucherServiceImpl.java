@@ -43,21 +43,7 @@ public class VoucherServiceImpl implements VoucherService
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "3000")})
     public Voucher findByIdVoucher(Long id)
     {
-        Boolean go = Boolean.TRUE;
-        Voucher vouchers = null;
-        while (go == Boolean.TRUE) {
-            try {
-                go = Boolean.FALSE;
-                vouchers = voucherRepository.findByIdVoucher(id);
-            } catch (CannotAcquireLockException e) {
-                System.out.println("Lock Exception Happens!!!");
-                go = Boolean.TRUE;
-            } catch (UnexpectedRollbackException e2){
-                System.out.println("Rollback Exception Happens!!!");
-                go = Boolean.TRUE;
-            }
-        }
-        return vouchers;
+        return voucherRepository.findByIdVoucher(id);
     }
 
     @Override
@@ -72,21 +58,7 @@ public class VoucherServiceImpl implements VoucherService
     @Override
     public Voucher updateVoucher(Voucher voucher)
     {
-        Boolean go = Boolean.TRUE;
-        Voucher vouchers = null;
-        while (go == Boolean.TRUE) {
-            try {
-                go = Boolean.FALSE;
-                vouchers = voucherRepository.save(voucher);
-            } catch (CannotAcquireLockException e) {
-                System.out.println("Lock Exception Happens!!!");
-                go = Boolean.TRUE;
-            } catch (UnexpectedRollbackException e2){
-                System.out.println("Rollback Exception Happens!!!");
-                go = Boolean.TRUE;
-            }
-        }
-        return vouchers;
+        return voucherRepository.save(voucher);
     }
 
     @Override
@@ -106,20 +78,6 @@ public class VoucherServiceImpl implements VoucherService
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value = "3000")})
     public Voucher findByVoucherName(String voucherName)
     {
-        Boolean go = Boolean.TRUE;
-        Voucher vouchers = null;
-        while (go == Boolean.TRUE) {
-            try {
-                go = Boolean.FALSE;
-                vouchers = voucherRepository.findByVoucherName(voucherName);
-            } catch (CannotAcquireLockException e) {
-                System.out.println("Lock Exception Happens!!!");
-                go = Boolean.TRUE;
-            } catch (UnexpectedRollbackException e2){
-                System.out.println("Rollback Exception Happens!!!");
-                go = Boolean.TRUE;
-            }
-        }
-        return vouchers;
+        return voucherRepository.findByVoucherName(voucherName);
     }
 }

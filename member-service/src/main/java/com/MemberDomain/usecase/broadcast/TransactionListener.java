@@ -26,18 +26,20 @@ public class TransactionListener {
     public void receive(Transaction transaction) {
         UserDataResponse userDataResponse = userMapper.getUserData(transaction.getIdUser());
 
-        double finalAmount;
+        double finalAmount, deltaAmount;
 
         if(transaction.getIsCredit() == Boolean.FALSE){
             finalAmount = userDataResponse.getBalance() - transaction.getAmount();
+            deltaAmount = (-1)*transaction.getAmount();
         }
         else {
             finalAmount = userDataResponse.getBalance() + transaction.getAmount();
+            deltaAmount = transaction.getAmount();
         }
 
         balanceMapper.updateBalance(finalAmount, transaction.getIdUser());
         UserDataResponse userDataResponse1 = userMapper.getUserData(transaction.getIdUser());
         System.out.println("A new balance: "+userDataResponse1.toString());
-        memberBroadcaster.send(transaction.getIdUser());
+        memberBroadcaster.send(transaction.getIdUser(), deltaAmount);
     }
 }

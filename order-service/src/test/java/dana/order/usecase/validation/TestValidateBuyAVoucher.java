@@ -36,7 +36,7 @@ public class TestValidateBuyAVoucher {
 
         json = reproduceVoucherInput();
         json.put("idVoucher", "-22");
-        assertEquals("081", validateBuyAVoucher.check(json).getValue());
+        assertEquals("027", validateBuyAVoucher.check(json).getValue());
 
         json = reproduceVoucherInput();
         assertEquals("083", validateBuyAVoucher.check(json).getValue());

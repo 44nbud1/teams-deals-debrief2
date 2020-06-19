@@ -12,6 +12,7 @@ import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -26,7 +27,7 @@ public class MemberListener {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @Qualifier("shareMemberForOrder")
     @RabbitListener(queues = "deals.queue.member.order")
-    public synchronized void receive(User user) {
+    public void receive(User user) {
         System.out.println("MEMBER RAW : "+user.toJsonString());
         if (userRepository.doesUserExist(user.getIdUser()) == Boolean.FALSE){
             databaseRepository.createNewUser(user);

@@ -1,5 +1,7 @@
 package dana.order;
 
+import dana.order.entity.DealsStatus;
+import dana.order.usecase.exception.OrderFailedException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +17,13 @@ class OrderApplicationTests {
     @Test
     public void contextLoads() throws Exception {
         assertThat(orderApplication).isNotNull();
+    }
+
+    OrderFailedException exception = new OrderFailedException(DealsStatus.OK);
+
+    @Test
+    public void exceptionTest(){
+        assertThat(exception.getStatus().is2xxSuccessful()).isTrue();
     }
 
 }

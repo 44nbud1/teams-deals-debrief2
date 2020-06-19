@@ -139,9 +139,9 @@ public class AuthenticationValidationTest {
 
     @Test
     public void testSession(){
-        ResponseEntity<?> tes = template.get("http://localhost:8082/test");
+        ResponseEntity<?> tes = template.get("http://localhost:8082/api/user");
         System.out.println(tes.getHeaders());
-        System.out.println(template.get("http://localhost:8082/set").getBody());
-        System.out.println(template.get("http://localhost:8082/sot").getBody());
+//        System.out.println(template.get("http://localhost:8082/set").getBody());
+//        System.out.println(template.get("http://localhost:8082/sot").getBody());
     }
 }
