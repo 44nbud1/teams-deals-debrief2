@@ -24,7 +24,7 @@ public class LoginTransactionTest {
         assertFalse(loginTransaction.login(loginRequest, path).getStatusCode().is2xxSuccessful());
 
         loginRequest.setPhoneNumber("082118941234");
-        loginRequest.setPassword("H0lmesH3re!");
+        loginRequest.setPassword("H0lmesHere!");
         assertTrue(loginTransaction.login(loginRequest, path).getStatusCode().is2xxSuccessful());
 
         loginRequest.setPassword("W4ts0nHere!");

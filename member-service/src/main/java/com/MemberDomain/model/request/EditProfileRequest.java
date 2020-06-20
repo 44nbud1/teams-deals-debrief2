@@ -11,26 +11,26 @@ public class EditProfileRequest {
     public EditProfileRequest() {
     }
 
-    public EditProfileRequest(String name, String email, String oldPassword, String newPassword, String confirmPassword) {
-        super();
-        this.name = name;
-        this.email = email;
-        this.oldPassword = oldPassword;
-        this.newPassword = newPassword;
-        this.confirmPassword = confirmPassword;
-    }
-
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("User Name = ").append(name).append(" - ");
-        sb.append("User Email = ").append(email).append(" - ");
-        sb.append("User Old Password = ").append(oldPassword).append(" - ");
-        sb.append("User New Password = ").append(newPassword).append(" - ");
-        sb.append("Confirm New Password = ").append(confirmPassword).append(" - ");
-
-        return sb.toString();
-    }
+//    public EditProfileRequest(String name, String email, String oldPassword, String newPassword, String confirmPassword) {
+//        super();
+//        this.name = name;
+//        this.email = email;
+//        this.oldPassword = oldPassword;
+//        this.newPassword = newPassword;
+//        this.confirmPassword = confirmPassword;
+//    }
+//
+//    public String toString(){
+//        StringBuilder sb = new StringBuilder();
+//
+//        sb.append("User Name = ").append(name).append(" - ");
+//        sb.append("User Email = ").append(email).append(" - ");
+//        sb.append("User Old Password = ").append(oldPassword).append(" - ");
+//        sb.append("User New Password = ").append(newPassword).append(" - ");
+//        sb.append("Confirm New Password = ").append(confirmPassword).append(" - ");
+//
+//        return sb.toString();
+//    }
 
     public void setName(String name) {
         this.name = name;

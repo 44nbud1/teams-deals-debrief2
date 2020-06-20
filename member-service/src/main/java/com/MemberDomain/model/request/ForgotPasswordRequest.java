@@ -7,24 +7,24 @@ public class ForgotPasswordRequest {
     public ForgotPasswordRequest() {
     }
 
-    public ForgotPasswordRequest(String newPassword, String confirmPassword) {
-        super();
-        this.newPassword = newPassword;
-        this.confirmPassword = confirmPassword;
-    }
-
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("User New Password = ").append(newPassword).append(" - ");
-        sb.append("Confirm Password = ").append(confirmPassword).append(" - ");
-
-        return sb.toString();
-    }
-
-    public ForgotPasswordRequest(String confirmPassword){
-        this("", confirmPassword);
-    }
+//    public ForgotPasswordRequest(String newPassword, String confirmPassword) {
+//        super();
+//        this.newPassword = newPassword;
+//        this.confirmPassword = confirmPassword;
+//    }
+//
+//    public String toString(){
+//        StringBuilder sb = new StringBuilder();
+//
+//        sb.append("User New Password = ").append(newPassword).append(" - ");
+//        sb.append("Confirm Password = ").append(confirmPassword).append(" - ");
+//
+//        return sb.toString();
+//    }
+//
+//    public ForgotPasswordRequest(String confirmPassword){
+//        this("", confirmPassword);
+//    }
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
