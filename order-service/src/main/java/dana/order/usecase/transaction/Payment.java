@@ -35,14 +35,15 @@ public class Payment {
 
     public ResponseEntity<?> payAVoucher(JSONObject json){
 
-        String idUser = ""+json.get("idUser");
-        Integer idTransaction = Integer.valueOf(""+json.get("idTransaction"));
         String path = ""+json.get("path");
 
         DealsStatus validation = validatePayAVoucher.check(json);
         if (!validation.getStatus().is2xxSuccessful()){
             return ResponseWrapper.wrap(validation, null, path);
         }
+
+        String idUser = ""+json.get("idUser");
+        Integer idTransaction = Integer.valueOf(""+json.get("idTransaction"));
 
         if (userRepository.doesUserExist(idUser) == Boolean.FALSE){
             return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, path);

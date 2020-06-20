@@ -29,7 +29,6 @@ public class TransactionHistory {
 
     public ResponseEntity<?> get(JSONObject json){
 
-        String idUser = ""+json.get("idUser");
         String path = ""+json.get("path");
 
         DealsStatus validation = validateTransactionHistory.check(json);
@@ -37,6 +36,8 @@ public class TransactionHistory {
         if (!validation.getStatus().is2xxSuccessful()){
             return ResponseWrapper.wrap(validation, null, path);
         }
+
+        String idUser = ""+json.get("idUser");
 
         if (userRepository.doesUserExist(idUser) == Boolean.FALSE){
             return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, path);
