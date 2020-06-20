@@ -55,7 +55,7 @@ public class MobileController {
 
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     @PostMapping(value = "/api/user/{idUser}/transaction/topup", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> TOPUP(@PathVariable("idUser") Integer idUser, @RequestBody JSONObject json){
+    public ResponseEntity<?> TOPUP(@PathVariable("idUser") String idUser, @RequestBody JSONObject json){
         json.put("idUser", idUser);
         json.put("path", "/api/user/"+idUser+"/transaction/topup");
         return topup.execute(json);
@@ -79,7 +79,7 @@ public class MobileController {
 
     @GetMapping(value = "/api/user/{idUser}/transaction/{idTransaction}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> detailedTransactionHistory(@PathVariable("idUser") String idUser,
-                                                        @PathVariable("idTransaction") Integer idTransaction){
+                                                        @PathVariable("idTransaction") String idTransaction){
         JSONObject json = new JSONObject();
         json.put("idUser", idUser);
         json.put("idTransaction", idTransaction);
