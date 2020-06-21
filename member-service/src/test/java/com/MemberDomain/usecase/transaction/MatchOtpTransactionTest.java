@@ -16,8 +16,8 @@ public class MatchOtpTransactionTest {
     @Test
     public void matchOtp(){
         System.out.println("Match Otp Test");
-        String path = "/api/auth/33/match-otp";
-        String idUser = "33";
+        String path = "/api/auth/31/match-otp";
+        String idUser = "31";
 
         MatchOtpRequest matchOtpRequest = new MatchOtpRequest();
 
