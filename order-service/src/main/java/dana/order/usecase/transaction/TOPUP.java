@@ -34,15 +34,16 @@ public class TOPUP {
 
     public ResponseEntity<?> execute(JSONObject json){
 
-        String idUser = ""+json.get("idUser");
-        String virtualNumber = ""+json.get("virtualNumber");
-        Double amount = Double.valueOf(""+json.get("amount"));
         String path = ""+json.get("path");
 
         DealsStatus validation = validateTOPUP.check(json);
         if (!validation.getStatus().is2xxSuccessful()){
             return ResponseWrapper.wrap(validation, null, path);
         }
+
+        String idUser = ""+json.get("idUser");
+        String virtualNumber = ""+json.get("virtualNumber");
+        Double amount = Double.valueOf(""+json.get("amount"));
 
         if (userRepository.doesUserExist(idUser) == Boolean.FALSE){
             return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, path);

@@ -30,14 +30,15 @@ public class PlaceOrder{
 
     public ResponseEntity<?> buyAVoucher(JSONObject json){
 
-        String idUser = ""+json.get("idUser");
-        Integer idVoucher = Integer.valueOf(""+json.get("idVoucher"));
         String path = ""+json.get("path");
 
         DealsStatus validation = validateBuyAVoucher.check(json);
         if (!validation.getStatus().is2xxSuccessful()){
             return ResponseWrapper.wrap(validation, null, path);
         }
+
+        String idUser = ""+json.get("idUser");
+        Integer idVoucher = Integer.valueOf(""+json.get("idVoucher"));
 
         if (userRepository.doesUserExist(idUser) == Boolean.FALSE){
             return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, path);

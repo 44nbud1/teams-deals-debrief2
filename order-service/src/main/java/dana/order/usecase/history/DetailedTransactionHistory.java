@@ -3,6 +3,7 @@ package dana.order.usecase.history;
 import dana.order.adapter.wrapper.ResponseWrapper;
 import dana.order.entity.*;
 import dana.order.usecase.port.*;
+import dana.order.usecase.validate.ValidateDetailedTransactionHistory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,20 @@ public class DetailedTransactionHistory {
     @Autowired
     HistoryRepository historyRepository;
 
+    @Autowired
+    ValidateDetailedTransactionHistory validateDetailedTransactionHistory;
+
     public ResponseEntity<?> get(JSONObject json){
+
+        String path = ""+json.get("path");
+
+        DealsStatus validation = validateDetailedTransactionHistory.check(json);
+        if (!validation.getStatus().is2xxSuccessful()){
+            return ResponseWrapper.wrap(validation, null, path);
+        }
 
         String idUser = ""+json.get("idUser");
         Integer idTransaction = Integer.valueOf(""+json.get("idTransaction"));
-        String path = ""+json.get("path");
 
         if (userRepository.doesUserExist(idUser) == Boolean.FALSE){
             return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, path);

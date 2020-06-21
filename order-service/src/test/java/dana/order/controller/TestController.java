@@ -95,7 +95,7 @@ public class TestController {
 
         mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, -2)
                 .contentType("application/json"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
 
         mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 9, 13)
                 .contentType("application/json"))
@@ -143,6 +143,13 @@ public class TestController {
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(json)))
                 .andExpect(status().isNotAcceptable());
+
+        json.put("virtualNumber", "9030081222371122");
+        json.put("amount", 15000);
+        mockMvc.perform(post("/api/user/{idUser}/transaction/topup", 9)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isCreated());
     }
 
     @Test
