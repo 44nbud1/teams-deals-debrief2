@@ -16,8 +16,8 @@ public class GetProfileTransactionTest {
     @Test
     public void getProfileTest(){
         System.out.println("Get Profile Test");
-        String path = "/api/user/33";
-        String idUser = "33";
+        String path = "/api/user/31";
+        String idUser = "31";
 
         assertTrue(getProfileTransaction.getProfile(idUser,  path).getStatusCode().is2xxSuccessful());
 
