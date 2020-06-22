@@ -16,13 +16,13 @@ public class DetailedTransactionHistory {
     UserRepository userRepository;
 
     @Autowired
-    DatabaseRepository databaseRepository;
-
-    @Autowired
     HistoryRepository historyRepository;
 
     @Autowired
     ValidateDetailedTransactionHistory validateDetailedTransactionHistory;
+
+    @Autowired
+    TransactionRepository transactionRepository;
 
     public ResponseEntity<?> get(JSONObject json){
 
@@ -40,7 +40,7 @@ public class DetailedTransactionHistory {
             return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, path);
         }
 
-        Transaction transaction = databaseRepository.getTransactionById(idTransaction);
+        Transaction transaction = transactionRepository.getTransactionById(idTransaction);
 
         if (transaction == null){
             return ResponseWrapper.wrap(DealsStatus.TRANSACTION_NOT_FOUND, null, path);
@@ -50,7 +50,7 @@ public class DetailedTransactionHistory {
             return ResponseWrapper.wrap(DealsStatus.TRANSACTION_NOT_FOUND, null, path);
         }
 
-        databaseRepository.fallingAllExpiredTransaction();
+        transactionRepository.fallingAllExpiredTransaction();
 
         JSONObject transactionDetails = historyRepository.getUserDetailedHistory(transaction.getIdTransaction());
 

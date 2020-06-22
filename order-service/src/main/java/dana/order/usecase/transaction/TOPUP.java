@@ -24,9 +24,6 @@ public class TOPUP {
     TransactionRepository transactionRepository;
 
     @Autowired
-    DatabaseRepository databaseRepository;
-
-    @Autowired
     UserRepository userRepository;
 
     @Autowired
@@ -57,7 +54,7 @@ public class TOPUP {
             return ResponseWrapper.wrap(DealsStatus.MINIMUM_TOPUP, null, path);
         }
 
-        User user = databaseRepository.getUserById(idUser);
+        User user = userRepository.getUserById(idUser);
 
         if (user.getBalance() + amount > 1000000){
             return ResponseWrapper.wrap(DealsStatus.MAXIMUM_BALANCE, null, path);
@@ -76,7 +73,7 @@ public class TOPUP {
 
         Integer idTransaction = transactionRepository.TOPUPBalance(idUser, amount, virtualNumber, partyCode);
 
-        Transaction transaction = databaseRepository.getTransactionById(idTransaction);
+        Transaction transaction = transactionRepository.getTransactionById(idTransaction);
 
         transactionBroadcaster.send(transaction.getIdTransaction());
 

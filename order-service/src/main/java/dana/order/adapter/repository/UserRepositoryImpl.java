@@ -29,4 +29,8 @@ public class UserRepositoryImpl implements UserRepository {
         return Boolean.TRUE;
     }
 
+    public User getUserById(String idUser){
+        return databaseRepository.getUserById(idUser);
+    }
+
 }

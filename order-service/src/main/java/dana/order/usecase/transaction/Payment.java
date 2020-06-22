@@ -25,9 +25,6 @@ public class Payment {
     ValidatePayAVoucher validatePayAVoucher;
 
     @Autowired
-    DatabaseRepository databaseRepository;
-
-    @Autowired
     TransactionRepository transactionRepository;
 
     @Autowired
@@ -49,7 +46,7 @@ public class Payment {
             return ResponseWrapper.wrap(DealsStatus.USER_NOT_FOUND, null, path);
         }
 
-        Transaction transaction = databaseRepository.getTransactionById(idTransaction);
+        Transaction transaction = transactionRepository.getTransactionById(idTransaction);
 
         if (transaction == null){
             return ResponseWrapper.wrap(DealsStatus.TRANSACTION_NOT_FOUND, null, path);
@@ -64,12 +61,12 @@ public class Payment {
         }
 
         if (voucherRepository.validateExpiration(transaction.getIdGoods()) == Boolean.FALSE){
-            databaseRepository.fallingATransaction(idUser, idTransaction);
+            transactionRepository.fallingATransaction(idUser, idTransaction);
             return ResponseWrapper.wrap(DealsStatus.VOUCHER_NOT_AVAILABLE, null, path);
         }
 
         if (transactionRepository.checkATransactionExpiration(idTransaction) == Boolean.FALSE){
-            databaseRepository.fallingATransaction(idUser, idTransaction);
+            transactionRepository.fallingATransaction(idUser, idTransaction);
             return ResponseWrapper.wrap(DealsStatus.TRANSACTION_EXPIRED, null, path);
         }
 
@@ -82,11 +79,11 @@ public class Payment {
         }
 
         if (voucherRepository.validateQuantity(transaction.getIdGoods()) == Boolean.FALSE){
-            databaseRepository.fallingATransaction(idUser, idTransaction);
+            transactionRepository.fallingATransaction(idUser, idTransaction);
             return ResponseWrapper.wrap(DealsStatus.VOUCHER_OUT_OF_STOCK, null, path);
         }
 
-        User user = databaseRepository.getUserById(idUser);
+        User user = userRepository.getUserById(idUser);
 
         if (user.getBalance() - transaction.getAmount() < 0){
             return ResponseWrapper.wrap(DealsStatus.BALANCE_NOT_ENOUGH, null, path);
@@ -94,7 +91,7 @@ public class Payment {
 
         if (transaction.getIdGoods() == 2){
             // Failed case
-            databaseRepository.fallingATransaction(idUser, idTransaction);
+            transactionRepository.fallingATransaction(idUser, idTransaction);
             return ResponseWrapper.wrap(DealsStatus.PAYMENT_SUCCESS, null, path);
         }
 

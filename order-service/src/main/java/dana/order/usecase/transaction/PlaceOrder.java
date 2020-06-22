@@ -25,9 +25,6 @@ public class PlaceOrder{
     @Autowired
     TransactionRepository transactionRepository;
 
-    @Autowired
-    DatabaseRepository databaseRepository;
-
     public ResponseEntity<?> buyAVoucher(JSONObject json){
 
         String path = ""+json.get("path");
@@ -62,7 +59,7 @@ public class PlaceOrder{
 
         Integer idTransaction = voucherRepository.insertNewOrder(idUser, idVoucher);
 
-        Transaction transaction = databaseRepository.getTransactionById(idTransaction);
+        Transaction transaction = transactionRepository.getTransactionById(idTransaction);
 
         JSONObject result = new JSONObject();
         result.put("idTransaction", transaction.getIdTransaction());
