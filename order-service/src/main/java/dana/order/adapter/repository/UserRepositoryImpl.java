@@ -33,4 +33,12 @@ public class UserRepositoryImpl implements UserRepository {
         return databaseRepository.getUserById(idUser);
     }
 
+    public String getUniqueKey(String key){
+        return databaseRepository.getUniqueKey(key);
+    }
+
+    public void addUniqueKey(String key, String response){
+        databaseRepository.addUniqueKey(key, response);
+    }
+
 }

@@ -31,18 +31,4 @@ public class ThirdParty {
     public void setPartyCode(Integer partyCode) {
         this.partyCode = partyCode;
     }
-
-    public String toJsonString(){
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
-
-    public JSONObject toJsonObject(){
-        JSONObject obj = new JSONObject();
-        obj.put("idThirdParty", Integer.valueOf(idThirdParty));
-        obj.put("partyName", partyName);
-        obj.put("partyCode", Integer.valueOf(partyCode));
-
-        return obj;
-    }
 }

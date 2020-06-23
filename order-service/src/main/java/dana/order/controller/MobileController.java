@@ -38,8 +38,11 @@ public class MobileController {
 
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     @PostMapping(value = "/api/user/{idUser}/transaction/voucher", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> placeOrder(@PathVariable("idUser") String idUser, @RequestBody JSONObject json){
+    public ResponseEntity<?> placeOrder(@PathVariable("idUser") String idUser,
+                                        @RequestBody JSONObject json,
+                                        @RequestParam(value = "key", required = false) String key){
         json.put("idUser", idUser);
+        json.put("key", key);
         json.put("path", "/api/user/"+idUser+"/transaction/voucher");
         return placeOrder.buyAVoucher(json);
     }
@@ -55,8 +58,11 @@ public class MobileController {
 
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     @PostMapping(value = "/api/user/{idUser}/transaction/topup", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> TOPUP(@PathVariable("idUser") String idUser, @RequestBody JSONObject json){
+    public ResponseEntity<?> TOPUP(@PathVariable("idUser") String idUser,
+                                   @RequestBody JSONObject json,
+                                   @RequestParam(value = "key", required = false) String key){
         json.put("idUser", idUser);
+        json.put("key", key);
         json.put("path", "/api/user/"+idUser+"/transaction/topup");
         return topup.execute(json);
     }

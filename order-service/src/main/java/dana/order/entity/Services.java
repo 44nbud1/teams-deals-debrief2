@@ -22,17 +22,4 @@ public class Services {
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
-
-    public String toJsonString(){
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
-
-    public JSONObject toJsonObject(){
-        JSONObject obj = new JSONObject();
-        obj.put("idService", Integer.valueOf(idService));
-        obj.put("serviceName", serviceName);
-
-        return obj;
-    }
 }

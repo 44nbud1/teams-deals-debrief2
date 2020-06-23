@@ -11,6 +11,7 @@ import dana.order.usecase.port.UserRepository;
 import dana.order.usecase.validate.ValidateTOPUP;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,11 @@ public class TOPUP {
     public ResponseEntity<?> execute(JSONObject json){
 
         String path = ""+json.get("path");
+        String key = (json.get("key") == null) ? null : ""+json.get("key");
+
+        if (key != null && userRepository.getUniqueKey(key) != null){
+            return new ResponseEntity<>(userRepository.getUniqueKey(key), HttpStatus.CREATED);
+        }
 
         DealsStatus validation = validateTOPUP.check(json);
         if (!validation.getStatus().is2xxSuccessful()){
@@ -76,6 +82,12 @@ public class TOPUP {
         Transaction transaction = transactionRepository.getTransactionById(idTransaction);
 
         transactionBroadcaster.send(transaction.getIdTransaction());
+
+        String response = ResponseWrapper.jsonWrap(DealsStatus.TOPUP_SUCCESS, null, path).toString();
+
+        if (key != null){
+            userRepository.addUniqueKey(key, response);
+        }
 
         return ResponseWrapper.wrap(DealsStatus.TOPUP_SUCCESS, null, path);
     }
