@@ -6,8 +6,8 @@ import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.request.LoginRequest;
 import com.MemberDomain.model.response.LoginResponse;
 import com.MemberDomain.model.response.UserDataResponse;
-import com.MemberDomain.usecase.port.UserRepository;
-import com.MemberDomain.usecase.validation.UserValidation;
+import com.MemberDomain.usecase.port.MemberRepository;
+import com.MemberDomain.usecase.validation.MemberValidation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +18,14 @@ import org.springframework.stereotype.Service;
 public class LoginTransaction {
 
     @Autowired
-    UserValidation userValidation;
+    MemberValidation memberValidation;
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     public ResponseEntity<JSONObject> login(LoginRequest loginRequest, String path){
 
-        ResponseEntity<JSONObject> check = userValidation.login(loginRequest, path);
+        ResponseEntity<JSONObject> check = memberValidation.login(loginRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -35,7 +35,7 @@ public class LoginTransaction {
             loginRequest.setPhoneNumber("+62"+loginRequest.getPhoneNumber().substring(1));
         }
 
-        LoginResponse loginResponse = userRepository.getUserLoginData(""+loginRequest.getPhoneNumber());
+        LoginResponse loginResponse = memberRepository.getUserLoginData(""+loginRequest.getPhoneNumber());
 
         if (loginResponse == null){
             return ResponseFailed.wrapResponse(DealsStatus.DATA_NOT_MATCH, path);
@@ -45,7 +45,7 @@ public class LoginTransaction {
             return ResponseFailed.wrapResponse(DealsStatus.DATA_NOT_MATCH, path);
         }
 
-        UserDataResponse userDataResponse = userRepository.getUserData(loginResponse.getIdUser());
+        UserDataResponse userDataResponse = memberRepository.getUserData(loginResponse.getIdUser());
 
         return ResponseSuccess.wrapResponse(userDataResponse, DealsStatus.LOGIN_SUCCESS, path);
     }

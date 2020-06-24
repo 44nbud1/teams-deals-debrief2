@@ -4,13 +4,13 @@ import com.MemberDomain.model.request.RegisterRequest;
 import com.MemberDomain.model.response.*;
 import com.MemberDomain.usecase.port.BalanceMapper;
 import com.MemberDomain.usecase.port.OtpMapper;
-import com.MemberDomain.usecase.port.UserRepository;
+import com.MemberDomain.usecase.port.MemberRepository;
 import com.MemberDomain.usecase.port.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
-public class UserRepositoryImpl implements UserRepository {
+@Repository
+public class MemberRepositoryImpl implements MemberRepository {
 
     @Autowired
     UserMapper userMapper;
