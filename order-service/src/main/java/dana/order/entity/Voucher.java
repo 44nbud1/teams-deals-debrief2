@@ -115,11 +115,6 @@ public class Voucher {
         this.updatedAt = updatedAt;
     }
 
-    public String toJsonString(){
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
-
     public JSONObject toJsonObject(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject obj = new JSONObject();

@@ -255,4 +255,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
         //SELECT
         return databaseMapper.getUserExistById(idUser);
     }
+
+    public String getUniqueKey(String key){
+        return databaseMapper.getUniqueKey(key);
+    }
+
+    public void addUniqueKey(String key, String response){
+        databaseMapper.addUniqueKey(key, response);
+    }
 }

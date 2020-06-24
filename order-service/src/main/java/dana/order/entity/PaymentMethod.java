@@ -22,17 +22,4 @@ public class PaymentMethod {
     public void setMethodName(String methodName) {
         this.methodName = methodName;
     }
-
-    public String toJsonString(){
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
-
-    public JSONObject toJsonObject(){
-        JSONObject obj = new JSONObject();
-        obj.put("idPaymentMethod", Integer.valueOf(idPaymentMethod));
-        obj.put("methodName", methodName);
-
-        return obj;
-    }
 }

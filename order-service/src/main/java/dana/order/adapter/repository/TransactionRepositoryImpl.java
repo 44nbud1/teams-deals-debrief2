@@ -119,4 +119,16 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return databaseRepository.getTransactionById(idTransaction);
 
     }
+
+    public Transaction getTransactionById(Integer idTransaction){
+        return databaseRepository.getTransactionById(idTransaction);
+    }
+
+    public void fallingATransaction(String idUser, Integer idTransaction){
+        databaseRepository.fallingATransaction(idUser, idTransaction);
+    }
+
+    public void fallingAllExpiredTransaction(){
+        databaseRepository.fallingAllExpiredTransaction();
+    }
 }

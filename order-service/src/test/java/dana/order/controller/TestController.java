@@ -1,6 +1,7 @@
 package dana.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dana.order.adapter.encoder.TokenGeneratorUUID;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.jupiter.api.Test;
@@ -14,9 +15,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -32,6 +31,9 @@ public class TestController {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    TokenGeneratorUUID tokenGeneratorUUID;
 
     @Test
     void contextLoads() throws Exception {
@@ -117,6 +119,13 @@ public class TestController {
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(json)))
                 .andExpect(status().isNotFound());
+
+        String key = tokenGeneratorUUID.generateToken();
+        json.put("idVoucher",1);
+        mockMvc.perform(post("/api/user/{idUser}/transaction/voucher?key="+key, 9)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -162,7 +171,8 @@ public class TestController {
         JSONObject voucher = new JSONObject();
         voucher.put("idVoucher", 1);
 
-        MvcResult result = mockMvc.perform(post("/api/user/{idUser}/transaction/voucher", 18)
+        String key = tokenGeneratorUUID.generateToken();
+        MvcResult result = mockMvc.perform(post("/api/user/{idUser}/transaction/voucher?key="+key, 18)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(voucher)))
                 .andExpect(status().isCreated())

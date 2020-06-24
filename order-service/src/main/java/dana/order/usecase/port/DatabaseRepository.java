@@ -88,4 +88,8 @@ public interface DatabaseRepository {
     void insertNewOrder(Integer idTransaction, String idUser, Double amount, Integer idVoucher);
 
     Integer getUserExistById(String idUser);
+
+    String getUniqueKey(String key);
+
+    void addUniqueKey(String key, String response);
 }

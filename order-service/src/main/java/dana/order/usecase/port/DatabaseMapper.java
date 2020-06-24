@@ -74,6 +74,17 @@ public interface DatabaseMapper {
             "voucher_price = #{voucherPrice}, max_discount_price = #{maxDiscountPrice}, discount = #{discount}, " +
             "voucher_quantity = voucher_quantity + #{voucherQuantity}, is_active = #{isActive}, expired_date = #{expiredDate} WHERE id_voucher = #{idVoucher}";
     final String getMaxTransactionID = "SELECT MAX(id_transaction) AS id_transaction FROM transactions";
+    final String getUniqueKey = "SELECT response FROM idempotent_keys WHERE ikey = #{ikey}";
+    final String addUniqueKey = "INSERT INTO idempotent_keys (ikey, response) VALUES (#{ikey}, #{response})";
+
+    @Select(getUniqueKey)
+    @Results(value = {
+            @Result(column = "response")
+    })
+    String getUniqueKey(@Param("ikey") String key);
+
+    @Insert(addUniqueKey)
+    void addUniqueKey(@Param("ikey") String key, @Param("response") String response);
 
     @Select(getMaxTransactionID)
     @Results(value = {

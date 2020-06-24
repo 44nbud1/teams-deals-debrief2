@@ -12,4 +12,7 @@ public interface TransactionRepository {
     Integer TOPUPBalance(String idUser, Double amount, String virtualNumber, String partyCode);
     String getPhoneNumberFromVA(String virtualNumber);
     Transaction setRefund(String idUser, Double amount, Integer idGoods);
+    Transaction getTransactionById(Integer idTransaction);
+    void fallingATransaction(String idUser, Integer idTransaction);
+    void fallingAllExpiredTransaction();
 }

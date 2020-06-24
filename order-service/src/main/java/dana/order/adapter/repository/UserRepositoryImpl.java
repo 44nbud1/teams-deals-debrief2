@@ -29,4 +29,16 @@ public class UserRepositoryImpl implements UserRepository {
         return Boolean.TRUE;
     }
 
+    public User getUserById(String idUser){
+        return databaseRepository.getUserById(idUser);
+    }
+
+    public String getUniqueKey(String key){
+        return databaseRepository.getUniqueKey(key);
+    }
+
+    public void addUniqueKey(String key, String response){
+        databaseRepository.addUniqueKey(key, response);
+    }
+
 }

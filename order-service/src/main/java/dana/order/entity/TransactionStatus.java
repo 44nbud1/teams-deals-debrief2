@@ -22,17 +22,4 @@ public class TransactionStatus {
     public void setStatusName(String statusName) {
         this.statusName = statusName;
     }
-
-    public String toJsonString(){
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
-
-    public JSONObject toJsonObject(){
-        JSONObject obj = new JSONObject();
-        obj.put("idTransactionStatus", Integer.valueOf(idTransactionStatus));
-        obj.put("statusName", statusName);
-
-        return obj;
-    }
 }
