@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -45,7 +46,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
-                System.out.println(e.getMessage());
+                System.out.println("Time : "+ new Date());
+                System.out.println(e.getLocalizedMessage());
             } catch (MalformedJwtException e){
                 System.out.println(e.getLocalizedMessage());
             } catch (SignatureException e){

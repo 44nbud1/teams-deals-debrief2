@@ -1,7 +1,7 @@
 package com.okta.examples.service.validation;
 
 import com.okta.examples.adapter.jwt.JwtTokenUtil;
-import com.okta.examples.repository.MyBatisRepository;
+import com.okta.examples.repository.SessionRepository;
 import com.okta.examples.service.usecase.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 public class SessionValidation {
 
     @Autowired
-    MyBatisRepository repository;
+    SessionRepository repository;
 
     @Autowired
     SessionService sessionService;
@@ -21,7 +21,7 @@ public class SessionValidation {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
-    public boolean request(String idUser, HttpServletRequest request){
+    public boolean request(String idUser, HttpServletRequest request, String path){
 
         String header = request.getHeader("Authorization");
 
@@ -45,18 +45,18 @@ public class SessionValidation {
             return false;
         }
 
-//        String[] split = request.getServletPath().split("/");
-//        if (split[2].equalsIgnoreCase("user")) {
-//            if (idUser.equals("12") || idUser.equals("13")) {
-//                return false;
-//            }
-//        }else if (split[2].equalsIgnoreCase("admin")){
-//            if (!idUser.equals("12")) {
-//                if (!idUser.equals("13")) {
-//                    return false;
-//                }
-//            }
-//        }
+        String[] split = path.split("/");
+        if (split[2].equalsIgnoreCase("user")) {
+            if (idUser.equals("12") || idUser.equals("13")) {
+                return false;
+            }
+        }else if (split[2].equalsIgnoreCase("admin")){
+            if (!idUser.equals("12")) {
+                if (!idUser.equals("13")) {
+                    return false;
+                }
+            }
+        }
 
         if (sessionService.checkSessionExpired(idUser, idSession) == 0){
             sessionService.destroySession(idUser);
@@ -152,8 +152,11 @@ public class SessionValidation {
         if (!decode(session, idSession)){
             return false;
         }
-
+        if (request.getServletPath().isEmpty()){
+            return false;
+        }
         String[] split = request.getServletPath().split("/");
+
         if (split[2].equalsIgnoreCase("user")) {
             if (idUser.equals("12") || idUser.equals("13") || idUser.equals("126")) {
                 return false;
@@ -181,7 +184,7 @@ public class SessionValidation {
         return passwordEncoder.matches(password, passhass);
     }
 
-    public boolean requestSession(HttpServletRequest request){
+    public boolean requestSession(String idUser, HttpServletRequest request){
 
         String header = request.getHeader("Authorization");
 
@@ -196,7 +199,7 @@ public class SessionValidation {
             return false;
         }
 
-        String idUser = session.substring(36);
+//        String idUser = session.substring(36);
 
         String idSession = sessionService.checkSession(idUser);
         if (idSession == null){

@@ -6,6 +6,8 @@ import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Date;
+
 public class ResponseSuccess {
 //    public static JSONObject wrap200(Object data, String message, String path){
 //        JSONObject json = new JSONObject();
@@ -41,7 +43,7 @@ public class ResponseSuccess {
     }
 
     public static ResponseEntity<JSONObject> wrapOk(){
-        System.out.println("Validation Success");
+        System.out.println("Validation Success. " +new Date());
         return new ResponseEntity<>(new JSONObject(), HttpStatus.OK);
     }
 
