@@ -147,7 +147,7 @@ public class TransactionService {
 
         JSONObject order = (JSONObject) jsonOrder.get("data");
 
-        return ResponseSuccess.wrapResponse(order, DealsStatus.TRANSACTION_HISTORY_COLLECTED, path);
+        return ResponseSuccess.wrapResponse(order, DealsStatus.DETAILED_HISTORY_COLLECTED, path);
 //        return ResponseSuccess.wrap200(order, "Transaction history are successfully collected.",
 //                "/api/user/"+idUser+"/transaction/"+idTransaction);
     }

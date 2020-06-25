@@ -1,5 +1,6 @@
 package com.okta.examples.usecase;
 
+import com.okta.examples.adapter.parser.Parser;
 import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.service.usecase.AdminService;
 import org.json.simple.JSONObject;
@@ -69,6 +70,7 @@ public class AdminServiceTest {
         String page = "0";
         assertFalse(adminService.sortVoucher(name, page, path).getStatusCode().is2xxSuccessful());
 
+        Parser.parseJSON("a");
     }
 
     @Test
@@ -110,4 +112,5 @@ public class AdminServiceTest {
         assertEquals(DealsStatus.VOUCHER_NOT_FOUND.getValue(), adminService.voucherDetail(idVoucher, path).getBody().get("status"));
 
     }
+
 }

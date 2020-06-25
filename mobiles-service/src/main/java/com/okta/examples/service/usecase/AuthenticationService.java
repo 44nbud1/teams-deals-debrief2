@@ -49,10 +49,6 @@ public class AuthenticationService {
             return check;
         }
 
-//        if (registerRequest.getPhoneNumber().startsWith("0")){
-//            registerRequest.setPhoneNumber("+62"+registerRequest.getPhoneNumber().substring(1));
-//        }
-//        registerRequest.setPassword(encryptPassword(registerRequest.getPassword()));
         //Register validation in member domain
         System.out.println("Register. Send data to member domain : "+ Parser.toJsonString(registerRequest));
         ResponseEntity<?> fromMember = member.register(registerRequest, path);
@@ -72,25 +68,13 @@ public class AuthenticationService {
 
         //Create user
         JSONObject user = (JSONObject) jsonMember.get("data");
-//        String idUser = ""+user.get("idUser");
-//
-//        //Create and start session
-//        System.out.println("Start new session for id : " + idUser);
-//        String idSession = UUID.randomUUID().toString();
-//        sessionService.startSession(idUser, idSession);
 
         //Wrap response
         JSONObject result = new JSONObject();
-//        result.put("token", idSession);
         result.put("user", user);
 
         return ResponseSuccess.wrapResponse(result, DealsStatus.REGISTRATION_SUCCESS, path);
     }
-
-//    private String encryptPassword(String password){
-//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//        return passwordEncoder.encode(password);
-//    }
 
     public ResponseEntity<JSONObject> login(LoginRequest loginRequest, String path, String request){
 
@@ -101,10 +85,6 @@ public class AuthenticationService {
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
-
-//        if (loginRequest.getPhoneNumber().startsWith("0")){
-//            loginRequest.setPhoneNumber("+62"+loginRequest.getPhoneNumber().substring(1));
-//        }
 
         //Login validation in member domain
         System.out.println("Login. Send data to member domain : "+ Parser.toJsonString(loginRequest));
@@ -126,6 +106,8 @@ public class AuthenticationService {
         //Create user
         JSONObject user = (JSONObject) jsonMember.get("data");
         String idUser = ""+user.get("idUser");
+        String balance = ""+user.get("balance");
+        user.put("balance", balance);
         String idSession= UUID.randomUUID().toString()+idUser;
         //Check user session
         System.out.println("Check if id : "+ idUser+" already have session");
@@ -133,7 +115,6 @@ public class AuthenticationService {
 
             System.out.println("Session found. Destroy old session for id : "+idUser);
             sessionService.destroySession(idUser);
-//            request.getSession().invalidate();
             System.out.println("Start new session for id : " + idUser);
 
             //Create and start session
@@ -173,11 +154,10 @@ public class AuthenticationService {
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
+
         String phoneNumber = (""+data.get("phoneNumber"));
-//        if (phoneNumber.startsWith("0")){
-//            phoneNumber = "+62"+phoneNumber.substring(1);
-//        }
         data.put("phoneNumber", phoneNumber);
+
         //Request otp validation in member domain
         System.out.println("Request OTP. Send data to member domain : "+ Parser.toJsonString(data));
         ResponseEntity<?> fromMember = member.requestOtp(data);
@@ -199,7 +179,11 @@ public class AuthenticationService {
         String idUser = ""+user.get("idUser");
 
         if (sessionService.checkSession(idUser) != null){
-            return ResponseFailed.wrapResponse(DealsStatus.ALREADY_LOGIN, path);
+            if (sessionService.checkSessionExpiredWithoutSession(idUser) > 0){
+                sessionService.destroySession(idUser);
+            }else {
+                return ResponseFailed.wrapResponse(DealsStatus.ALREADY_LOGIN, path);
+            }
         }
 
         //Wrap response
@@ -217,7 +201,11 @@ public class AuthenticationService {
         }
 
         if (sessionService.checkSession(idUser) != null){
-            return ResponseFailed.wrapResponse(DealsStatus.ALREADY_LOGIN, path);
+            if (sessionService.checkSessionExpiredWithoutSession(idUser) > 0){
+                sessionService.destroySession(idUser);
+            }else {
+                return ResponseFailed.wrapResponse(DealsStatus.ALREADY_LOGIN, path);
+            }
         }
         //Match otp validation in member domain
         System.out.println("Match OTP. Send data to member domain : "+ Parser.toJsonString(data));
@@ -252,7 +240,11 @@ public class AuthenticationService {
             return check;
         }
         if (sessionService.checkSession(idUser) != null){
-            return ResponseFailed.wrapResponse(DealsStatus.ALREADY_LOGIN, path);
+            if (sessionService.checkSessionExpiredWithoutSession(idUser) > 0){
+                sessionService.destroySession(idUser);
+            }else {
+                return ResponseFailed.wrapResponse(DealsStatus.ALREADY_LOGIN, path);
+            }
         }
 
         JSONObject data = new JSONObject();
@@ -278,14 +270,6 @@ public class AuthenticationService {
 
         //Wrap response
         return ResponseSuccess.wrapResponse(null, DealsStatus.FORGOT_PASSWORD, path);
-    }
-
-    public ResponseEntity<JSONObject> test(JSONObject data, String path){
-        if (data == null){
-            return ResponseFailed.wrapResponseFailed( "You are not authorized",
-                                                    "201", HttpStatus.UNAUTHORIZED, path);
-        }
-        return ResponseSuccess.wrapOk();
     }
 
 }

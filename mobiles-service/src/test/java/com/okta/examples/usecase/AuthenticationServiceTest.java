@@ -32,8 +32,8 @@ public class AuthenticationServiceTest {
         assertFalse(authenticationService.register(registerRequest, "/api/auth/register").getStatusCode().is2xxSuccessful());
 
         registerRequest.setName("kevin");
-        registerRequest.setEmail("kevinard11@gmail.com");
-        registerRequest.setPhoneNumber("+6287878787878");
+        registerRequest.setEmail("kevinbasrd11@gmail.com");
+        registerRequest.setPhoneNumber("+6287875787878");
         registerRequest.setPassword("P@ssw0rd");
         registerRequest.setConfirmPassword("P@ssw0rd");
 //        assertTrue(authenticationService.register(registerRequest, "/api/auth/register").getStatusCode().is2xxSuccessful());

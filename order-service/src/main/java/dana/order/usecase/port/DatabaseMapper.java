@@ -28,10 +28,10 @@ public interface DatabaseMapper {
     final String makeARefund = "INSERT INTO transactions (id_transaction, id_user, amount, transaction_date, is_credit, id_transaction_status, " +
             "id_payment_method, id_service, id_goods) VALUES (#{idTransaction}, #{idUser}, #{amount}, NOW(), 1, 3, 2, 1, #{idGoods})";
     final String fallingAllExpiredTransaction = "UPDATE transactions SET id_transaction_status = 2 WHERE id_transaction_status = 4 " +
-            "AND NOW() > DATE_ADD(created_at, INTERVAL 20 MINUTE)";
+            "AND NOW() > DATE_ADD(created_at, INTERVAL 20 minute)";
     final String getTransactionById = "SELECT * FROM transactions WHERE id_transaction = #{idTransaction}";
     final String checkATransactionExpiration = "SELECT COUNT(*) AS amount FROM transactions WHERE id_transaction = #{idTransaction} AND id_transaction_status = 4 " +
-            "AND NOW() > DATE_ADD(created_at, INTERVAL 1 MINUTE)";
+            "AND NOW() > DATE_ADD(created_at, INTERVAL 20 minute)";
     final String setFinishATransaction = "UPDATE transactions SET id_transaction_status = 1 WHERE id_transaction = #{idTransaction}";
     final String checkThirdPartyExists = "SELECT COUNT(*) AS amount FROM third_parties WHERE party_code = ${partyCode}";
     final String TOPUP = "INSERT INTO transactions (id_transaction, id_user, amount, transaction_date, is_credit, id_transaction_status, " +
