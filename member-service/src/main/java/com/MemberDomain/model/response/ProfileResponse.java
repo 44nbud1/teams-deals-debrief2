@@ -6,6 +6,7 @@ public class ProfileResponse {
     private String name;
     private String email;
     private String phoneNumber;
+    private double balance;
 
     public ProfileResponse() {
     }
@@ -49,6 +50,10 @@ public class ProfileResponse {
         this.phoneNumber = phoneNumber;
     }
 
+    public void setBalance(double balance){
+        this.balance = balance;
+    }
+
     public String getIdUser() {
         return idUser;
     }
@@ -63,6 +68,10 @@ public class ProfileResponse {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public double getBalance(){
+        return balance;
     }
 
 }
