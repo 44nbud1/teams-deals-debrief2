@@ -27,6 +27,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
                 databaseMapper.updateAVoucherWithDelta(voucher);
                 retry = Boolean.FALSE;
             }catch (DeadlockLoserDataAccessException e){
+                System.out.println("A Deadlock in updating a voucher with delta.");
                 e.printStackTrace();
                 retry = Boolean.TRUE;
             }
@@ -46,6 +47,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
                 databaseMapper.fallingAllExpiredTransaction();
                 retry = Boolean.FALSE;
             }catch (DeadlockLoserDataAccessException e){
+                System.out.println("A Deadlock in expiring all expired transaction.");
                 e.printStackTrace();
                 retry = Boolean.TRUE;
             }
@@ -65,6 +67,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
                 databaseMapper.updateAUser(user);
                 retry = Boolean.FALSE;
             }catch (DeadlockLoserDataAccessException e){
+                System.out.println("A Deadlock in updating a user.");
                 e.printStackTrace();
                 retry = Boolean.TRUE;
             }
@@ -82,6 +85,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
                 databaseMapper.updateAVoucher(voucher);
                 retry = Boolean.FALSE;
             }catch (DeadlockLoserDataAccessException e){
+                System.out.println("A Deadlock in updating a voucher.");
                 e.printStackTrace();
                 retry = Boolean.TRUE;
             }
@@ -181,6 +185,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
                 databaseMapper.setFinishATransaction(idTransaction);
                 retry = Boolean.FALSE;
             }catch (DeadlockLoserDataAccessException e){
+                System.out.println("A Deadlock in updating a transaction.");
                 e.printStackTrace();
                 retry = Boolean.TRUE;
             }
@@ -205,6 +210,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
                 databaseMapper.fallingATransaction(idUser, idTransaction);
                 retry = Boolean.FALSE;
             }catch (DeadlockLoserDataAccessException e){
+                System.out.println("A Deadlock in expiring a transaction.");
                 e.printStackTrace();
                 retry = Boolean.TRUE;
             }
