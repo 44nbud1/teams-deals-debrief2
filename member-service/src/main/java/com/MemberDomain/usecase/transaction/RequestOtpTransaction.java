@@ -6,8 +6,8 @@ import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.request.OtpRequest;
 import com.MemberDomain.model.response.OtpResponse;
 import com.MemberDomain.model.response.ProfileResponse;
-import com.MemberDomain.usecase.port.UserRepository;
-import com.MemberDomain.usecase.validation.UserValidation;
+import com.MemberDomain.usecase.port.MemberRepository;
+import com.MemberDomain.usecase.validation.MemberValidation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +17,14 @@ import org.springframework.stereotype.Service;
 public class RequestOtpTransaction {
 
     @Autowired
-    UserValidation userValidation;
+    MemberValidation memberValidation;
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     public ResponseEntity<JSONObject> requestOtp(OtpRequest otpRequest, String path){
 
-        ResponseEntity<JSONObject> check = userValidation.requestOtp(otpRequest, path);
+        ResponseEntity<JSONObject> check = memberValidation.requestOtp(otpRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -34,20 +34,20 @@ public class RequestOtpTransaction {
             otpRequest.setPhoneNumber("+62"+otpRequest.getPhoneNumber().substring(1));
         }
 
-        ProfileResponse profileResponse = userRepository.requestOtp(otpRequest.getPhoneNumber());
+        ProfileResponse profileResponse = memberRepository.requestOtp(otpRequest.getPhoneNumber());
 
         if (profileResponse == null){
             return ResponseFailed.wrapResponse(DealsStatus.PHONE_NUMBER_NOT_EXISTS, path);
         }
 
         String idUser = profileResponse.getIdUser();
-        OtpResponse otpResponse = userRepository.checkUserOtp(""+idUser);
+        OtpResponse otpResponse = memberRepository.checkUserOtp(""+idUser);
 
         if (otpResponse == null){
-            userRepository.createOtp(""+idUser);
+            memberRepository.createOtp(""+idUser);
         }
         else{
-            userRepository.updateOtp(""+idUser);
+            memberRepository.updateOtp(""+idUser);
         }
 
         JSONObject result = new JSONObject();

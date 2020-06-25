@@ -36,17 +36,7 @@ public class AuthController {
 
     @PostMapping(value = "/api/auth/login")
     public ResponseEntity<?> login(@RequestBody(required = false) LoginRequest loginRequest, HttpServletRequest request) {
-        request.getSession().invalidate();
-        ResponseEntity<JSONObject> login = authentication.login(loginRequest, request.getServletPath(), request.getSession().getId());
-//        JSONObject data = (JSONObject) login.getBody().get("data");
-//        JSONObject user = (JSONObject) data.get("user");
-//        if (user != null){
-////        request.getSession().setAttribute("userId", data.get("token"));
-////        System.out.println(user.get("name"));
-////        request.getSession().setAttribute("id", user.get("idUser"));
-////        System.out.println(request.getSession().getAttribute("userId"));
-//        }
-        return login;
+        return authentication.login(loginRequest, request.getServletPath(), request.getSession().getId());
     }
 
     @PostMapping(value ="/api/auth/request-otp")
@@ -65,11 +55,5 @@ public class AuthController {
                                             @RequestBody(required = false) ForgotPasswordRequest forgotPasswordRequest,
                                             HttpServletRequest request){
         return authentication.forgotPassword(idUser, forgotPasswordRequest, request.getServletPath());
-    }
-
-    @GetMapping(value = "/tes")
-    public ResponseEntity<?> test(HttpServletRequest request){
-        System.out.println(request.getSession().getId());
-        return template.poest("http://localhost:8082/test", request.getSession().getId());
     }
 }

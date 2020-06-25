@@ -45,9 +45,6 @@ public class AuthenticationValidation {
         if (!Pattern.matches(regex_password, registerRequest.getPassword())) {
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
         }
-//        if (registerRequest.getPhoneNumber().startsWith("0")){
-//            registerRequest.setPhoneNumber("+62"+registerRequest.getPhoneNumber().substring(1));
-//        }
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())){
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_MISS_MATCH, path);
         }
@@ -64,9 +61,7 @@ public class AuthenticationValidation {
         if (loginRequest.getPhoneNumber() == null || loginRequest.getPassword()== null){
             return ResponseFailed.wrapResponse(DealsStatus.FILL_ALL_FORMS, path);
         }
-//        if (loginRequest.getPhoneNumber().startsWith("0")){
-//            loginRequest.setPhoneNumber("+62"+loginRequest.getPhoneNumber().substring(1));
-//        }
+
         if(!Pattern.matches(regex_telephone, loginRequest.getPhoneNumber())){
             return ResponseFailed.wrapResponse(DealsStatus.PHONE_NUMBER_INVALID, path);
         }

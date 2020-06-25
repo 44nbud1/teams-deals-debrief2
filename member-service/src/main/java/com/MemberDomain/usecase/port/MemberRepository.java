@@ -3,7 +3,7 @@ package com.MemberDomain.usecase.port;
 import com.MemberDomain.model.request.RegisterRequest;
 import com.MemberDomain.model.response.*;
 
-public interface UserRepository {
+public interface MemberRepository {
     Boolean doesEmailAvailable(String email);
     Boolean doesPhoneNumberAvailable(String phoneNumber);
     void insertNewUser(RegisterRequest registerRequest);

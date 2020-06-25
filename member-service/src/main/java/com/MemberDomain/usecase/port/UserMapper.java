@@ -27,7 +27,10 @@ public interface UserMapper {
             "WHERE tu.idUser = tb.idUser AND tu.idRole = tr.idRole\n" +
             "AND tu.idUser = #{idUser}";
 
-    final String getUserProfile = "SELECT * FROM tbl_users WHERE idUser = #{idUser}";
+    final String getUserProfile = "SELECT tu.idUser, tu.name, tu.email, tu.phoneNumber, tb.balance\n" +
+            "FROM tbl_users as tu, tbl_balances as tb\n" +
+            "WHERE tu.idUser = tb.idUser\n" +
+            "AND tu.idUser = #{idUser}";
 
     final String getUserPassword = "SELECT password FROM tbl_users WHERE idUser = #{idUser}";
 
@@ -65,7 +68,8 @@ public interface UserMapper {
             @Result(property = "idUser", column = "idUser"),
             @Result(property = "name", column = "name"),
             @Result(property = "email", column = "email"),
-            @Result(property = "phoneNumber", column = "phoneNumber")
+            @Result(property = "phoneNumber", column = "phoneNumber"),
+            @Result(property = "balance", column = "balance")
     })
     ProfileResponse getUserProfile(String idUser);
 

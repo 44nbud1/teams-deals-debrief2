@@ -1,6 +1,5 @@
 package com.okta.examples.service.microservice;
 
-import com.okta.examples.model.request.CreateMerchantRequest;
 import com.okta.examples.adapter.template.Template;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +74,6 @@ public class VoucherDomain {
     }
 
     public ResponseEntity<?> updateVoucher(String idVoucher, JSONObject data, String path){
-        return template.put(apis+path, data);
+        return template.put(api+"/admin/update-status-voucher/"+idVoucher+"/restock", data);
     }
 }

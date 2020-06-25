@@ -6,8 +6,8 @@ import com.MemberDomain.adapter.wrapper.ResponseSuccess;
 import com.MemberDomain.model.request.RegisterRequest;
 import com.MemberDomain.model.response.UserDataResponse;
 import com.MemberDomain.usecase.broadcast.MemberBroadcaster;
-import com.MemberDomain.usecase.port.UserRepository;
-import com.MemberDomain.usecase.validation.UserValidation;
+import com.MemberDomain.usecase.port.MemberRepository;
+import com.MemberDomain.usecase.validation.MemberValidation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegisterTransaction {
 
     @Autowired
-    UserValidation userValidation;
+    MemberValidation memberValidation;
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     MemberBroadcaster memberBroadcaster;
@@ -31,7 +31,7 @@ public class RegisterTransaction {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = InternalError.class)
     public ResponseEntity<JSONObject> createAccount(RegisterRequest registerRequest, String path) {
 
-        ResponseEntity<JSONObject> check = userValidation.register(registerRequest, path);
+        ResponseEntity<JSONObject> check = memberValidation.register(registerRequest, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
@@ -41,11 +41,11 @@ public class RegisterTransaction {
             registerRequest.setPhoneNumber("+62"+registerRequest.getPhoneNumber().substring(1));
         }
 
-        if (userRepository.doesEmailAvailable(""+registerRequest.getEmail().toLowerCase()) == Boolean.FALSE){
+        if (memberRepository.doesEmailAvailable(""+registerRequest.getEmail().toLowerCase()) == Boolean.FALSE){
             return ResponseFailed.wrapResponse(DealsStatus.EMAIL_EXISTS, path);
         }
 
-        if (userRepository.doesPhoneNumberAvailable(""+registerRequest.getPhoneNumber()) == Boolean.FALSE){
+        if (memberRepository.doesPhoneNumberAvailable(""+registerRequest.getPhoneNumber()) == Boolean.FALSE){
             return ResponseFailed.wrapResponse(DealsStatus.PHONE_NUMBER_EXISTS, path);
         }
 
@@ -53,8 +53,8 @@ public class RegisterTransaction {
         registerRequest.setPassword(encryptPassword(registerRequest.getPassword()));
 
         try {
-            userRepository.insertNewUser(registerRequest);
-            userRepository.insertNewUserBalance(registerRequest.getIdUser());
+            memberRepository.insertNewUser(registerRequest);
+            memberRepository.insertNewUserBalance(registerRequest.getIdUser());
         } catch (InternalError e) {
             return ResponseFailed.wrapResponse(DealsStatus.REQUEST_TIME_OUT, path);
         }
@@ -62,7 +62,7 @@ public class RegisterTransaction {
 //        userRepository.insertNewUser(registerRequest);
 //        userRepository.insertNewUserBalance(registerRequest.getIdUser());
 
-        UserDataResponse userDataResponse = userRepository.getUserData(registerRequest.getIdUser());
+        UserDataResponse userDataResponse = memberRepository.getUserData(registerRequest.getIdUser());
         memberBroadcaster.send(registerRequest.getIdUser(), Double.valueOf(0));
 
         return ResponseSuccess.wrapResponse(userDataResponse, DealsStatus.REGISTRATION_SUCCESS, path);

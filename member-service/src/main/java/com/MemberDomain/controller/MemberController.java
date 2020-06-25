@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api")
-public class UserController {
+public class MemberController {
 
     @Autowired
     private RegisterTransaction registerTransaction;

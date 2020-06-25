@@ -30,15 +30,10 @@ public class UserController {
     @Autowired
     SessionValidation sessionValidation;
 
-    @PostMapping(value = "/")
-    public ResponseEntity<?> welcome(HttpServletRequest request){
-        return new ResponseEntity<>("Welcome. Your session id : "+ request.getSession().getAttribute("userId") + request.getSession().getAttribute("id"), HttpStatus.OK);
-    }
-
     @GetMapping(value = "/{idUser}")
     public ResponseEntity<?> getProfile(@PathVariable("idUser") String idUser,
                                         HttpServletRequest request){
-        if (!sessionValidation.request(idUser, request)){
+        if (!sessionValidation.request(idUser, request, "/api/user/"+idUser)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
         return userService.getProfile(idUser, request.getServletPath());
@@ -48,7 +43,7 @@ public class UserController {
     public ResponseEntity<?> editProfile(@PathVariable("idUser") String idUser,
                                          @RequestBody(required = false) EditProfileRequest editProfileRequest,
                                          HttpServletRequest request){
-        if (!sessionValidation.request(idUser, request)){
+        if (!sessionValidation.request(idUser, request, "/api/user/"+idUser)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
 //        System.out.println(request.getSession().getAttribute("userId"));
@@ -59,7 +54,7 @@ public class UserController {
     public ResponseEntity<?> createOrderVoucher(@PathVariable("id_user") String idUser,
                                                 @RequestBody(required = false) JSONObject data,
                                                 HttpServletRequest request){
-        if (!sessionValidation.request(idUser, request)){
+        if (!sessionValidation.request(idUser, request, "/api/user/"+idUser+"/transaction/voucher")){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
 //        System.out.println(request.getSession().getAttribute("userId"));
@@ -70,7 +65,7 @@ public class UserController {
     public ResponseEntity<?> payOrderVoucher(@PathVariable("idUser") String idUser,
                                              @RequestBody(required = false) JSONObject data,
                                              HttpServletRequest request){
-        if (!sessionValidation.request(idUser, request)){
+        if (!sessionValidation.request(idUser, request, "/api/user/"+idUser+"/transaction/voucher")){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
 //        System.out.println(request.getSession().getAttribute("userId"));
@@ -81,7 +76,7 @@ public class UserController {
     public ResponseEntity<?> payTopup(@PathVariable("idUser") String idUser,
                                       @RequestBody(required = false) JSONObject data,
                                       HttpServletRequest request){
-        if (!sessionValidation.request(idUser, request)){
+        if (!sessionValidation.request(idUser, request, "/api/user/"+idUser+"/transaction/topup")){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
 //        System.out.println(request.getSession().getAttribute("userId"));
@@ -95,7 +90,7 @@ public class UserController {
                                                 @RequestParam(value = "filter-end-date", required = false) String filterEnd,
                                                 @RequestParam(value = "page", required = false) String page,
                                                 HttpServletRequest request){
-        if (!sessionValidation.request(idUser, request)){
+        if (!sessionValidation.request(idUser, request, "/api/user/"+idUser+"/transaction")){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
 //        System.out.println(request.getSession().getAttribute("userId"));
@@ -106,7 +101,7 @@ public class UserController {
     public ResponseEntity<?> transactionDetail(@PathVariable("idUser") String idUser,
                                                @PathVariable("idTransaction") String idTransaction,
                                                HttpServletRequest request){
-        if (!sessionValidation.request(idUser, request)){
+        if (!sessionValidation.request(idUser, request,"/api/user/"+idUser+"/transaction/"+idTransaction)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
 //        System.out.println(request.getSession().getAttribute("userId"));
@@ -116,9 +111,9 @@ public class UserController {
     @GetMapping("/show-all-voucher")
     public ResponseEntity<?> getAllVoucher(@RequestParam(value = "page", required = false) String page,
                                            HttpServletRequest request) {
-//        if (!sessionValidation.requestId(request)){
-//            return ResponseFailed.unAuthorized(request.getServletPath());
-//        }
+        if (!sessionValidation.requestId(request)){
+            return ResponseFailed.unAuthorized(request.getServletPath());
+        }
 //        System.out.println(request.getSession().getAttribute("userId"));
         return voucherService.getAllVoucher(page, request.getServletPath());
     }
@@ -127,9 +122,9 @@ public class UserController {
     public ResponseEntity<?> filterVoucher(@RequestParam(value = "merchantCategory", required = false) String merchantCategory,
                                            @RequestParam(value = "page", required = false) String page,
                                            HttpServletRequest request){
-//        if (!sessionValidation.requestId(request)){
-//            return ResponseFailed.unAuthorized(request.getServletPath());
-//        }
+        if (!sessionValidation.requestId(request)){
+            return ResponseFailed.unAuthorized(request.getServletPath());
+        }
 //        System.out.println(request.getSession().getAttribute("userId"));
         return voucherService.filterVoucher(merchantCategory, page, request.getServletPath());
     }
@@ -138,9 +133,9 @@ public class UserController {
     public ResponseEntity<?> searchVoucher(@RequestParam(value = "merchantName", required = false) String merchantName,
                                            @RequestParam(value = "page", required = false) String page,
                                            HttpServletRequest request){
-//        if (!sessionValidation.requestId(request)){
-//            return ResponseFailed.unAuthorized(request.getServletPath());
-//        }
+        if (!sessionValidation.requestId(request)){
+            return ResponseFailed.unAuthorized(request.getServletPath());
+        }
 //        System.out.println(request.getSession().getAttribute("userId"));
         return voucherService.searchVoucher(merchantName, page, request.getServletPath());
     }
@@ -149,9 +144,9 @@ public class UserController {
     public ResponseEntity<?> sortVoucher(@RequestParam(value = "sortBy", required = false) String name,
                                          @RequestParam(value = "page", required = false) String page,
                                          HttpServletRequest request){
-//        if (!sessionValidation.requestId(request)){
-//            return ResponseFailed.unAuthorized(request.getServletPath());
-//        }
+        if (!sessionValidation.requestId(request)){
+            return ResponseFailed.unAuthorized(request.getServletPath());
+        }
 //        System.out.println(request.getSession().getAttribute("userId"));
         return voucherService.sortVoucher(name, page, request.getServletPath());
     }
@@ -159,11 +154,9 @@ public class UserController {
     @PostMapping("/{idUser}/logout")
     public ResponseEntity<?> logout(@PathVariable("idUser") String idUser,
                                     HttpServletRequest request){
-        if (!sessionValidation.requestSession(request)){
+        if (!sessionValidation.requestSession(idUser, request)){
             return ResponseFailed.unAuthorized(request.getServletPath());
         }
-        request.getSession().invalidate();
-//        System.out.println(request.getSession().getAttribute("userId"));
         return userService.logout(idUser, request.getServletPath());
     }
 

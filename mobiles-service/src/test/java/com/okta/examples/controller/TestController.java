@@ -58,6 +58,12 @@ public class TestController {
                 .content(objectMapper.writeValueAsString(json)))
                 .andExpect(status().isOk());
 
+        mockMvc.perform(get("/")
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isOk());
+
     }
 
     @Test
@@ -65,8 +71,8 @@ public class TestController {
 
         JSONObject json = new JSONObject();
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MTA3NjlkNi01Y2Q4LTQ3MmYtOGU3OS0yMmVjMTY3YjNlYWExMSIsImV4cCI6MTU5MzA2OTY2MywiaWF0IjoxNTkyNDU0NzgzfQ.FggRkWOTI2Ijrq06Bkm_RZStz6KlZFrfI7aLZqmO2wgFo4QodEIytwbsGT6Di8McEK3vnIK29T5Fsu06qj3Yng");
-        mockMvc.perform(get("/api/user/{idUser}", 11)
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/user/{idUser}", 23)
                 .headers(headers)
                 .contentType("application/json")
                 //.param("sendWelcomeMail", "true")
@@ -97,8 +103,8 @@ public class TestController {
         JSONObject json = new JSONObject();
         json.put("name", "kevin");
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MTA3NjlkNi01Y2Q4LTQ3MmYtOGU3OS0yMmVjMTY3YjNlYWExMSIsImV4cCI6MTU5MzA2OTY2MywiaWF0IjoxNTkyNDU0NzgzfQ.FggRkWOTI2Ijrq06Bkm_RZStz6KlZFrfI7aLZqmO2wgFo4QodEIytwbsGT6Di8McEK3vnIK29T5Fsu06qj3Yng");
-        mockMvc.perform(put("/api/user/{idUser}", 11)
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(put("/api/user/{idUser}", 23)
                 .headers(headers)
                 .contentType("application/json")
                 //.param("sendWelcomeMail", "true")
@@ -116,13 +122,69 @@ public class TestController {
     }
 
     @Test
+    void userCreateOrderVoucher() throws Exception{
+
+        JSONObject json = new JSONObject();
+        json.put("idVoucher",1);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(post("/api/user/{idUser}/transaction/voucher", 23)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isCreated());
+
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2M2U4Yzg5My05ZDExLTQ2ZjEtOWM1Yi00NDUyOTExYTEyNTQyNCIsImV4cCI6MTU5MjczMzk1OSwiaWF0IjoxNTkyNzMzOTUwfQ.dbRlJGGZEeiAcn3PlynZfS_PMPiY-99uWKozE_KBSatF0iBwvRtYOBSVGYdOxIhG9dbQ_ytuzjEYyIiLsvZ2fw");
+        mockMvc.perform(post("/api/user/{idUser}/transaction/voucher", 23)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void userPayOrderVoucher() throws Exception{
+
+        JSONObject json = new JSONObject();
+        json.put("idTransaction", 12);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(put("/api/user/{idUser}/transaction/voucher", 23)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    void userTopup() throws Exception{
+
+        JSONObject json = new JSONObject();
+        json.put("virtualNumber", "90300878787877");
+        json.put("amount", 5000);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(post("/api/user/{idUser}/transaction/topup", 23)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
     void userTransactionHistory() throws Exception{
 
         JSONObject json = new JSONObject();
         json.put("name", "kevin");
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MTA3NjlkNi01Y2Q4LTQ3MmYtOGU3OS0yMmVjMTY3YjNlYWExMSIsImV4cCI6MTU5MzA2OTY2MywiaWF0IjoxNTkyNDU0NzgzfQ.FggRkWOTI2Ijrq06Bkm_RZStz6KlZFrfI7aLZqmO2wgFo4QodEIytwbsGT6Di8McEK3vnIK29T5Fsu06qj3Yng");
-        mockMvc.perform(get("/api/user/{idUser}/transaction", 11)
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/user/{idUser}/transaction", 23)
                 .headers(headers)
                 .contentType("application/json")
                 //.param("sendWelcomeMail", "true")
@@ -130,7 +192,15 @@ public class TestController {
                 .andExpect(status().isOk());
 
         headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MTA3NjlkNi01Y2Q4LTQ3MmYtOGU3OS0yMmVjMTY3YjNlYWExMSIsImV4cCI6MTU5MzA2OTY2MywiaWF0IjoxNTkyNDU0NzgzfQ.FggRkWOTI2Ijrq06Bkm_RZStz6KlZFrfI7aLZqmO2wgFo4QodEIytwbsGT6Di8McEK3vnIK29T5Fsu06qj3Yng");
-        mockMvc.perform(put("/api/user/{idUser}/transaction/12", 12)
+        mockMvc.perform(get("/api/user/{idUser}/transaction/12", 12)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/user/{idUser}/transaction/12", 12)
                 .headers(headers)
                 .contentType("application/json")
                 //.param("sendWelcomeMail", "true")
@@ -144,7 +214,7 @@ public class TestController {
         JSONObject json = new JSONObject();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MTA3NjlkNi01Y2Q4LTQ3MmYtOGU3OS0yMmVjMTY3YjNlYWExMSIsImV4cCI6MTU5MzA2OTY2MywiaWF0IjoxNTkyNDU0NzgzfQ.FggRkWOTI2Ijrq06Bkm_RZStz6KlZFrfI7aLZqmO2wgFo4QodEIytwbsGT6Di8McEK3vnIK29T5Fsu06qj3Yng");
-        mockMvc.perform(put("/api/user/{idUser}/transaction/12", 11)
+        mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}}", 23,12)
                 .headers(headers)
                 .contentType("application/json")
                 //.param("sendWelcomeMail", "true")
@@ -152,13 +222,179 @@ public class TestController {
                 .andExpect(status().is4xxClientError());
 
         headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MTA3NjlkNi01Y2Q4LTQ3MmYtOGU3OS0yMmVjMTY3YjNlYWExMSIsImV4cCI6MTU5MzA2OTY2MywiaWF0IjoxNTkyNDU0NzgzfQ.FggRkWOTI2Ijrq06Bkm_RZStz6KlZFrfI7aLZqmO2wgFo4QodEIytwbsGT6Di8McEK3vnIK29T5Fsu06qj3Yng");
-        mockMvc.perform(put("/api/user/{idUser}/transaction/12", 12)
+        mockMvc.perform(get("/api/user/{idUser}/transaction/{idTransaction}", 12,12)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void userShowVoucher() throws Exception{
+
+        JSONObject json = new JSONObject();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/user/show-all-voucher?page=0")
                 .headers(headers)
                 .contentType("application/json")
                 //.param("sendWelcomeMail", "true")
                 .content(objectMapper.writeValueAsString(json)))
                 .andExpect(status().is4xxClientError());
 
+    }
+
+    @Test
+    void adminShowVoucher() throws Exception{
+
+        JSONObject json = new JSONObject();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/admin/show-all-voucher?page=0")
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    void userFilterVoucher() throws Exception{
+
+        JSONObject json = new JSONObject();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/user/filter-voucher?merchantCategory=fnb&page=0")
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    void adminFilterVoucher() throws Exception{
+
+        JSONObject json = new JSONObject();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/admin/voucher/filterByStatus?filterBystatus=true&page=0")
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    void userSearchVoucher() throws Exception{
+
+        JSONObject json = new JSONObject();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/user/findByMerchantName-voucher?merchantName=k&page=0")
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    void adminSearchVoucher() throws Exception{
+
+        JSONObject json = new JSONObject();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/admin/findByMerchantName-voucher?merchantName=k&page=0")
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    void userSortVoucher() throws Exception{
+
+        JSONObject json = new JSONObject();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/user/sort-voucher?sortBy=k&page=0")
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    void adminSortVoucher() throws Exception{
+
+        JSONObject json = new JSONObject();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/admin/sort-voucher?sortBy=k&page=0")
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void adminVoucherDetail() throws Exception{
+
+        JSONObject json = new JSONObject();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/admin/voucher-detail-voucher/{idVoucher}", 1)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    void adminUpdateVoucher() throws Exception{
+
+        JSONObject json = new JSONObject();
+        json.put("status", true);
+        json.put("quota", 5);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(get("/api/admin/update-status-voucher/{idVoucher}/restock", 1)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    void userLogout() throws Exception{
+
+        JSONObject json = new JSONObject();
+        json.put("virtualNumber", "90300878787877");
+        json.put("amount", 5000);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNmI2MTg1ZC0wZmQ2LTQ5YWEtODFiZi0yNzhkZmE5YmRhZTgyMyIsImV4cCI6MTU5MzMzNjAzMSwiaWF0IjoxNTkyNzMxMjMxfQ.ha_gGqpdQY6tKWy5vG9XdZLCzN0_rr-59NURI4hHBc06kEGlksBmwDzUQWloVQOmf9CNOBcidyWkwakvxLaJSw");
+        mockMvc.perform(post("/api/user/{idUser}/logout", 1)
+                .headers(headers)
+                .contentType("application/json")
+                //.param("sendWelcomeMail", "true")
+                .content(objectMapper.writeValueAsString(json)))
+                .andExpect(status().is4xxClientError());
 
     }
 }

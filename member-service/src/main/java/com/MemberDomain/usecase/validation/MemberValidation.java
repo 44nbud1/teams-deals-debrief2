@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.regex.Pattern;
 
 @Service
-public class UserValidation {
+public class MemberValidation {
 
     private final String regex_email = "^(?=.*(^[A-Za-z0-9]+|^[A-Za-z0-9]+[.][A-Za-z0-9])[@][A-Za-z0-9.\\-_]+[.][A-Za-z]+$).{6,74}$";
     private final String regex_password = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=\\S+$).{8,16}$";

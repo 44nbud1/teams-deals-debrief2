@@ -26,15 +26,15 @@ public class AdminService {
 
     public ResponseEntity<?> createMerchant(String idUser, String idMerchant, JSONObject data, String path){
 
-        System.out.println("Create Merchant Validation. " + Parser.toJsonString(data));
+        System.out.println("Create Voucher Validation. " + Parser.toJsonString(data));
         ResponseEntity<?> check = validate.test(data, path);
 
         if (!check.getStatusCode().is2xxSuccessful()){
             return check;
         }
-        System.out.println("Create Merchant. Send data to voucher domain :" + Parser.toJsonString(data));
+        System.out.println("Create Voucher. Send data to voucher domain :" + Parser.toJsonString(data));
         ResponseEntity<?> fromVoucher = voucher.createMerchant(idUser, idMerchant, data);
-        System.out.println("Create Merchant. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
+        System.out.println("Create Voucher. Receive data from voucher domain :"+ fromVoucher.getBody().toString());
 
         JSONObject jsonVoucher = Parser.parseJSON(fromVoucher.getBody().toString());
         String message = ""+ jsonVoucher.get("message");
