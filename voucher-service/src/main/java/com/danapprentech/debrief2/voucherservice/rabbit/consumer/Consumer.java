@@ -50,7 +50,10 @@ public class Consumer
             vouchers.setUpdateAt(new Date());
 
             System.out.println(vouchers.getQuota());
-            System.out.println();
+            if (vouchers.getQuota() == 0)
+            {
+                vouchers.setStatus(Boolean.FALSE);
+            }
             voucherService.updateVoucher(vouchers);
             System.out.println("update sukses");
             System.out.println("-------------");
@@ -83,6 +86,10 @@ public class Consumer
             System.out.println("Voucher sesudah refund "+vouchers.getQuota() );
             vouchers.setUpdateAt(new Date());
             System.out.println(vouchers.getQuota());
+            if (vouchers.getQuota()>0)
+            {
+                vouchers.setStatus(Boolean.TRUE);
+            }
             voucherService.updateVoucher(vouchers);
             System.out.println("update sukses");
             System.out.println("-------------");

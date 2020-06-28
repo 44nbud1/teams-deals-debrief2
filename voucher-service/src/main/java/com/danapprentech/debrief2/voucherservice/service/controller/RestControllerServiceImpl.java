@@ -306,6 +306,12 @@ public class RestControllerServiceImpl implements RestControllerService{
                     "/admin/update-status-voucher/{idVoucher}/restock", new Date()),HttpStatus.NOT_FOUND);
         }
 
+        if (vouchers.getExpiredDate().before(new Date()) && updateVoucherRequest.getStatus().equalsIgnoreCase("true"))
+        {
+            return ResponseEntity.badRequest().body(new MessageResponse("Status invalid.", "063",
+                    "/api/admin/update-status-voucher/{idVoucher}/restock", new Date()));
+        }
+
         if (updateVoucherRequest.getStatus() == null) {
             return ResponseEntity.badRequest().body(new MessageResponse("Status invalid.", "063",
                     "/api/admin/update-status-voucher/{idVoucher}/restock", new Date()));
