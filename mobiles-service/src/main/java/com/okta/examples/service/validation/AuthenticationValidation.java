@@ -6,6 +6,8 @@ import com.okta.examples.model.request.RegisterRequest;
 import com.okta.examples.model.status.DealsStatus;
 import com.okta.examples.model.response.ResponseFailed;
 import com.okta.examples.model.response.ResponseSuccess;
+import com.vdurmont.emoji.Emoji;
+import com.vdurmont.emoji.EmojiParser;
 import org.json.simple.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,7 @@ import java.util.regex.Pattern;
 @Service
 public class AuthenticationValidation {
 
-    private final String regex_email = "^(?=.*(^[A-Za-z0-9]+|^[A-Za-z0-9]+[.][A-Za-z0-9]+)[@][A-Za-z0-9.\\-_]+[.][A-Za-z]+$).{6,74}$";
+    private final String regex_email = "^(?=.*(^[\\w]+|^[\\w]+[.]+[\\w]+)[@][\\w.\\-]+[.][A-Za-z]+$).{6,74}$";
     private final String regex_password = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=\\S+$).{8,16}$";
     private final String regex_telephone = "^(?!.*[^0-9+])(([\\+][6][2])|([0]){1})[8]{1}[^046]{1}[0-9]{7,9}$";
     private final String regex_name = "^(?!.*^[\\s])(?!.*[\\s]$)(?!.*[0-9!@#$%^&*])(?=.*[a-zA-Z'\\-]{3,10}[\\s]|.*^[a-zA-Z'\\-]{3,10}$)(?!.*['][\\-]|.*[\\-][']|.*[\\-][\\-]|.*['][']).{3,20}$";
@@ -45,6 +47,9 @@ public class AuthenticationValidation {
         if (!Pattern.matches(regex_password, registerRequest.getPassword())) {
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
         }
+        if (isEmojiExists(registerRequest.getPassword()) == Boolean.TRUE){
+            return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
+        }
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())){
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_MISS_MATCH, path);
         }
@@ -67,6 +72,10 @@ public class AuthenticationValidation {
         }
 
         if (!Pattern.matches(regex_password, loginRequest.getPassword())) {
+            return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
+        }
+
+        if (isEmojiExists(loginRequest.getPassword()) == Boolean.TRUE){
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
         }
 
@@ -124,11 +133,24 @@ public class AuthenticationValidation {
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
         }
 
+//        if (isEmojiExists(forgotPasswordRequest.getPassword()) == Boolean.TRUE){
+//            return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_INVALID, path);
+//        }
+
         if (!forgotPasswordRequest.getPassword().equals(forgotPasswordRequest.getConfirmPassword())){
             return ResponseFailed.wrapResponse(DealsStatus.PASSWORD_MISS_MATCH, path);
         }
 
         return ResponseSuccess.wrapOk();
+    }
+
+    public Boolean isEmojiExists(String emoji){
+        String myEmoji = EmojiParser.parseToUnicode(emoji);
+        String regex = "^(?!.*[\\\\]).+$";
+        if (Pattern.matches(regex, myEmoji) == true){
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 
 }

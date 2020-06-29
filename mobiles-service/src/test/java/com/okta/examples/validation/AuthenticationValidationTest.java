@@ -113,6 +113,11 @@ public class AuthenticationValidationTest {
     }
 
     @Test
+    public void testEmoji(){
+        assertEquals(Boolean.TRUE, authenticationValidation.isEmojiExists("sdfd"));
+    }
+
+    @Test
     public void forgotPasswordValidation(){
         System.out.println("Forgot Password Validation Test");
         assertFalse(authenticationValidation.forgotPassword(null, "/").getStatusCode().is2xxSuccessful());
